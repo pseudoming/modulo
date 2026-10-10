@@ -1,0 +1,41 @@
+{
+  "synthetic": true,
+  "producer": "Dify 1.17.1 actual agent-chat application via console HTTP API",
+  "dify_image": "langgenius/dify-api@sha256:ceede5b903afaa20348f7ad80ebf847379dc56d886a99b9ec6a08913dacd7732",
+  "dify_source": "2bb466c09aa16ebce7a9d0770ededb80ac2de05c",
+  "graphon": "0.7.0",
+  "provider_plugin": "langgenius/openai_api_compatible:0.0.68@ba61c5eccb814be7364117c0bec3710a51e09b20f31e37243e747a00f9377969",
+  "scope": "two rounds, real HTTP calculator, stream + non-stream; local synthetic model",
+  "reported_usage": "deliberately synthetic 123 input / 17 output, not an independent reference",
+  "reference": "official Qwen3.8 frozen Jinja template + tokenizers native encoder on separately preserved Dify-runtime and upstream-HTTP requests; no modulo counter",
+  "files": [
+    {
+      "file": "agent-llm.jsonl",
+      "sha256": "040b9aaa0dda036bde79cc1435404f39f7bcef81b07e515f13b03df394bc34d1"
+    },
+    {
+      "file": "agent-thoughts.jsonl",
+      "sha256": "1307412fb1721de1cb63c95008959d8dab161c28d05c13ec2e0c224300e2ff7a"
+    },
+    {
+      "file": "application-1791582425644277747.sse",
+      "sha256": "ec5b32d68a18623abd1b8ada87c911ecf9d3b47376665e56af8a70c0847194ff"
+    },
+    {
+      "file": "application-1791582438570808810.sse",
+      "sha256": "71b0e1a18b180252b022bc9742408464faa1d64a88415491e07b711a61391bba"
+    },
+    {
+      "file": "model-exchanges.jsonl",
+      "sha256": "9e2ebc308cab1fbe4aad9cd37b2876811968529e25510c4e5c6c4415aa8148f0"
+    },
+    {
+      "file": "reference.json",
+      "sha256": "ca088034dff118137b326cd2b3575f43966accee4d06c845ebb719e137afa8ad"
+    },
+    {
+      "file": "run-manifest.json",
+      "sha256": "20bfdf1765fedc85acd8c520da9a29990bbcd8c9f33a41d2974d4dad6b129f63"
+    }
+  ]
+}

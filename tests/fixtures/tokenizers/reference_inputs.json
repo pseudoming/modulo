@@ -1,0 +1,30 @@
+[
+  {
+    "name": "basic_zh",
+    "messages": [
+      {"role": "system", "content": "你是一个简洁的助手。"},
+      {"role": "user", "content": "请计算 2 + 3。"}
+    ],
+    "output": "5。"
+  },
+  {
+    "name": "history_unicode",
+    "messages": [
+      {"role": "system", "content": "Answer briefly."},
+      {"role": "user", "content": "你好，world 🌍!"},
+      {"role": "assistant", "content": "Hello!"},
+      {"role": "user", "content": "保留空格： A  B\n下一行。"}
+    ],
+    "output": "收到。"
+  },
+  {
+    "name": "no_system",
+    "messages": [{"role": "user", "content": "只记录消息，没有 usage。"}],
+    "output": ""
+  },
+  {
+    "name": "empty_content",
+    "messages": [{"role": "system", "content": ""}, {"role": "user", "content": ""}],
+    "output": ""
+  }
+]

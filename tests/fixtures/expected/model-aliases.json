@@ -1,0 +1,35 @@
+{
+  "synthetic": true,
+  "base_fixtures": [
+    "examples/dify/basic.jsonl",
+    "examples/langchain/basic.jsonl"
+  ],
+  "base_call_id": "45552c4e-f263-58c9-b911-57430d729300",
+  "changes": {
+    "dify": {
+      "data.process_data.model_name": "volc-deepseek"
+    },
+    "langchain": {
+      "extra.metadata.ls_model_name": "volc-deepseek"
+    }
+  },
+  "records_per_protocol": 1,
+  "platform_field_present": false,
+  "alias_and_literal_platform_are_fixture_declarations": true,
+  "reference_vector": {
+    "file": "tests/fixtures/tokenizers/family_reference_vectors.json",
+    "asset": "deepseek-v4.1",
+    "name": "history_unicode"
+  },
+  "expected_with_none_or_literal_volcengine": {
+    "selected_calls": 1,
+    "reported_input_tokens": 58,
+    "recalculated_input_tokens": 55,
+    "input_delta": 3,
+    "verdict": "DEVIATION"
+  },
+  "reference_assets": {
+    "qwen": "qwen3.8",
+    "deepseek": "deepseek-v4.1"
+  }
+}

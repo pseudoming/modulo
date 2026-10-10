@@ -1,0 +1,9 @@
+# Optional DaoCloud mirror for the Elastic registry, pinned to upstream amd64 digests.
+# docker compose -f tests/local-dev/compose.yaml -f tests/local-dev/compose.mirror.yaml up -d --wait
+services:
+  elasticsearch:
+    image: m.daocloud.io/docker.elastic.co/elasticsearch/elasticsearch:9.5.5@sha256:c40a1fb2bc6976821e5625d2329992a1e9c29df576e5955fdcba02421abf0d3c
+    platform: linux/amd64
+  kibana:
+    image: m.daocloud.io/docker.elastic.co/kibana/kibana:9.5.5@sha256:a3b7c419a30b05fa24485403b90608c3907d27a3f33f0bc05d891540b3aebbeb
+    platform: linux/amd64

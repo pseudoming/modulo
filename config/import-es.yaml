@@ -1,0 +1,13 @@
+# 本地测试 ES 不需要认证；实际使用时替换地址并选择下面一种认证方式。
+path: http://localhost:9200
+index: dify-access-log-202610*
+
+# 用户名密码：取消下面两行注释，密码在运行前设置到环境变量。
+# username: audit-reader
+# password-env: MODULO_ES_PASSWORD
+
+# API key：与用户名密码二选一。
+# api-key-env: MODULO_ES_API_KEY
+
+# page-size: 500
+# query-file: query.json  # 可选，ES 原生查询子句；相对本文件目录。

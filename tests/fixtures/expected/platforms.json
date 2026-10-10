@@ -1,0 +1,37 @@
+{
+  "synthetic": true,
+  "base_fixtures": [
+    "examples/dify/basic.jsonl",
+    "examples/langchain/basic.jsonl"
+  ],
+  "reference_vectors": {
+    "file": "tests/fixtures/tokenizers/family_reference_vectors.json",
+    "qwen": "basic_zh",
+    "deepseek": "history_unicode"
+  },
+  "platforms": [
+    "deepseek-official",
+    "volcengine",
+    "huaweicloud"
+  ],
+  "models": [
+    "Qwen/Qwen3.8-2.4T-A95B",
+    "deepseek-ai/DeepSeek-V4.1-Flash"
+  ],
+  "records_per_protocol": 8,
+  "platform_labels_are_fixture_declarations": true,
+  "expected_with_field_or_metadata_source": {
+    "CONSISTENT": 5,
+    "DEVIATION": 1,
+    "UNVERIFIABLE": 2
+  },
+  "injected_delta": {
+    "platform": "volcengine",
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "input_delta": 3
+  },
+  "reference_assets": {
+    "qwen": "qwen3.8",
+    "deepseek": "deepseek-v4.1"
+  }
+}

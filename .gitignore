@@ -1,0 +1,26 @@
+# Customer material and generated audit output must stay out of Git.
+/data/
+/runs/
+/artifacts/
+/exports/
+/secrets/
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+/assets/
+# Local agent settings and credentials.
+/.agents/
+/.codex/
+/.aws/
+
+# Private working documentation.
+/private-docs/
+/docs/
+/AGENTS.md

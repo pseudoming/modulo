@@ -1,0 +1,185 @@
+{
+  "synthetic": true,
+  "reviewed_on": "2026-10-10",
+  "scope": "fixed plain-text local references, no service calls or weights",
+  "assets": [
+    {
+      "asset": "qwen3.8",
+      "backend": "qwen",
+      "repo": "Qwen/Qwen3.8-2.4T-A95B",
+      "revision": "207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/tree/207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
+      "repo_created_at": "2026-08-08T01:50:52.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "qwen3.8-max",
+      "readme_sha256": "7690c680c2d6eb284179ef5dd4db63260d248531cae9087b09b2c2200230f331",
+      "template_kwargs": {
+        "reasoning_effort": "xhigh",
+        "preserve_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "revision": "2cba9e42aa026125f3ed06c6d98c1db82f7ca027",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/tree/2cba9e42aa026125f3ed06c6d98c1db82f7ca027",
+      "repo_created_at": "2026-09-10T02:17:58.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "mit",
+      "readme_sha256": "347c9db4e5506acb531cbc3b724407ab88e9af8781679152f0823d7bac16d251",
+      "template_kwargs": {
+        "thinking_mode": "thinking",
+        "reasoning_effort": "high",
+        "drop_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "repo": "moonshotai/Kimi-K3",
+      "revision": "f831ab66814297da540d832a5235f8e904f29d06",
+      "url": "https://huggingface.co/moonshotai/Kimi-K3/tree/f831ab66814297da540d832a5235f8e904f29d06",
+      "repo_created_at": "2026-06-13T06:42:57.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "kimi-k3",
+      "readme_sha256": "57de265b5842dfa465c6e73b368b0e15a89b8793b5450528dad577da202cc6fe",
+      "template_kwargs": {
+        "thinking": true,
+        "thinking_effort": "max"
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "repo": "MiniMaxAI/MiniMax-M3",
+      "revision": "f0e1c1e04d40177e4673a22097036854f536e9c0",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/tree/f0e1c1e04d40177e4673a22097036854f536e9c0",
+      "repo_created_at": "2026-06-02T07:49:31.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "minimax-community",
+      "readme_sha256": "6148856dbf8be26dcf3f9b913be0252c38454e852108fdab01212fe965f3e327",
+      "template_kwargs": {
+        "thinking_mode": "adaptive"
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "longcat-2.0",
+      "backend": "longcat",
+      "repo": "meituan-longcat/LongCat-2.0",
+      "revision": "834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+      "url": "https://huggingface.co/meituan-longcat/LongCat-2.0/tree/834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+      "repo_created_at": "2026-07-05T00:07:44.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "mit",
+      "readme_sha256": "465f906597726afdce4d58afb00e8bde1766e4886c26860becc2d3fd2edbedc9",
+      "template_kwargs": {
+        "enable_thinking": true,
+        "save_history_reasoning_content": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "glm-5.3",
+      "backend": "glm",
+      "repo": "zai-org/GLM-5.3",
+      "revision": "aca966e4e02791568aa6a4ced368624b3d897f42",
+      "url": "https://huggingface.co/zai-org/GLM-5.3/tree/aca966e4e02791568aa6a4ced368624b3d897f42",
+      "repo_created_at": "2026-08-25T06:42:50.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "glm-5.3",
+      "readme_sha256": "ed1c0a4563c437a32f8953d637a1db9bd831de1b24bd3062a5ace9e04340b1cf",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": false
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "repo": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "revision": "b61f21852680ee02a29e946e18cf8697f4844061",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/tree/b61f21852680ee02a29e946e18cf8697f4844061",
+      "repo_created_at": "2026-09-21T15:39:33.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "mit",
+      "readme_sha256": "bf373f444efcd309534804edd1fadadd1eb0ad64f7b0474c96fdac946614c13e",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "repo": "stepfun-ai/Step-3.7-Flash",
+      "revision": "5f6244077ac62e04eec3f320501ff8c2b293373a",
+      "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash/tree/5f6244077ac62e04eec3f320501ff8c2b293373a",
+      "repo_created_at": "2026-05-23T02:13:46.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "apache-2.0",
+      "readme_sha256": "b0d04c993d40a28fff3ecac99045de502e75b0c0635e233f2aa8614783972519",
+      "template_kwargs": {},
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "hy4-preview",
+      "backend": "hunyuan",
+      "repo": "tencent/Hy4-preview",
+      "revision": "705d81ee51566a186d645b74c974d642ef2828fe",
+      "url": "https://huggingface.co/tencent/Hy4-preview/tree/705d81ee51566a186d645b74c974d642ef2828fe",
+      "repo_created_at": "2026-08-27T08:52:40.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "apache-2.0",
+      "readme_sha256": "a596a79b27cccc18754eae0a4c10e7b40e2128aa97d67e80ce1eae645ebc1955",
+      "template_kwargs": {
+        "reasoning_effort": "high",
+        "preserved_thinking": false
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "ling-3.0",
+      "backend": "ling",
+      "repo": "inclusionAI/Ling-3.0-flash",
+      "revision": "ef06d91fe382109ae82647da88ff99b0f11745b0",
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash/tree/ef06d91fe382109ae82647da88ff99b0f11745b0",
+      "repo_created_at": "2026-08-02T16:14:41.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "mit",
+      "readme_sha256": "52f6285293eafc30ffa0cecc7b2da3f199b7829314f8911c9aa006ae8aad3ba4",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "ring-2.6",
+      "backend": "ring",
+      "repo": "inclusionAI/Ring-2.6-1T",
+      "revision": "2314abdf9e380b7fa7b4b79369ceb5f69cc46b32",
+      "url": "https://huggingface.co/inclusionAI/Ring-2.6-1T/tree/2314abdf9e380b7fa7b4b79369ceb5f69cc46b32",
+      "repo_created_at": "2026-05-14T08:10:02.000Z",
+      "repo_created_at_is_not_release_date": true,
+      "license_label": "mit",
+      "readme_sha256": "25e5073c969ec2185f57b1f3773a95367d486103f7161b8927fdfd40d62292c7",
+      "template_kwargs": {
+        "reasoning_effort": "high"
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    }
+  ],
+  "raw_records": 15,
+  "verdicts": {
+    "CONSISTENT": 11,
+    "DEVIATION": 1,
+    "UNVERIFIABLE": 3
+  },
+  "source_reported_counts": "copied from independently frozen reference vectors, +3 for explicit deviation; not real upstream usage",
+  "unverified": "provider billing, identity, multimodal, tools, hidden reasoning and non-profile parameters"
+}

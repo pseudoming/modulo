@@ -1,0 +1,26 @@
+[
+  {
+    "message_id": "4ad0e27f-84c5-42ac-b28e-021f13bbd11e",
+    "sse_file": "application-1791582425644277747.sse",
+    "stream": false,
+    "model_requests": 2,
+    "tool_executions": 1,
+    "wire_ids": [
+      "chatcmpl-0b355e4d-b40f-469f-af0b-bfec1cef2b6b",
+      "chatcmpl-3732bcb3-0497-4c05-8cb4-a8a5b80da494"
+    ],
+    "collector_sha256": "70c41d40cb3c6089701286613c550f5aa39d1d878a7186d501f93e7a51789612"
+  },
+  {
+    "message_id": "5b4fbe63-299b-42fb-90a3-5f7f1a440204",
+    "sse_file": "application-1791582438570808810.sse",
+    "stream": true,
+    "model_requests": 2,
+    "tool_executions": 1,
+    "wire_ids": [
+      "chatcmpl-9daf2ae3-bcde-4c4b-aa43-d60ff0f4c1dc",
+      "chatcmpl-6baa9627-0a73-4342-a10e-78303c9f1933"
+    ],
+    "collector_sha256": "70c41d40cb3c6089701286613c550f5aa39d1d878a7186d501f93e7a51789612"
+  }
+]

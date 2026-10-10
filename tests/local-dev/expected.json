@@ -1,0 +1,39 @@
+{
+  "schema_version": "elastic-lab.v2",
+  "synthetic": true,
+  "dates": [
+    "20261001",
+    "20261002",
+    "20261003"
+  ],
+  "models": [
+    "Qwen/Qwen3.8-2.4T-A95B",
+    "deepseek-ai/DeepSeek-V4.1-Flash",
+    "qwen-turbo",
+    "deepseek-chat"
+  ],
+  "indices": 6,
+  "documents_per_index": 4,
+  "documents_total": 24,
+  "per_protocol": {
+    "calls": 12,
+    "recalculated_calls": 6,
+    "compared_calls": 5,
+    "verdicts": {
+      "CONSISTENT": 3,
+      "DEVIATION": 2,
+      "UNVERIFIABLE": 7
+    },
+    "deltas": [
+      -2,
+      0,
+      0,
+      0,
+      3
+    ]
+  },
+  "reference_assets": {
+    "qwen": "qwen3.8",
+    "deepseek": "deepseek-v4.1"
+  }
+}

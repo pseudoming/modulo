@@ -1,0 +1,97 @@
+{
+  "synthetic": true,
+  "reviewed_at": "2026-10-10",
+  "upstream_sources": [
+    {
+      "label": "newapi",
+      "repository": "QuantumNous/new-api",
+      "revision": "1d4328e97417a043a161a0dd30a5b129be3ace49",
+      "path": "model/log.go",
+      "sha256": "f26f5c98bd1a2fb0917d5d18586a2c5fda82afe8a05a37fe18ad428357892b27"
+    },
+    {
+      "label": "oneapi",
+      "repository": "songquanpeng/one-api",
+      "revision": "8df4a2670b98266bd287c698243fff327d9748cf",
+      "path": "model/log.go",
+      "sha256": "bab83067b818a139ef9c5e743272e390ba75d42dcf61691ccb8e9794b6eedbe9"
+    },
+    {
+      "label": "litellm-types",
+      "repository": "BerriAI/litellm",
+      "revision": "6d4fa56ac434c392dc34442f752272087eddcbbc",
+      "path": "litellm/types/utils.py",
+      "sha256": "13ea4bd0275c1c82802d04bdf0ae58c7d5a60386225b7b3525e5d214346c264e"
+    },
+    {
+      "label": "litellm-schema",
+      "repository": "BerriAI/litellm",
+      "revision": "6d4fa56ac434c392dc34442f752272087eddcbbc",
+      "path": "schema.prisma",
+      "sha256": "1ed6fbff070ed7cdf2fa86f667d7b6eedd6a0be2d7036250a54cfe360de183db"
+    },
+    {
+      "label": "litellm-logging",
+      "repository": "BerriAI/litellm",
+      "revision": "6d4fa56ac434c392dc34442f752272087eddcbbc",
+      "path": "litellm/litellm_core_utils/litellm_logging.py",
+      "sha256": "8dd16caae95fbefdc9b2481c60ac3b7145605d14b8ab5c6faf85525a55038fdb"
+    },
+    {
+      "label": "litellm-redaction",
+      "repository": "BerriAI/litellm",
+      "revision": "6d4fa56ac434c392dc34442f752272087eddcbbc",
+      "path": "litellm/litellm_core_utils/redact_messages.py",
+      "sha256": "a0edfe9b0f7f8067a0c5aa3eb360f91051fe4942da932ef2eb3c89a3248e9a96"
+    }
+  ],
+  "reference_inputs": "tests/fixtures/tokenizers/reference_inputs.json",
+  "reference_vectors": "tests/fixtures/tokenizers/family_reference_vectors.json",
+  "tool_reference_vectors": "tests/fixtures/tokenizers/reasoning_reference_vectors.json#gateway_tool_reference",
+  "generation": "Hand-composed native log shapes; no upstream service or remote model was run. Fixed messages and tokenizer expectations are from pre-existing independent reference vectors.",
+  "qwen_reference": "basic_zh",
+  "deepseek_reference": "history_unicode",
+  "model_alias_and_platforms_are_fixture_declarations": true,
+  "selected_models": [
+    "Qwen/Qwen3.8-2.4T-A95B",
+    "volc-deepseek"
+  ],
+  "expected_after_model_filter": {
+    "newapi": {
+      "raw_records": 6,
+      "parsed_calls": 5,
+      "selected_calls": 4,
+      "excluded_calls": 1,
+      "ignored_records": 1,
+      "verdicts": {
+        "UNVERIFIABLE": 4
+      }
+    },
+    "oneapi": {
+      "raw_records": 6,
+      "parsed_calls": 4,
+      "selected_calls": 3,
+      "excluded_calls": 1,
+      "ignored_records": 2,
+      "verdicts": {
+        "UNVERIFIABLE": 3
+      }
+    },
+    "litellm": {
+      "raw_records": 8,
+      "parsed_calls": 8,
+      "selected_calls": 7,
+      "excluded_calls": 1,
+      "ignored_records": 0,
+      "verdicts": {
+        "CONSISTENT": 1,
+        "DEVIATION": 2,
+        "UNVERIFIABLE": 4
+      }
+    }
+  },
+  "reference_assets": {
+    "qwen": "qwen3.8",
+    "deepseek": "deepseek-v4.1"
+  }
+}

@@ -1,0 +1,46 @@
+# 1. 选择来源，再修改对应来源文件中的访问地址。
+source: log
+source-config: import-log-file.yaml
+# 改用 ES 时，上面两行改成：
+# source: es
+# source-config: import-es.yaml
+
+# 2. 日志格式：dify / langchain / newapi / oneapi / litellm。
+adapter: dify
+# 日志正文包在外层字段中时填写，例如本地 ES 实验使用 payload。
+# payload-field: payload
+
+# 3. 只扫描哪些供应商。默认不筛选；需要时取消注释并修改。
+# platform-tag-source: field:platform
+# platforms: [volcengine, huaweicloud]
+# metadata 中的标签用 metadata:platform；整批单一供应商用 literal:供应商名。
+
+# 4. 在 modelnames 中追加内部名称；asset 保持为对应的本地参照型号。
+# 单项可加 platform 和 platform-tag-source；不写 platform 表示全局。
+models:
+  - modelnames: ["Qwen/Qwen3.8-2.4T-A95B", "qwen-2.4t"]
+    asset: qwen3.8
+  - modelnames: ["deepseek-ai/DeepSeek-V4.1-Flash"]
+    asset: deepseek-v4.1
+  - modelnames: ["moonshotai/Kimi-K3"]
+    asset: kimi-k3
+  - modelnames: ["MiniMaxAI/MiniMax-M3"]
+    asset: minimax-m3
+  - modelnames: ["meituan-longcat/LongCat-2.0"]
+    asset: longcat-2.0
+  - modelnames: ["zai-org/GLM-5.3"]
+    asset: glm-5.3
+  - modelnames: ["XiaomiMiMo/MiMo-V2.6-Pro-RL"]
+    asset: mimo-v2.6
+  - modelnames: ["stepfun-ai/Step-3.7-Flash"]
+    asset: step-3.7
+  - modelnames: ["tencent/Hy4-preview"]
+    asset: hy4-preview
+  - modelnames: ["inclusionAI/Ling-3.0-flash"]
+    asset: ling-3.0
+  - modelnames: ["inclusionAI/Ring-2.6-1T"]
+    asset: ring-2.6
+
+# 通常无需修改。这里的相对路径以本配置文件所在目录为准。
+assets: ../assets/tokenizers
+output: ../runs

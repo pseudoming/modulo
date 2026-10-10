@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "reference": "tests/fixtures/tokenizers/reasoning_reference_vectors.json",
+  "reference_sha256": "3d556b68d897fc045e65d67e4e96e25da55164b6e2f5dd311f28dba7a7f39a73",
+  "generator": "tests/tools/fixtures/generate_reasoning_fixtures.py",
+  "models": 11,
+  "rows_per_protocol": 96,
+  "input_usage": "frozen official reference IDs; no gateway/model service was run",
+  "output_usage": "not supplied; reasoning and answer counts are separate local text components"
+}

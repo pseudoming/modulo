@@ -1,0 +1,4 @@
+# Exact strings from the synthetic fixtures, not real service addresses.
+https://deepseek-official.example.test/v1: deepseek-official
+https://volcengine.example.test/v1: volcengine
+https://huaweicloud.example.test/v1: huaweicloud

@@ -1,0 +1,98 @@
+{
+  "schema_version": "native-log-fixtures.v1",
+  "synthetic": true,
+  "date": "2026-10-10",
+  "files": [
+    {
+      "file": "dify.jsonl",
+      "sha256": "e488ee01a6cad0128215f8be59058bb4f50736cfdbd51e890193056f77938d97",
+      "captured_file_sha256": "e488ee01a6cad0128215f8be59058bb4f50736cfdbd51e890193056f77938d97",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "dify-expected.json",
+      "sha256": "9ee193c213acfbd961d5a7d63383964de05480123fb7757eefc0ad76fc24c995",
+      "captured_file_sha256": "9ee193c213acfbd961d5a7d63383964de05480123fb7757eefc0ad76fc24c995",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "langchain.jsonl",
+      "sha256": "c27395978f4953f84fd00ceef7fc0fa0d20fdb5b804e1f96804270a019fb678d",
+      "captured_file_sha256": "c27395978f4953f84fd00ceef7fc0fa0d20fdb5b804e1f96804270a019fb678d",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "langchain-stream.jsonl",
+      "sha256": "fe4aead7813a19232199c65d9c38b7d439ba69f46bafac10691cd9eef76d3415",
+      "captured_file_sha256": "fe4aead7813a19232199c65d9c38b7d439ba69f46bafac10691cd9eef76d3415",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "langchain-expected.json",
+      "sha256": "2f946475e39ab49cb16e1b152b37460546466fe3c3fc93547f177a147fd93989",
+      "captured_file_sha256": "2f946475e39ab49cb16e1b152b37460546466fe3c3fc93547f177a147fd93989",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "litellm-standard.jsonl",
+      "sha256": "99a0e3c520633d8af206464cb9156dc6a1e7ec464d3a93612e5a5d3706589666",
+      "captured_file_sha256": "99a0e3c520633d8af206464cb9156dc6a1e7ec464d3a93612e5a5d3706589666",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "litellm-spend.jsonl",
+      "sha256": "82c732b973a8ab09fcef43e30ea0b72f798609a5d644013ff8947414e9d7d6ea",
+      "captured_file_sha256": "82c732b973a8ab09fcef43e30ea0b72f798609a5d644013ff8947414e9d7d6ea",
+      "projection": "unchanged producer output"
+    },
+    {
+      "file": "newapi.log",
+      "sha256": "74d702d8a3bf2dfc131972d77e360b4c351258179d3d81b25ad9cb7bb8f68440",
+      "captured_file_sha256": "25c0e58f4cfdfbcbc7bf7163b98245022a7aa594b36f85c9deda030d268eb6c9",
+      "projection": "only DEBUG/GIN lines; body bytes unchanged"
+    },
+    {
+      "file": "oneapi.log",
+      "sha256": "c5140d8b2b5e064c66a578878702fd133f3ea528b716faf1bd42cde121bd65f4",
+      "captured_file_sha256": "e6b6ac0280cfc3836e7d3f5f1f9f9b117b660d76a233f1acd8cb586b1acb907b",
+      "projection": "only DEBUG/GIN lines; body bytes unchanged"
+    },
+    {
+      "file": "oneapi-patched.log",
+      "sha256": "7e61c4443496d12a40e9caf6f9337739bbd82d728592dd049651b6fd73b81c0e",
+      "captured_file_sha256": "fb38a9a2dc3d496b3c65fb04f3acd21d8b330335cfacb8415a61c58c7a8074ca",
+      "projection": "only DEBUG/GIN lines; body bytes unchanged"
+    }
+  ],
+  "expected_counts_from": [
+    "tests/fixtures/tokenizers/family_reference_vectors.json",
+    "tests/fixtures/tokenizers/reasoning_reference_vectors.json"
+  ],
+  "runtimes": {
+    "langchain-core": "1.6.7",
+    "graphon": "0.7.0",
+    "litellm": "1.103.3",
+    "newapi": "v1.0.0-rc.42",
+    "oneapi_stock": "v0.6.11-preview.7",
+    "oneapi_patch_base": "8df4a2670b98266bd287c698243fff327d9748cf"
+  },
+  "scope": {
+    "dify": "Executed Graphon LLMNode.run and pinned Dify prompt-saving serializer; model runtime is synthetic. No full Dify UI/plugin deployment.",
+    "langchain": "Real callback lifecycle and serialization; synthetic BaseChatModel.",
+    "litellm": "Real SDK HTTP request and terminal callback plus upstream SpendLogs serializer; synthetic local HTTP endpoint. No PostgreSQL deployment.",
+    "newapi": "Deployed pinned Docker image, real DEBUG logs, local synthetic upstream.",
+    "oneapi": "Both stock image and compiled pinned source with supplied logging patch; API build uses placeholder UI, local synthetic upstream."
+  },
+  "images": {
+    "newapi": "calciumion/new-api@sha256:80d2be398567c4d59235d74bd7c21417ebfd612cd3452863ba8bd8dcad4fc437",
+    "oneapi": "justsong/one-api@sha256:a55fb5181854aa0823cc04797ee875dfc5a953c0deb5e7e7ec39a8148e70cbc3",
+    "python": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "dify_serializer_sha256": "62bb0822f0319f45663b3dc7497c0f5d3f437590a20e36c5a30428c269596818",
+  "oneapi_patch_sha256": "a5fdd7b7a7cb9465f8e32d9b7452c35a2b7209745640cf93671593f9355eaa15",
+  "oneapi_binary_sha256": "62406a6dd140a9c4911acf83b3b8047749ad57f7678ba14e764546368b958ca2",
+  "references": {
+    "tests/fixtures/tokenizers/family_reference_vectors.json": "337a9f92dcb702409229f720dd186a030ce82fec8df4bab1e5c72e6bf9df01f7",
+    "tests/fixtures/tokenizers/reasoning_reference_vectors.json": "3d556b68d897fc045e65d67e4e96e25da55164b6e2f5dd311f28dba7a7f39a73"
+  }
+}

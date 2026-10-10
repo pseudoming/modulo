@@ -1,0 +1,962 @@
+{
+  "2b2cd593-f6b2-5063-be7a-a8df28e3b498": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "e3204f5e-5fa0-5cf1-bff5-5f50a3dee2d3": {
+    "input_tokens": 403,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "40eee735-c026-531c-9959-2cac277a9dc0": {
+    "input_tokens": 445,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "cd2ba519-aa21-59ae-b0a5-66327440d9d6": {
+    "input_tokens": 437,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "fe21b601-da33-5082-acaf-12e96a725bb9": {
+    "input_tokens": 446,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "a6b81c64-53b6-5428-a252-f44203af2e52": {
+    "input_tokens": 97,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "5b00c125-1536-51fe-bb19-f4964c3f7e21": {
+    "input_tokens": 71,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "5f0e3e53-f30d-59c6-b4d8-1334ed88ce21": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "2936de28-b226-5fe1-be91-df9faf862e03": {
+    "input_tokens": 84,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "c73d0355-2dcd-598e-b239-a0a3fb307f27": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "be985001-8a4e-55f6-9c6d-416d0720c373": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "522ffeb6-d3d7-529f-9e52-4663859f8c4c": {
+    "input_tokens": 400,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "4819fc4d-817a-5531-82ef-72a2dcab6904": {
+    "input_tokens": 453,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "a9b47319-e340-56ec-8ea5-660cf4537699": {
+    "input_tokens": 421,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "3316bf18-79c3-55c8-877f-286c15256751": {
+    "input_tokens": 436,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "c2beb4da-9c45-55fe-86ea-6d0e76d37583": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "27bfa4b3-6b0a-57dc-b6d7-90f2f6e151ea": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "0ad15d07-fc1c-5426-a660-a9b074ae99c1": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "bf828fea-8531-5313-9c90-9765fa9dbfbf": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "f1cd28c4-950d-59f4-a72e-d06dd9b79a27": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "352caff6-1e00-5dcf-aad2-e53d8b06b754": {
+    "input_tokens": 30,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ccb5a5b9-b37d-5c01-85e0-7dada122ebfa": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "7b5280a5-5102-5210-8037-a64d3304085c": {
+    "input_tokens": 79,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "0afe6f2c-c274-5a30-b0b0-fe9c8452c3bb": {
+    "input_tokens": 177,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "03294fad-b829-5456-aa1c-cecf406098a9": {
+    "input_tokens": 309,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "38095ebc-714b-56e5-be51-2f1e784011a6": {
+    "input_tokens": 373,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "69a79608-d9aa-59f1-a281-965255596ef4": {
+    "input_tokens": 330,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "3991b96d-7b2a-511a-b7cf-c8825312e1dc": {
+    "input_tokens": 374,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "5c0fd84a-1767-5388-a1ed-efc9d4738b13": {
+    "input_tokens": 178,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "87b9d0df-caa9-5025-b709-5fce6f758eea": {
+    "input_tokens": 178,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2412e6f8-7dee-5cee-b0ae-e6b1a5169b76": {
+    "input_tokens": 177,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2ba492d4-079d-504d-8d45-855930b1f5fc": {
+    "input_tokens": 223,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "e34c33ab-a99e-5fa0-a690-0ed248300027": {
+    "input_tokens": 489,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "505af7d7-8b91-5e7e-beae-5f5baf1112bf": {
+    "input_tokens": 524,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "529bcc5c-fa61-5e3e-a77d-32fefe354558": {
+    "input_tokens": 514,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "95b533dd-bdb6-5db8-95cc-c76deda22eca": {
+    "input_tokens": 529,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "41c14c7b-c3a1-5414-911a-c187c05aee66": {
+    "input_tokens": 220,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "baf32ba4-199d-5cf2-b33b-2d7fbb3b1490": {
+    "input_tokens": 223,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "15de16ce-17cc-53a6-a6bc-13a0e2fd1031": {
+    "input_tokens": 210,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "72eab9c5-5387-5ea2-9286-762cc4bfb4c7": {
+    "input_tokens": 64,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "d996b816-111c-5a5c-8158-f7560b9e2eb3": {
+    "input_tokens": 219,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "f73118a1-bc97-5aca-b9a9-8df6a53e2afd": {
+    "input_tokens": 245,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "713829a4-6980-53b5-855b-0fe245176a8b": {
+    "input_tokens": 253,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "03d5c21d-954f-5ca0-bc4d-a3dc1434723d": {
+    "input_tokens": 262,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "13cc4618-ad48-53b9-b22f-6b6d18a27faf": {
+    "input_tokens": 44,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "9ee0dc50-423b-5b6b-8de2-ed43f393bcb4": {
+    "input_tokens": 64,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "4afcf690-1da8-59df-8664-0b6eb091508c": {
+    "input_tokens": 88,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "3c8766e0-877c-5600-8461-0f7ff4baf5cd": {
+    "input_tokens": 88,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "5daf2332-e059-5a0b-9555-bd76aeeba2d5": {
+    "input_tokens": 33,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "2a290ebb-d322-5c82-a4cc-243d328e6200": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "573c8570-c89d-5850-b76e-806c6a63a301": {
+    "input_tokens": 222,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "a10690f9-4ccc-56bc-a2b3-12de89f0ef45": {
+    "input_tokens": 240,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "a1bdcc54-e8af-5d1b-bc0c-1d216c17eb49": {
+    "input_tokens": 247,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "01ba3de4-1e84-5f20-9e3b-c537b260b86a": {
+    "input_tokens": 255,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "14b1e94c-d16d-5111-a72b-700c0b8d828b": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "785913c8-333c-5bbc-b298-0d4f9765d653": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "5ab8f042-c987-5cf7-9f92-61ea14840b6a": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "aba31d59-6992-52f7-b95f-e20da871e4b4": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "d09460b3-50da-54be-a62e-7d32f1c47ad7": {
+    "input_tokens": 40,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "a7b45310-257d-5ec8-b37a-71f783d66446": {
+    "input_tokens": 68,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "fe4a49ab-b408-51f3-a963-78e29e24d858": {
+    "input_tokens": 160,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "151ce1e3-84a7-5ecf-a7df-919adac77af0": {
+    "input_tokens": 183,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "e7c039ce-be29-59eb-82ec-4979f881f54f": {
+    "input_tokens": 186,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "179f76eb-cf0b-5adf-9a61-34e4601dc6d2": {
+    "input_tokens": 202,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "f000f25c-ab43-514f-8d71-8e896cc57c75": {
+    "input_tokens": 68,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "bac976ce-95be-5648-9643-71ece09e7fd8": {
+    "input_tokens": 70,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "662e037a-4b03-53e9-82a6-7aa115b62f4a": {
+    "input_tokens": 49,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "6df80988-e94f-5cdf-ab0d-c0e4e0d94373": {
+    "input_tokens": 318,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "0d7d6ecc-54ac-5da8-a63c-5893b17368f3": {
+    "input_tokens": 352,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "6fdfa623-5d21-5109-acf6-66df76b78a09": {
+    "input_tokens": 338,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ae466338-038c-537d-a955-f52e5b6fb631": {
+    "input_tokens": 310,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2e160d13-b768-5a88-bd99-a3f73c109712": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2ab5b9d0-5000-57ee-b1c1-0ca687dbd703": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2d7749e2-512a-5a94-8304-c5bc05bab60d": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "8437f604-b41e-58c5-82e5-0e3b49d0ead0": {
+    "input_tokens": 52,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "06f1c727-f561-5391-9889-6398f9eb7c75": {
+    "input_tokens": 257,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "34b6af9f-6eb1-5bf7-a9e6-c064728a84d2": {
+    "input_tokens": 275,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "be8d7ae9-c119-5782-bbeb-67e0992a5e5e": {
+    "input_tokens": 279,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "3af6e5e2-362e-52b8-8cc4-10973bdb42cc": {
+    "input_tokens": 253,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ee21da4d-317b-587e-ab38-7d70650cb232": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "57b72233-4863-5696-985c-def0d6a28d5b": {
+    "input_tokens": 75,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "198b379d-3792-555c-b876-aa42e8697298": {
+    "input_tokens": 78,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "f4285a73-b4b7-54b0-82cd-44e39de4b852": {
+    "input_tokens": 309,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "9676cb29-a810-5853-a02e-fd24b655b0b6": {
+    "input_tokens": 335,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "60aab27f-8ff0-588f-b0b0-55c9a5693c63": {
+    "input_tokens": 343,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "ede7bf2b-d9c5-5de9-bed6-3b4dba234d1d": {
+    "input_tokens": 353,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "7b5b3b4f-76d6-5476-a86f-68012ca48dc0": {
+    "input_tokens": 78,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "dc1a1469-75b3-5fc0-a920-76b05ffb2c9a": {
+    "input_tokens": 79,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "50485fe2-43d0-5fbe-b3fd-49227ff7501b": {
+    "input_tokens": 79,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "da6793a0-2f75-5c7d-8b8b-8b160df533e4": {
+    "input_tokens": 65,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "ecf92a7f-efa7-5436-8c1b-a9e3085740d1": {
+    "input_tokens": 320,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "b9abe30c-97ac-591d-8d2d-39943e9806fe": {
+    "input_tokens": 346,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "52584add-2dbf-57cc-b97d-5f9bc2980e3b": {
+    "input_tokens": 354,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "905224ab-9c16-5e90-8f14-5b6b6aaad5ed": {
+    "input_tokens": 319,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "ef18be69-f8c8-5d78-b4d3-cc6ff4dbe159": {
+    "input_tokens": 65,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "0506e199-d32d-56a3-9ef8-eff10fdb8a6b": {
+    "input_tokens": 66,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "9710b7f0-f3f2-5235-ad46-d28053feb2f3": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "44138e98-afde-59fd-adeb-107484c8886a": {
+    "input_tokens": 403,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "2b6aa969-f894-5b6a-a48a-ef8a1dc32701": {
+    "input_tokens": 445,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "e9f33504-e6c5-5e22-8f7c-da64621a15be": {
+    "input_tokens": 437,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "f60cc36b-2383-5d1e-b63b-cf3318e37acd": {
+    "input_tokens": 446,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "25137e57-5f6f-512e-be5e-5ab411e022bf": {
+    "input_tokens": 97,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "8601fef8-15f0-534f-8fa8-7f99a5d5f48c": {
+    "input_tokens": 71,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "347ae0ef-0543-51b7-a095-dd275ff14231": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "282dac45-d3ca-5442-8123-b02c2785bb86": {
+    "input_tokens": 84,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "b4a947c5-7f31-5e22-bfda-894f1c93fe2d": {
+    "input_tokens": 109,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "ea273334-d352-56ba-b5db-53a87c389a52": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "6ef0dd49-5f3e-5a26-88cd-95c653bc0b63": {
+    "input_tokens": 400,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "fe706658-9534-5ebb-8ead-036ac4a1e071": {
+    "input_tokens": 453,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "b4e53f9e-cbca-5323-ad2e-a2871b9d3208": {
+    "input_tokens": 421,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "1e173773-a8c2-526a-b7f1-b10c8cc454e4": {
+    "input_tokens": 436,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "a5f5b197-6110-5465-b78e-3be444c66f9b": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "4a34b3aa-44d2-5fcb-9757-4bbd99bd18e1": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "732a7b9c-96b5-599e-89be-ccb8e8659ad3": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "421d5e99-8790-5197-aa7f-9c516dcd74ab": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "1bbd2544-6a67-58fd-8fa2-08a99baba89e": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ad55084c-bb0b-56c0-9f68-1db0908c295d": {
+    "input_tokens": 30,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "8e67fb9f-cd26-5c67-98e5-b532007244d5": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "634ed9d5-5fb6-5860-926b-23aa408c91cc": {
+    "input_tokens": 79,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "73f7bca8-2da6-5438-96f9-6bbe9fe6faab": {
+    "input_tokens": 177,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "649c9db3-fdff-57da-a4cb-8af199329046": {
+    "input_tokens": 309,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "204e3e4f-8438-5a16-a0c6-c246a1d87d7c": {
+    "input_tokens": 373,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ce209d85-0ab1-5d1e-b891-51c4e88dd79b": {
+    "input_tokens": 330,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "2882dca2-9b97-5ac7-8068-9314cdc043ca": {
+    "input_tokens": 374,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "4644cb5d-a59d-5bbb-8c89-c31825153361": {
+    "input_tokens": 178,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "aa0ce4f9-b672-5297-81ef-8696eb2b85e7": {
+    "input_tokens": 178,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "b9d0d486-78f1-5ac9-a6d5-1c86239b3fae": {
+    "input_tokens": 177,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "64f0927e-9313-53d3-8ac2-38f8165716fa": {
+    "input_tokens": 223,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "f38ef3c0-5290-5940-ba66-acdd25f47ce8": {
+    "input_tokens": 489,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "330d3184-3182-5c7f-afaa-49612bb3479d": {
+    "input_tokens": 524,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "5241012a-6c85-54b2-b62b-4c1faa1fd1f9": {
+    "input_tokens": 514,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "11ec469b-a2d5-543c-8caf-76c8db1c05ef": {
+    "input_tokens": 529,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "d92c8931-e961-5aa0-b7f5-9f593528eb19": {
+    "input_tokens": 220,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "5a4b3426-dcd9-5549-be12-217c58dedd7f": {
+    "input_tokens": 223,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "2f03316d-008a-5ae2-8b2d-6100091804ac": {
+    "input_tokens": 210,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 20
+  },
+  "57c2dca9-9215-5732-a952-cb0a3402cafd": {
+    "input_tokens": 64,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "b6b8075a-2336-5cc1-9bc5-50bf9b76270e": {
+    "input_tokens": 219,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "d8492f16-73e1-5929-9b88-c9c3d44a0a5b": {
+    "input_tokens": 245,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "c4a8db95-c26b-5178-a4ae-4700ea0ea96f": {
+    "input_tokens": 253,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "45adb5a3-42f4-5cba-bcf6-ff13de1c7a8c": {
+    "input_tokens": 262,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "a2c1f006-51b7-5905-899f-2ef7365e8517": {
+    "input_tokens": 44,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "ac2baed8-17f4-56b9-a1a4-50b208fe1c45": {
+    "input_tokens": 64,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "629bd644-b5d5-58e1-9e95-58b17b15d055": {
+    "input_tokens": 88,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "50261414-9c4e-5529-98b2-6c05fcebaa3e": {
+    "input_tokens": 88,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "8f638544-f4bd-52f9-9a37-d1dd7cd987f3": {
+    "input_tokens": 33,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 24
+  },
+  "a711aabd-2ecf-5b70-9415-a290941bd398": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "73f25243-1682-5351-a5ff-6e01463fcba2": {
+    "input_tokens": 222,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "68aa379d-e234-5f24-a6b0-2f079a72afe8": {
+    "input_tokens": 240,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "c87d1432-b1e4-5e59-a8dc-49de12b677c4": {
+    "input_tokens": 247,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "58e2d5ba-210b-5dde-8ddf-a01c4e586f36": {
+    "input_tokens": 255,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "c8ad1863-c7f0-579c-a235-d556e634de13": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "6ea17929-87bd-5279-a0d8-222a260f2545": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "97d05edd-5e9f-5561-82cd-fd681edf8e5d": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "e509b912-5f33-536c-88a9-72109fb5cb0a": {
+    "input_tokens": 61,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "d2adb108-3eaf-5b94-9ba3-8fe0dd585c5b": {
+    "input_tokens": 40,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 21
+  },
+  "6fc8e922-76cf-5df0-b1dc-1243ff52a993": {
+    "input_tokens": 68,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "42f6f1a2-8f99-59b3-a934-2209f5f79070": {
+    "input_tokens": 160,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "6f8d72a5-7e20-5525-9c48-6c8f87b0ea0e": {
+    "input_tokens": 183,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "04096ad8-98bb-5b3c-84f1-18df9ab57037": {
+    "input_tokens": 186,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "88c824be-574b-5c83-9a5d-9faa1dcee23a": {
+    "input_tokens": 202,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "55768bb6-d856-53d6-bf19-1cdf406992c0": {
+    "input_tokens": 68,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "deb1a9c6-c872-5ad8-8cf4-498937c5274a": {
+    "input_tokens": 70,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 22
+  },
+  "9bfb4413-1361-5515-96cd-e58be5e930c4": {
+    "input_tokens": 49,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "490d53e0-3ee5-5f0d-a1b0-dfe72b88f230": {
+    "input_tokens": 318,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "c37f6617-8b30-56de-8319-03d710455145": {
+    "input_tokens": 352,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "cf6a894b-087b-5bb6-b397-33cdb3064375": {
+    "input_tokens": 338,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "6763a0b9-1d98-5080-9db4-ec8398d6a689": {
+    "input_tokens": 310,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "a1702296-b24d-52cb-8f1a-02afb6b1b7e8": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "92baaed9-7967-5d3c-9c78-17360113f17e": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "1010d327-a074-5d72-baa9-37aa92102c11": {
+    "input_tokens": 54,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "474ca899-b46e-545b-92d2-afdfcb865628": {
+    "input_tokens": 52,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "ee1c3c5f-81ea-5fba-8b28-30e88404ef9c": {
+    "input_tokens": 257,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "1e2ecf88-ef37-533d-800f-04805e26f6d5": {
+    "input_tokens": 275,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "3eb6c8aa-56ec-5ab4-804e-e04eb0133448": {
+    "input_tokens": 279,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "0f4a12f1-4a27-5a38-bc3a-656d00bc58d2": {
+    "input_tokens": 253,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "f18faefb-3d36-5aaf-a5a8-f3ad39b2032b": {
+    "input_tokens": 55,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "a59bc56e-031d-5200-addd-3a9a4762de8c": {
+    "input_tokens": 75,
+    "visible_output_tokens": 4,
+    "reasoning_output_tokens": 23
+  },
+  "969dae8e-3569-522c-b8ce-9bd3173df7ba": {
+    "input_tokens": 78,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "f7cc69b2-d6d9-5daa-a143-f3adb0769f4f": {
+    "input_tokens": 309,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "4f8d5a7a-8ed5-5563-af32-3f3d279df2c1": {
+    "input_tokens": 335,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "a3c6f43c-1ea6-579a-b980-688c28d8f678": {
+    "input_tokens": 343,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "a8d407db-2c62-5eb4-8789-e1bc99e6f6cf": {
+    "input_tokens": 353,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "ef90b540-7d65-5c93-abca-c66645f8d948": {
+    "input_tokens": 78,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "44f171c8-a218-5545-9d40-6589cf277086": {
+    "input_tokens": 79,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "e222c4d1-45a7-5262-ac84-56574678625e": {
+    "input_tokens": 79,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "f3f82fde-dec8-579d-97c3-825bd315555b": {
+    "input_tokens": 65,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "53eda9d0-e673-5a03-abc7-b7efcd2ad99c": {
+    "input_tokens": 320,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "22d74506-3021-5a75-a122-607a1034c3a6": {
+    "input_tokens": 346,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "18e85ef7-9c41-58b0-95a9-e746c1e06e7f": {
+    "input_tokens": 354,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "28a26d10-d299-5e27-9558-daa9e500eda7": {
+    "input_tokens": 319,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "ec594594-244f-5ee8-939e-d4d786a92328": {
+    "input_tokens": 65,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  },
+  "79778c63-ea4e-5db8-8e74-34f32b0026f3": {
+    "input_tokens": 66,
+    "visible_output_tokens": 5,
+    "reasoning_output_tokens": 21
+  }
+}

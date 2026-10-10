@@ -1,0 +1,7 @@
+# Synthetic examples only: these labels do not certify any cloud service.
+schema_version: platform-config.v1
+platform-tag-source: metadata:platform
+platforms:
+  - volcengine
+models:
+  - deepseek-ai/DeepSeek-V4.1-Flash

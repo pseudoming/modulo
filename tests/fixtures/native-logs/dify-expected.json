@@ -1,0 +1,57 @@
+{
+  "native-dify-qwen3.8": {
+    "input_tokens": 66,
+    "visible_output_tokens": 2,
+    "model": "Qwen/Qwen3.8-2.4T-A95B"
+  },
+  "native-dify-deepseek-v4.1": {
+    "input_tokens": 44,
+    "visible_output_tokens": 2,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash"
+  },
+  "native-dify-kimi-k3": {
+    "input_tokens": 112,
+    "visible_output_tokens": 2,
+    "model": "moonshotai/Kimi-K3"
+  },
+  "native-dify-minimax-m3": {
+    "input_tokens": 184,
+    "visible_output_tokens": 2,
+    "model": "MiniMaxAI/MiniMax-M3"
+  },
+  "native-dify-longcat-2.0": {
+    "input_tokens": 22,
+    "visible_output_tokens": 2,
+    "model": "meituan-longcat/LongCat-2.0"
+  },
+  "native-dify-glm-5.3": {
+    "input_tokens": 27,
+    "visible_output_tokens": 2,
+    "model": "zai-org/GLM-5.3"
+  },
+  "native-dify-mimo-v2.6": {
+    "input_tokens": 25,
+    "visible_output_tokens": 2,
+    "model": "XiaomiMiMo/MiMo-V2.6-Pro-RL"
+  },
+  "native-dify-step-3.7": {
+    "input_tokens": 31,
+    "visible_output_tokens": 2,
+    "model": "stepfun-ai/Step-3.7-Flash"
+  },
+  "native-dify-hy4-preview": {
+    "input_tokens": 35,
+    "visible_output_tokens": 2,
+    "model": "tencent/Hy4-preview"
+  },
+  "native-dify-ling-3.0": {
+    "input_tokens": 34,
+    "visible_output_tokens": 2,
+    "model": "inclusionAI/Ling-3.0-flash"
+  },
+  "native-dify-ring-2.6": {
+    "input_tokens": 39,
+    "visible_output_tokens": 2,
+    "model": "inclusionAI/Ring-2.6-1T"
+  }
+}

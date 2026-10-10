@@ -1,0 +1,8 @@
+models:
+- modelnames:
+  - volc-deepseek
+  asset: deepseek-v4.1
+- modelnames:
+  - volc-deepseek
+  asset: deepseek-v4.1
+  platform: volcengine

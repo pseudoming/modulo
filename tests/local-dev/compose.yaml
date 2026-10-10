@@ -1,0 +1,53 @@
+name: modulo-local
+
+# A local synthetic-data lab. Only the host loopback ports are published.
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
+    environment:
+      discovery.type: single-node
+      cluster.name: modulo-local
+      xpack.security.enabled: "false"
+      xpack.security.enrollment.enabled: "false"
+      xpack.ml.enabled: "false"
+      ingest.geoip.downloader.enabled: "false"
+      node.store.allow_mmap: "false"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - "127.0.0.1:${MODULO_ES_PORT:-9200}:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=2s' >/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.5
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    environment:
+      SERVER_NAME: modulo-kibana
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      XPACK_SECURITY_ENABLED: "false"
+      TELEMETRY_ENABLED: "false"
+      TELEMETRY_OPTIN: "false"
+      NODE_OPTIONS: --max-old-space-size=1024
+    ports:
+      - "127.0.0.1:${MODULO_KIBANA_PORT:-5601}:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    mem_limit: 1536m
+    healthcheck:
+      test: ["CMD", "/usr/share/kibana/node/default/bin/node", "-e", "fetch('http://localhost:5601/api/status').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 36
+      start_period: 60s
+
+volumes:
+  es-data:

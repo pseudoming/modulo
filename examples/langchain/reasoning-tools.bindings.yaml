@@ -1,0 +1,34 @@
+models:
+- modelnames:
+  - Qwen/Qwen3.8-2.4T-A95B
+  asset: qwen3.8
+- modelnames:
+  - deepseek-ai/DeepSeek-V4.1-Flash
+  asset: deepseek-v4.1
+- modelnames:
+  - moonshotai/Kimi-K3
+  asset: kimi-k3
+- modelnames:
+  - MiniMaxAI/MiniMax-M3
+  asset: minimax-m3
+- modelnames:
+  - meituan-longcat/LongCat-2.0
+  asset: longcat-2.0
+- modelnames:
+  - zai-org/GLM-5.3
+  asset: glm-5.3
+- modelnames:
+  - XiaomiMiMo/MiMo-V2.6-Pro-RL
+  asset: mimo-v2.6
+- modelnames:
+  - stepfun-ai/Step-3.7-Flash
+  asset: step-3.7
+- modelnames:
+  - tencent/Hy4-preview
+  asset: hy4-preview
+- modelnames:
+  - inclusionAI/Ling-3.0-flash
+  asset: ling-3.0
+- modelnames:
+  - inclusionAI/Ring-2.6-1T
+  asset: ring-2.6

@@ -1,0 +1,4 @@
+# 相对路径以本文件所在目录为准。读单个文件时删除 pattern。
+path: ../examples/dify
+# 换成实际目录后，例如 dify-access-log-202610*.jsonl。
+pattern: basic*.jsonl

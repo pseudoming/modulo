@@ -1,0 +1,33 @@
+{
+  "synthetic": true,
+  "reference_vectors": "tests/fixtures/tokenizers/family_reference_vectors.json",
+  "reference_assets": {
+    "qwen": "qwen3.8",
+    "deepseek": "deepseek-v4.1"
+  },
+  "generated_with": {
+    "langchain-core": "1.6.7"
+  },
+  "dify_source_revision": "2bb466c09aa16ebce7a9d0770ededb80ac2de05c",
+  "cases": [
+    "consistent",
+    "delta_plus_three",
+    "missing_usage",
+    "unknown_model",
+    "missing_messages",
+    "multimodal",
+    "same_content_new_id",
+    "failed_missing_messages"
+  ],
+  "raw_records_per_protocol": 10,
+  "expected_calls": 8,
+  "expected_duplicate_calls": 1,
+  "expected_ignored_records": 1,
+  "expected_input_verdicts": {
+    "CONSISTENT": 2,
+    "DEVIATION": 1,
+    "UNVERIFIABLE": 5
+  },
+  "expected_compared_calls": 3,
+  "expected_recalculated_calls": 4
+}

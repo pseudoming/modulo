@@ -1,0 +1,16 @@
+data: {"event":"agent_thought","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"9096121f-eb9e-457f-97ee-3c6940bbb12c","position":1,"thought":"","observation":"","tool":"","tool_labels":{},"tool_input":"","message_files":[]}
+
+data: {"event":"agent_message","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","answer":""}
+
+data: {"event":"agent_thought","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"9096121f-eb9e-457f-97ee-3c6940bbb12c","position":1,"thought":"","observation":"","tool":"add","tool_labels":{"add":{"en_US":"add","zh_Hans":"add"}},"tool_input":"{\"add\": {\"a\": 17, \"b\": 25}}","message_files":[]}
+
+data: {"event":"agent_thought","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"9096121f-eb9e-457f-97ee-3c6940bbb12c","position":1,"thought":"","observation":"{\"add\": \"{\\\"result\\\": 42}\"}","tool":"add","tool_labels":{"add":{"en_US":"add","zh_Hans":"add"}},"tool_input":"{\"add\": {\"a\": 17, \"b\": 25}}","message_files":[]}
+
+data: {"event":"agent_thought","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"6118bb07-70b7-4f6c-9319-fd1d46c205f6","position":2,"thought":"","observation":"","tool":"","tool_labels":{},"tool_input":"","message_files":[]}
+
+data: {"event":"agent_message","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","answer":"<think>\n工具已返回42，按工具结果作答。\n</think>工具计算结果是42。"}
+
+data: {"event":"agent_thought","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"6118bb07-70b7-4f6c-9319-fd1d46c205f6","position":2,"thought":"<think>\n工具已返回42，按工具结果作答。\n</think>工具计算结果是42。","observation":"","tool":"","tool_labels":{},"tool_input":"","message_files":[]}
+
+data: {"event":"message_end","conversation_id":"71dda1d7-7c72-431c-b735-6161e3809b6e","message_id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","created_at":1791582425,"task_id":"85affb88-a0d2-422e-86ed-732ff733e4ce","id":"4ad0e27f-84c5-42ac-b28e-021f13bbd11e","metadata":{"retriever_resources":[],"usage":{"prompt_tokens":246,"prompt_unit_price":"0","prompt_price_unit":"0","prompt_price":"0","completion_tokens":34,"completion_unit_price":"0","completion_price_unit":"0","completion_price":"0","total_tokens":280,"total_price":"0","currency":"USD","latency":0.12460604700027034},"reasoning":{}},"files":[]}
+
