@@ -7,6 +7,27 @@ from modulo.cli.parser import parser
 from modulo.core.domain.platforms import PlatformConfig
 
 
+def test_sampling_configuration_cli_overrides_and_switching_modes(tmp_path):
+    path = tmp_path / "modulo.yaml"
+    path.write_text(
+        "source: log\nadapter: dify\nmodels: []\nsampling:\n"
+        "  mode: window\n  window-minutes: 5\n  count: 100\n  seed: buyer\n"
+    )
+    args = ["import", "--config", str(path)]
+    configured = import_options(parser().parse_args(args)).sampling
+    assert configured.mode == "window" and configured.count == 100
+    overridden = import_options(parser().parse_args([*args, "--sample-count", "30"])).sampling
+    assert overridden.count == 30 and overridden.window_minutes == 5
+    switched = import_options(
+        parser().parse_args([*args, "--sample-mode", "ratio", "--sample-ratio", "0.1"])
+    ).sampling
+    assert str(switched.ratio) == "0.1" and switched.count is None and switched.seed == "buyer"
+    assert (
+        import_options(parser().parse_args([*args, "--sample-mode", "all"])).sampling.mode == "all"
+    )
+    assert asset_options(parser().parse_args(["prepare-assets", "--config", str(path)]))
+
+
 def test_asset_region_configuration_and_explicit_cli_overrides(tmp_path):
     path = tmp_path / "modulo.yaml"
     path.write_text(

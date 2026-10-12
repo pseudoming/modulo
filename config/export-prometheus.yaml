@@ -1,0 +1,22 @@
+# 先在用户的 Prometheus 启动参数中开启 --web.enable-remote-write-receiver。
+# modulo export-prometheus runs/<结果目录> --config config/export-prometheus.yaml
+url: http://localhost:9090/api/v1/write
+
+# 同一 scope 表示同一统计范围；展示最近一次导出的结果快照。
+# 不同网关或独立审计范围使用不同名称，不按每次运行生成新名称。
+scope: my-gateway
+
+# auto：window 结果只导出样本统计；其他结果导出完整本地统计。
+# 对外接收方应显式设置 sample-only；只接受满额的 count/window 样本。
+# full：仅用于允许查看总体规模的买方内部监控。
+# 不足额度、读取未完成或存在时间不明调用时，sample-only 不发送请求。
+visibility: auto
+
+# 凭证只从环境变量读取。Basic 与 Bearer 二选一，可都不配置。
+# username: metrics-writer
+# password-env: MODULO_PROMETHEUS_PASSWORD
+# bearer-token-env: MODULO_PROMETHEUS_TOKEN
+# ca-file: ./certs/prometheus-ca.pem
+
+timeout-seconds: 30
+max-series: 10000

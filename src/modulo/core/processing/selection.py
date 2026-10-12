@@ -91,4 +91,5 @@ def select_calls(
                 }
             )
             continue
+        selection["selected_calls"] += 1
         yield row

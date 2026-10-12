@@ -11,6 +11,7 @@
   <a href="#quick-start">Quick start</a> ·
   <a href="#results">Results</a> ·
   <a href="#configuration">Configuration</a> ·
+  <a href="#prometheus">Prometheus / Grafana</a> ·
   <a href="#faq">FAQ</a>
 </p>
 
@@ -31,6 +32,7 @@ flowchart LR
 - **Map internal model names**: assign multiple aliases to one tokenizer reference, with provider-specific mappings when needed.
 - **Explain missing evidence**: distinguish consistent, deviating, and unverifiable results, keeping the reason for every unavailable calculation.
 - **Trace the calculation**: retain source locations, field transformations, tokenizer/template revisions, and calculation parameters; verify result bundle integrity.
+- **Export statistics**: write saved call counts, coverage and token differences directly to Prometheus, with an importable Grafana template.
 
 <a id="log-formats"></a>
 
@@ -254,6 +256,75 @@ uv run modulo import --config config/modulo.yaml --state runs/import-state \
 ```
 
 Each state directory produces cumulative snapshots, retains earlier results and reuses unchanged calculations. After Ctrl+C, rerun the same command; uncommitted reads are replayed and deduplicated. File appends and rename rotation are supported; incomplete lines wait for a newline, while altered or truncated consumed prefixes raise an error. ES resumes a valid snapshot cursor; expired snapshots and new scans reread pages and deduplicate source records, including previously read documents. State and historical snapshots consume disk space; use separate directories for audit periods and new state directories when calculation rules or code change. Incomplete reads and data gaps remain visible in reports. See the [protocol examples](examples/README.md) for runnable inputs.
+
+<a id="sampling"></a>
+
+## Sampling and buyer data boundaries
+
+Full processing is the default. Set `sampling` in the main configuration:
+
+| mode | Behavior | Required parameters |
+| --- | --- | --- |
+| `all` | Recount all calls matching the filters | None |
+| `ratio` | Sample each platform/model with a fixed inclusion probability; actual counts vary | `ratio: 0.1` |
+| `count` | Randomly select up to N units per platform/model | `count: 100` |
+| `window` | Randomly select up to N units from one completed time window | `window-minutes: 5`, `count: 100` |
+
+```yaml
+sampling:
+  mode: window
+  window-minutes: 5
+  count: 100
+  seed: buyer-local-seed
+```
+
+Window sampling uses the normalized call's `started_at`. The default is the latest completed UTC window, inclusive at the start and exclusive at the end: running at 10:07 with a five-minute window selects 10:00–10:05. Replay a historical window with `--sample-before '2026-10-13T10:05:00+08:00'`. Missing, timezone-free or conflicting timestamps remain local diagnostics.
+
+Requests, responses and stream fragments are assembled before sampling. A normal call is one unit; a LangChain Run sharing aggregate usage is sampled as a whole unit, so call counts may exceed the quota. The same logs and `seed` reproduce the sample regardless of read order. `max-records` is a reading cap, not random sampling. Sampling saves recount work; selected source logs still need to be read and assembled.
+
+CLI options override configuration. Switching modes clears the previous mode's probability, quota and window parameters:
+
+```bash
+uv run modulo import --config config/modulo.yaml --sample-mode ratio --sample-ratio 0.1
+uv run modulo import --config config/modulo.yaml --sample-mode count --sample-count 100
+```
+
+Use system [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) for scheduling; each invocation exits after processing. This example runs every five minutes after window mode is configured; replace `/opt/modulo` with your installation path:
+
+```cron
+*/5 * * * * /opt/modulo/.venv/bin/modulo import --config /opt/modulo/config/modulo.yaml --state /opt/modulo/state >> /opt/modulo/sampling.log 2>&1
+```
+
+Trigger frequency and window length are separate settings. Only the latest completed window is selected automatically; missed windows and late logs can be replayed with `--sample-before`. This command neither uploads results nor installs a scheduled task.
+
+For an external Prometheus receiver, set `visibility: sample-only` in the export configuration. Only filled `count`/`window` sample statistics are sent: no raw record count, population, actual sampling fraction, seed or population coverage. `auto` uses this policy for window mode and full export otherwise. `full` is for buyer-internal receivers authorized to see population size. Full and proportional samples cannot use sample-only.
+
+Underfilled quotas, incomplete reading, invalid records or unresolved call times return `export: withheld` without sending a request. Exit code 0 means the policy completed, not that data was sent. The receiver retains its previous snapshot; check its age. Changing visibility does not erase already exported history; use a separate external scope/receiver.
+
+Local bundles, command output and the cron log still contain full population information and raw evidence; they are not restricted exports. Sample coverage divides by sampled calls. Population coverage divides by eligible calls within the sampling scope and is available only locally or through full export. Counts are retained explicitly; unresolved times remain separate.
+
+<a id="prometheus"></a>
+
+## Prometheus and Grafana
+
+Start your Prometheus server with `--web.enable-remote-write-receiver`, then export an existing result bundle:
+
+```bash
+uv run modulo export-prometheus runs/<result-directory> \
+  --url http://localhost:9090/api/v1/write --scope my-gateway
+
+# Alternatively, store the destination, scope and authentication settings in YAML
+uv run modulo export-prometheus runs/<result-directory> \
+  --config config/export-prometheus.yaml
+```
+
+The [export configuration](config/export-prometheus.yaml) supports Basic or Bearer authentication through named environment variables, a custom CA file, timeout and series limit. Explicit CLI options take precedence. The command verifies the bundle, reads saved calculations, sends metrics and exits; it does not rerun tokenizers or require Pushgateway or a resident service. Users enable the [Remote Write receiver](https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver) on their own Prometheus server.
+
+[Import](https://grafana.com/docs/grafana/latest/visualizations/dashboards/build-dashboards/import-dashboards/) [static/grafana/modulo.json](static/grafana/modulo.json) into Grafana and select your Prometheus data source. The template (Chinese panel labels) shows calls, overall/input/output verdicts, recount and comparison coverage, and token differences by scope, provider and model. A zero denominator means no data. Token comparisons use the same comparable call cohort. LangChain Run-level usage groups remain separate.
+
+Use a stable `scope` for each statistical scope. The latest exported snapshot is shown; exporting again does not add to call counts. Independent gateways or audit scopes need different scope names. All metrics are Gauges: do not use `rate()` or `increase()` to derive call volume. The template excludes model groups absent from the latest snapshot and displays the original result time separately; re-exporting an old bundle does not change that time. Samples use the **export time**, not the log event time; this is not historical event-time backfill.
+
+The template displays the last export within the selected time range (7 days by default). Data outside that range or Prometheus retention is unavailable. Details and exact integers remain in the local bundle. Network errors, HTTP 429 and 5xx receive at most 3 attempts; other failures stop immediately with a nonzero exit code. The default limit is 10,000 metric series per export, adjustable with `--max-series`. Users deploy and maintain Prometheus and Grafana.
 
 <a id="faq"></a>
 

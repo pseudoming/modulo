@@ -52,6 +52,56 @@ def test_prepare_assets_reads_main_config_and_reports_verified_files(
 MODELS = ["Qwen/Qwen3.8-2.4T-A95B", "deepseek-ai/DeepSeek-V4.1-Flash"]
 
 
+def test_prometheus_command_uses_config_and_cli_override_without_loading_plugins(
+    tmp_path, monkeypatch, capsys
+):
+    from modulo.cli.configuration import prometheus_options
+    from modulo.cli.parser import parser
+
+    config = tmp_path / "export.yaml"
+    config.write_text("url: http://localhost/api/v1/write\nscope: old\nca-file: cert.pem\n")
+    args = ["export-prometheus", str(tmp_path / "run"), "--config", str(config), "--scope", "new"]
+    options = prometheus_options(parser().parse_args(args))
+    assert options.scope == "new" and options.ca_file == tmp_path / "cert.pem"
+    captured = []
+    monkeypatch.setattr(
+        "modulo.cli.commands.export_prometheus",
+        lambda run, options: captured.append((run, options)) or {"export": "sent"},
+    )
+    monkeypatch.setattr(
+        "modulo.cli.commands.build_registry",
+        lambda _: pytest.fail("export must not discover model plugins"),
+    )
+    assert main(args) == 0
+    assert json.loads(capsys.readouterr().out) == {"export": "sent"}
+    assert captured[0][1] == options
+
+
+def test_prometheus_command_reports_failed_writes_and_missing_config(tmp_path, monkeypatch, capsys):
+    assert main(["export-prometheus", str(tmp_path)]) == 1
+    assert "Field required" in capsys.readouterr().err
+
+    def fail(*_args):
+        raise ValueError("Prometheus Remote Write returned HTTP 401")
+
+    monkeypatch.setattr("modulo.cli.commands.export_prometheus", fail)
+    assert (
+        main(
+            [
+                "export-prometheus",
+                str(tmp_path),
+                "--url",
+                "http://localhost/write",
+                "--scope",
+                "test",
+            ]
+        )
+        == 1
+    )
+    output = capsys.readouterr()
+    assert "HTTP 401" in output.err and not output.out
+
+
 @pytest.mark.assets
 @pytest.mark.parametrize("adapter", ["dify", "langchain"])
 @pytest.mark.parametrize("source", ["log", "es"])

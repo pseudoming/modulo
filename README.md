@@ -11,6 +11,7 @@
   <a href="#quick-start">快速开始</a> ·
   <a href="#results">结果示例</a> ·
   <a href="#configuration">配置</a> ·
+  <a href="#prometheus">Prometheus / Grafana</a> ·
   <a href="#faq">常见问题</a>
 </p>
 
@@ -31,6 +32,7 @@ flowchart LR
 - **映射内部模型名称**：多个别名共用同一 tokenizer 参照；同名模型可以按供应商分别配置。
 - **看清数据缺口**：区分一致、有差异和不可核验，保留未能复算的具体原因。
 - **回查计算依据**：保存原文位置、字段转换、tokenizer／模板版本和计算参数，支持结果包内容校验。
+- **导出统计**：把已有结果的调用数、覆盖率与差额直接写入 Prometheus，提供可导入的 Grafana 模板。
 
 <a id="log-formats"></a>
 
@@ -254,6 +256,75 @@ uv run modulo import --config config/modulo.yaml --state runs/import-state \
 ```
 
 同一状态目录生成累计结果快照，旧快照保留，未变化调用复用已有计算。Ctrl+C 停止后可用同一命令继续；未提交的读取会重读并去重。文件追加及重命名轮转可续读，半行等到换行后再处理，已读前缀被改写／截短会报错。ES 快照有效时从游标继续，过期或开始新一轮扫描时重新分页并按来源记录去重，因此会重新读取旧文档。状态和历史快照占用磁盘，按审计周期使用独立目录；计算规则或程序变更时使用新状态目录。读取不完整和数据缺口继续反映在报告中。更多输入见 [协议样例](examples/README.md)。
+
+<a id="sampling"></a>
+
+## 采样与买方数据范围
+
+默认全量。可在主配置的 `sampling` 中选择：
+
+| mode | 行为 | 必填参数 |
+| --- | --- | --- |
+| `all` | 复算全部符合筛选条件的调用 | 无 |
+| `ratio` | 各平台／模型按固定概率抽样，实际数量会波动 | `ratio: 0.1` |
+| `count` | 每个平台／模型随机抽取最多 N 个单位 | `count: 100` |
+| `window` | 从一个已结束的时间窗口随机抽取最多 N 个单位 | `window-minutes: 5`、`count: 100` |
+
+```yaml
+sampling:
+  mode: window
+  window-minutes: 5
+  count: 100
+  seed: buyer-local-seed
+```
+
+时间模式按规范化调用的 `started_at`，默认选择最近已结束的 UTC 窗口，包含起点、不包含终点。例如 10:07 执行，5 分钟窗口取 10:00–10:05。历史窗口可用 `--sample-before '2026-10-13T10:05:00+08:00'` 重跑；缺失、无时区或冲突的时间不猜补，留在本地诊断。
+
+先关联请求、响应和流片段，再抽样。普通调用是一个单位；共享总 usage 的 LangChain Run 整组作为一个单位，因此实际调用数可能超过额度。`seed` 与日志相同，抽样结果可复现，不受读取顺序影响。`max-records` 仍是读取上限，不是随机抽样；采样节省复算量，仍需读取并关联所选来源的日志。
+
+命令行可覆盖配置，切换模式不会继承上一模式的比例／额度／窗口参数：
+
+```bash
+uv run modulo import --config config/modulo.yaml --sample-mode ratio --sample-ratio 0.1
+uv run modulo import --config config/modulo.yaml --sample-mode count --sample-count 100
+```
+
+定时触发使用系统 [cron](https://man7.org/linux/man-pages/man5/crontab.5.html)，程序每次运行后退出。例如每 5 分钟处理一个窗口（把 `/opt/modulo` 换成安装路径，先在配置中启用 window 模式）：
+
+```cron
+*/5 * * * * /opt/modulo/.venv/bin/modulo import --config /opt/modulo/config/modulo.yaml --state /opt/modulo/state >> /opt/modulo/sampling.log 2>&1
+```
+
+cron 的触发频率与采样窗口长度分别设置。默认只处理最近一个已结束窗口，不自动补跑停机期间的窗口；晚到日志可用 `--sample-before` 重跑。上述命令只处理已有日志，不自动上传结果，也不安装定时任务。
+
+向外部 Prometheus 导出时，在导出配置设置 `visibility: sample-only`：只提供满额的 `count`／`window` 样本统计，不发送原始记录数、候选总数、实际抽样比例、种子或总体覆盖率。`auto` 默认对 window 使用此规则，其他模式完整导出；`full` 用于获准查看总体规模的买方内部监控。比例抽样和全量结果不能使用 sample-only。
+
+不足额度、读取未完成、非法记录或调用时间不明时，受限导出返回 `export: withheld`，不发送请求；退出码 0 表示按策略完成，不表示已发送。接收方仍保留之前的快照，应查看结果时间。切换策略不会删除已发送的历史数据；对外使用独立的 scope／接收方。
+
+本地结果包、命令输出与上述 cron 日志仍包含完整规模及原文依据，不能作为受限导出交给外部。样本内覆盖率以抽中调用为分母；总体覆盖率以本次采样范围的候选调用为分母，只在本地或 full 导出中提供。候选数与抽样数都保存，缺少有效时间的调用单列，不伪造分母。
+
+<a id="prometheus"></a>
+
+## Prometheus 与 Grafana
+
+Prometheus 启动时加上 `--web.enable-remote-write-receiver`，然后导出已有结果包：
+
+```bash
+uv run modulo export-prometheus runs/<结果目录> \
+  --url http://localhost:9090/api/v1/write --scope my-gateway
+
+# 也可将地址、scope 和认证配置保存在 YAML 中
+uv run modulo export-prometheus runs/<结果目录> \
+  --config config/export-prometheus.yaml
+```
+
+[导出配置](config/export-prometheus.yaml) 支持 Basic／Bearer 认证（凭证从指定环境变量读取）、自定义 CA、超时和序列数量上限，显式 CLI 参数优先。命令校验结果包、读取已保存的计算结果，发送后退出；不重新运行 tokenizer，不需要 Pushgateway 或常驻服务。Prometheus 的 [Remote Write 接收接口](https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver) 需要由用户开启。
+
+在 Grafana 中[导入](https://grafana.com/docs/grafana/latest/visualizations/dashboards/build-dashboards/import-dashboards/) [static/grafana/modulo.json](static/grafana/modulo.json)，选择自己的 Prometheus 数据源，即可按 scope、供应商和模型查看调用数、整体／输入／输出结论、复算覆盖率、比较覆盖率与 token 差额。分母为零显示无数据；token 差额只汇总同一可比较调用集合。LangChain Run 总 usage 另列组级结果。
+
+`scope` 是稳定的统计范围名称。同一 scope 展示最近导出的结果快照，重复导出不累加调用数；独立网关或不同审计范围使用不同 scope。全部指标是 Gauge，不能对它们使用 `rate()`／`increase()` 来计算调用量。模板排除旧快照已消失的模型分组；原结果时间单独显示，重发旧结果不会更新它。快照采样时间是**导出时间**，不按日志发生时间回填历史曲线。
+
+模板默认查看最近 7 天内的最后一次导出，可调整右上角时间范围；超过该范围或 Prometheus 保留期会显示无数据。明细与精确整数仍保存在本地结果包。网络错误、429、5xx 最多尝试 3 次；其他失败立即返回非零退出码，不声称写入成功。单次默认最多 10,000 条指标序列，可用 `--max-series` 调整。Prometheus／Grafana 的部署和维护由用户负责。
 
 <a id="faq"></a>
 

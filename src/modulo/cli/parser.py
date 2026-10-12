@@ -98,6 +98,20 @@ def parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--poll-seconds", type=float, help="持续导入轮询间隔，默认 5 秒")
     run.add_argument(
+        "--sample-mode", choices=["all", "ratio", "count", "window"], help="采样模式，默认全量"
+    )
+    run.add_argument(
+        "--sample-ratio", help="ratio 模式的纳入概率，如 0.1；按调用／共享 usage 组抽样"
+    )
+    run.add_argument(
+        "--sample-count", type=int, help="count 每个平台／模型组的额度；window 每个时间窗口的额度"
+    )
+    run.add_argument("--sample-seed", help="可复现随机种子，仅保存于买方本地")
+    run.add_argument(
+        "--sample-window-minutes", type=int, help="时间窗口长度；默认取最近已结束的 UTC 窗口"
+    )
+    run.add_argument("--sample-before", help="历史窗口结束时间，带时区的 ISO 格式；结束边界不包含")
+    run.add_argument(
         "--download-images",
         action=argparse.BooleanOptionalAction,
         help="下载缺尺寸的 URL 图片，默认关闭；缓存目录与限额见主配置 image-download",
@@ -106,6 +120,28 @@ def parser() -> argparse.ArgumentParser:
     report.add_argument("run", type=Path)
     report.add_argument("--details", action="store_true")
     report.add_argument("--call-id")
+    export = commands.add_parser(
+        "export-prometheus",
+        help="将已有结果的聚合指标直接写入 Prometheus",
+        argument_default=argparse.SUPPRESS,
+    )
+    export.add_argument("run", type=Path, help="已有结果包目录")
+    export.add_argument("--config", type=Path, help="Prometheus 导出 YAML 配置")
+    export.add_argument(
+        "--url", help="完整 Remote Write 接口地址，如 http://localhost:9090/api/v1/write"
+    )
+    export.add_argument("--scope", help="稳定的统计范围名称；同一范围展示最近导出的结果")
+    export.add_argument("--username", help="HTTP Basic 用户名")
+    export.add_argument("--password-env", help="保存 Basic 密码的环境变量名")
+    export.add_argument("--bearer-token-env", help="保存 Bearer token 的环境变量名；与 Basic 互斥")
+    export.add_argument("--ca-file", type=Path, help="自定义 TLS CA 证书文件")
+    export.add_argument("--timeout-seconds", type=float, help="HTTP 超时秒数，默认 30")
+    export.add_argument("--max-series", type=int, help="单次指标序列上限，默认 10000")
+    export.add_argument(
+        "--visibility",
+        choices=["auto", "full", "sample-only"],
+        help="auto：时间窗口只导出样本，其余完整导出；full 仅用于买方内部",
+    )
     verify = commands.add_parser("verify", help="校验结果包文件摘要")
     verify.add_argument("run", type=Path)
     reindex = commands.add_parser("reindex", help="由权威 JSONL 重建 DuckDB")

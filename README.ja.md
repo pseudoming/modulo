@@ -11,6 +11,7 @@
   <a href="#quick-start">クイックスタート</a> ·
   <a href="#results">結果の例</a> ·
   <a href="#configuration">設定</a> ·
+  <a href="#prometheus">Prometheus / Grafana</a> ·
   <a href="#faq">よくある質問</a>
 </p>
 
@@ -31,6 +32,8 @@ flowchart LR
 - **社内モデル名の対応付け**：複数の別名を同じ tokenizer の参照に割り当て、必要に応じてプロバイダー別に設定できます。
 - **不足情報の明示**：一致、差分あり、検証不可を区別し、再計算できない理由を保持します。
 - **計算根拠の追跡**：元のログ位置、フィールド変換、tokenizer・テンプレートのリビジョン、計算パラメーターを保存し、結果ファイルの整合性を検証できます。
+
+- **統計のエクスポート**：保存済みの呼び出し数・カバレッジ・差分を Prometheus に直接送信し、Grafana テンプレートで表示できます。
 
 <a id="log-formats"></a>
 
@@ -254,6 +257,75 @@ uv run modulo import --config config/modulo.yaml --state runs/import-state \
 ```
 
 同じ状態ディレクトリから累積スナップショットを作成し、以前の結果を保持して、変更のない計算を再利用します。Ctrl+C 後は同じコマンドで再開でき、未コミット分は再読込して重複を除きます。ファイルへの追記と名前変更によるローテーションに対応し、未完の行は改行まで待機します。既読部分の改変・切り詰めはエラーです。ES の有効なスナップショットはカーソルから再開し、期限切れや新しい走査では既読文書を含めて再取得・重複排除します。状態と過去のスナップショットはディスクを使用するため、監査期間ごとに分け、計算ルールやコードを変更した際は新しい状態ディレクトリを使います。読み取りの不完全さやデータ不足は結果に残ります。入力例は [プロトコル別サンプル](examples/README.md) を参照してください。
+
+<a id="sampling"></a>
+
+## サンプリングと買い手側のデータ範囲
+
+初期設定は全件処理です。主設定の `sampling` で切り替えます。
+
+| mode | 動作 | 必須パラメーター |
+| --- | --- | --- |
+| `all` | フィルターに一致する全呼び出しを再計算 | なし |
+| `ratio` | プラットフォーム／モデル別に一定の確率で抽出。実際の件数は変動 | `ratio: 0.1` |
+| `count` | プラットフォーム／モデルごとに最大 N 単位を無作為抽出 | `count: 100` |
+| `window` | 終了済みの一つの時間枠から最大 N 単位を無作為抽出 | `window-minutes: 5`、`count: 100` |
+
+```yaml
+sampling:
+  mode: window
+  window-minutes: 5
+  count: 100
+  seed: buyer-local-seed
+```
+
+時間枠には正規化済みの `started_at` を使用します。通常は直近の終了済み UTC 枠を選び、開始時刻を含み、終了時刻を含みません。5 分枠なら 10:07 の実行対象は 10:00–10:05 です。`--sample-before '2026-10-13T10:05:00+08:00'` で過去の枠を再実行できます。時刻の欠落、タイムゾーン未指定、競合は推測せず、ローカルに記録します。
+
+リクエスト、レスポンス、ストリーム片を関連付けてから抽出します。通常の呼び出しは 1 単位、合計 usage を共有する LangChain Run は全体で 1 単位です。このため呼び出し数が抽出枠を超える場合があります。同じログと `seed` なら読み取り順序によらず同じ標本を再現します。`max-records` は読み取り上限であり、無作為抽出ではありません。再計算量は減りますが、対象ソースのログ読み取りと関連付けは必要です。
+
+CLI が設定を上書きします。モード変更時は以前の確率、件数、時間枠の設定を引き継ぎません。
+
+```bash
+uv run modulo import --config config/modulo.yaml --sample-mode ratio --sample-ratio 0.1
+uv run modulo import --config config/modulo.yaml --sample-mode count --sample-count 100
+```
+
+定期実行にはシステムの [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) を使い、プログラムは毎回終了します。window モードを設定したうえで、以下の `/opt/modulo` を設置先に置き換えると 5 分ごとに実行できます。
+
+```cron
+*/5 * * * * /opt/modulo/.venv/bin/modulo import --config /opt/modulo/config/modulo.yaml --state /opt/modulo/state >> /opt/modulo/sampling.log 2>&1
+```
+
+実行頻度と時間枠の長さは別設定です。通常は直近の終了済み枠のみ処理し、停止中の枠は自動補完しません。遅れて届いたログや過去の枠は `--sample-before` で再実行できます。このコマンドは結果の自動送信や定期タスクの登録を行いません。
+
+外部 Prometheus にはエクスポート設定で `visibility: sample-only` を指定します。枠を満たした count／window の標本統計だけを送信し、元のレコード数、母集団数、実際の抽出割合、seed、母集団カバレッジは送りません。`auto` は window だけをこの方式にし、他のモードは完全統計を送ります。`full` は規模を閲覧できる買い手の内部監視用です。全件処理と確率抽出では sample-only を使用できません。
+
+枠不足、読み取り未完了、不正レコード、時刻不明の場合、`export: withheld` を返し、リクエストを送りません。終了コード 0 は方針に従って完了した意味で、送信済みとは限りません。受信先には前回の結果が残るので時刻を確認してください。方針の変更は過去の送信データを削除しません。外部向けには別の scope／受信先を使ってください。
+
+ローカルの結果、コマンド出力、cron ログには全体規模と原文が残るため、制限付きエクスポートとして外部に渡せません。標本内カバレッジの分母は抽出された呼び出し数、母集団カバレッジの分母は対象範囲の候補呼び出し数です。後者はローカルまたは full エクスポートだけに提供し、時刻不明の呼び出しは別に記録します。
+
+<a id="prometheus"></a>
+
+## Prometheus と Grafana
+
+Prometheus に起動オプション `--web.enable-remote-write-receiver` を追加し、既存の結果パッケージをエクスポートします。
+
+```bash
+uv run modulo export-prometheus runs/<結果ディレクトリ> \
+  --url http://localhost:9090/api/v1/write --scope my-gateway
+
+# 接続先・scope・認証設定を YAML に保存する場合
+uv run modulo export-prometheus runs/<結果ディレクトリ> \
+  --config config/export-prometheus.yaml
+```
+
+[エクスポート設定](config/export-prometheus.yaml) は Basic／Bearer 認証（指定した環境変数から取得）、独自 CA、タイムアウト、系列数上限に対応します。明示した CLI 引数が優先されます。保存済み結果を検証・集計して送信後に終了します。tokenizer の再実行、Pushgateway、常駐サービスは不要です。利用者の Prometheus で [Remote Write 受信](https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver)を有効にしてください。
+
+[static/grafana/modulo.json](static/grafana/modulo.json) を Grafana に[インポート](https://grafana.com/docs/grafana/latest/visualizations/dashboards/build-dashboards/import-dashboards/)し、利用する Prometheus データソースを選択します。テンプレートのパネル名は中国語です。scope・プロバイダー・モデル別に、呼び出し数、全体／入力／出力の判定、再計算率、比較率、token 差分を表示します。分母がゼロならデータなしとし、差分は同じ比較可能な呼び出し集合だけを集計します。LangChain Run 全体の usage はグループ単位で別表示します。
+
+`scope` は固定の集計範囲名です。同じ scope には最後に送信したスナップショットを表示し、再送しても呼び出し数を加算しません。異なるゲートウェイや監査範囲には別の scope を使います。すべて Gauge のため、`rate()`／`increase()` で呼び出し数を求めないでください。テンプレートは最新結果から消えたモデルを除外し、元の結果日時を別に表示します。再送しても元の結果日時は変わりません。時系列の時刻は**エクスポート時刻**であり、ログ発生時刻による履歴の補完ではありません。
+
+表示期間は初期設定で過去 7 日です。必要に応じて右上で変更してください。表示期間や Prometheus の保持期間を超えるとデータなしになります。明細と正確な整数はローカルの結果パッケージに残ります。通信エラー・429・5xx は最大 3 回試行し、その他の失敗は直ちに非ゼロ終了コードを返します。系列数上限は初期値 10,000、`--max-series` で変更できます。Prometheus／Grafana の構築と運用は利用者が行います。
 
 <a id="faq"></a>
 

@@ -1,0 +1,980 @@
+{
+  "id": null,
+  "uid": "modulo-audit",
+  "title": "Modulo · 日志用量核验",
+  "description": "Prometheus Remote Write 的批次快照：调用、覆盖率和同集合差额。",
+  "tags": [
+    "modulo",
+    "audit"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "refresh": "1m",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "label": "Prometheus",
+        "type": "datasource",
+        "query": "prometheus",
+        "refresh": 1
+      },
+      {
+        "name": "scope",
+        "label": "统计范围",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "query": "label_values(modulo_snapshot_timestamp_seconds, scope)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "sort": 1
+      },
+      {
+        "name": "platform",
+        "label": "供应商",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "query": "label_values(modulo_calls{scope=~\"$scope\"}, platform)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "sort": 1
+      },
+      {
+        "name": "model",
+        "label": "日志模型名",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "query": "label_values(modulo_calls{scope=~\"$scope\",platform=~\"$platform\"}, model)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "如何阅读",
+      "type": "text",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 4
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "每个 scope 展示所选时间范围内最近一次导出的快照；不是日志发生时间的流量曲线。采样结果中的调用数、复算／比较覆盖率和差异率都只针对样本；下方“总体覆盖率”才使用买方本地的候选总数。共享 usage 的 Run 整组抽取，抽样单位数可能小于调用数。\n\n只导出样本时，原始规模、读取状态、抽样比例和总体覆盖率不提供。额度不足或抽样范围不完整时不发送新快照，注意结果时间。切换导出策略不会删除接收方已经保存的历史数据。\n\n输入、输出分别统计；分母为零显示无数据。差额 = 报告 token − 本地 token，只合计同一可比较集合。原文、抽样依据和精确整数留在买方本地。"
+      }
+    },
+    {
+      "id": 2,
+      "title": "结果距今多久（整个 scope）",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 8,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "time() - last_over_time(modulo_result_timestamp_seconds{scope=~\"$scope\"}[$__range])",
+          "instant": true,
+          "range": false,
+          "format": "time_series",
+          "legendFormat": "{{scope}}"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 3,
+      "title": "最近导出距今多久（整个 scope）",
+      "type": "stat",
+      "gridPos": {
+        "x": 8,
+        "y": 4,
+        "w": 8,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "time() - last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])",
+          "instant": true,
+          "range": false,
+          "format": "time_series",
+          "legendFormat": "{{scope}}"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 4,
+      "title": "本批读取是否完成（整个 scope）",
+      "type": "stat",
+      "gridPos": {
+        "x": 16,
+        "y": 4,
+        "w": 8,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "只导出样本时不提供；不把接收方旧快照的总体信息当成当前数据。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "未读完",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "已读完",
+                  "color": "green"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_batch_read_complete{scope=~\"$scope\"}[$__range])) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0)",
+          "instant": true,
+          "range": false,
+          "format": "time_series",
+          "legendFormat": "{{scope}}"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 5,
+      "title": "处理状态（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 8,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "只导出样本时不提供；不把接收方旧快照的总体信息当成当前数据。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_run_status{scope=~\"$scope\"}[$__range]) == 1) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 6,
+      "title": "原始记录（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 8,
+        "y": 8,
+        "w": 8,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "只导出样本时不提供；不把接收方旧快照的总体信息当成当前数据。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_source_records{scope=~\"$scope\"}[$__range])) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 7,
+      "title": "筛选范围（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 16,
+        "y": 8,
+        "w": 8,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "只导出样本时不提供；不把接收方旧快照的总体信息当成当前数据。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_selection_calls{scope=~\"$scope\"}[$__range])) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 8,
+      "title": "调用数与供应商／模型",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 9,
+      "title": "整体／输入／输出结论",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_verdict_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 10,
+      "title": "处理对象内复算覆盖率",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "采样时分母是抽中调用数；全量时分母是筛选后的调用数。总体覆盖率见下方仅买方内部可见的面板。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(sum by(scope,direction) ((last_over_time(modulo_recalculated_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) / on(scope) group_left () (sum by(scope) ((last_over_time(modulo_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) > 0))",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 11,
+      "title": "处理对象内比较覆盖率",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 21,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "采样时分母是抽中调用数；全量时分母是筛选后的调用数。总体覆盖率见下方仅买方内部可见的面板。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(sum by(scope,direction) ((last_over_time(modulo_compared_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) / on(scope) group_left () (sum by(scope) ((last_over_time(modulo_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) > 0))",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 12,
+      "title": "差异率（仅已比较调用）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(scope,direction) ((last_over_time(modulo_verdict_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\",direction=~\"input|output\",verdict=\"DEVIATION\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) / (sum by(scope,direction) ((last_over_time(modulo_compared_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))) > 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 13,
+      "title": "可比较集合：报告与本地 token",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 28,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "只比较同一组调用；没有可比较调用的分项不显示为 0。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_compared_tokens{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) and on(scope,adapter,platform,model,direction) ((last_over_time(modulo_compared_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) > 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 14,
+      "title": "token 差额：净额、绝对、正向、负向",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_token_delta{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) and on(scope,adapter,platform,model,direction) ((last_over_time(modulo_compared_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) > 0)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 15,
+      "title": "不可比较／复算缺口分类",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "分类用于排查，精确原因请查看原结果。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_reason_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) > 0",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 16,
+      "title": "缓存命中调用",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 43,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(last_over_time(modulo_cache_hit_calls{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\",platform=~\"$platform\",model=~\"$model\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range])))",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 17,
+      "title": "Run 总 usage 组级比较（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 43,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "LangChain Run 总 usage 单独比较；不能复制到各输入或与调用数相加。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "last_over_time(modulo_run_usage_verdict_groups{scope=~\"$scope\"}[$__range]) > 0",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 18,
+      "title": "是否为采样结果（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 50,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "全量处理"
+                },
+                "1": {
+                  "text": "采样结果"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range])",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 19,
+      "title": "导出范围（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 50,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "买方内部完整统计"
+                },
+                "1": {
+                  "text": "仅样本统计"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range])",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 20,
+      "title": "抽样单位数、额度及窗口秒数（整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 57,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "last_over_time(modulo_sample_units{scope=~\"$scope\"}[$__range]) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "抽样单位数"
+        },
+        {
+          "refId": "B",
+          "expr": "last_over_time(modulo_sampling_quota{scope=~\"$scope\"}[$__range]) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "每组或窗口额度"
+        },
+        {
+          "refId": "C",
+          "expr": "last_over_time(modulo_sampling_window_seconds{scope=~\"$scope\"}[$__range]) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "窗口秒数"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 21,
+      "title": "实际调用抽样率（仅买方内部／整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 57,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "实际抽中调用数 ÷ 当前采样范围的候选调用数，不是配置的纳入概率。只导出样本时不提供。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(sum by(scope) (last_over_time(modulo_sampling_population{scope=~\"$scope\",kind=\"sampled_calls\"}[$__range])) / (sum by(scope) (last_over_time(modulo_sampling_population{scope=~\"$scope\",kind=\"eligible_calls\"}[$__range])) > 0)) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 22,
+      "title": "总体复算覆盖率（仅买方内部／整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 64,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "分母是本次采样范围的全部候选调用，包含未抽中调用。忽略平台／模型筛选；窗口外和时间无法判定的调用不混入该分母。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(sum by(scope,direction) (last_over_time(modulo_recalculated_calls{scope=~\"$scope\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) / on(scope) group_left () (sum by(scope) (last_over_time(modulo_sampling_population{scope=~\"$scope\",kind=\"eligible_calls\"}[$__range])) > 0)) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 23,
+      "title": "总体比较覆盖率（仅买方内部／整个 scope）",
+      "type": "table",
+      "gridPos": {
+        "x": 12,
+        "y": 64,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "分母是本次采样范围的全部候选调用，包含未抽中调用。忽略平台／模型筛选；窗口外和时间无法判定的调用不混入该分母。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "无可用数据"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(sum by(scope,direction) (last_over_time(modulo_compared_calls{scope=~\"$scope\"}[$__range]) and on(scope,adapter,platform,model) (last_over_time(modulo_group_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]) == on(scope) group_left last_over_time(modulo_snapshot_timestamp_seconds{scope=~\"$scope\"}[$__range]))) / on(scope) group_left () (sum by(scope) (last_over_time(modulo_sampling_population{scope=~\"$scope\",kind=\"eligible_calls\"}[$__range])) > 0)) and on(scope) (last_over_time(modulo_sample_only{scope=~\"$scope\"}[$__range]) == 0) and on(scope) (last_over_time(modulo_sampled_result{scope=~\"$scope\"}[$__range]) == 1)",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": ""
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    }
+  ]
+}

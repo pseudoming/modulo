@@ -15,6 +15,7 @@ def summarize(
     *,
     batch_read_complete: bool,
     working=None,
+    sampling=None,
 ) -> BatchResult:
     errors = any(item["level"] == "error" for item in diagnostics)
     status = ("PARTIAL" if rows else "FAILED") if errors else "COMPLETE"
@@ -40,35 +41,6 @@ def summarize(
             reasons[measured["reason"]] += 1
         model = call["model"] or "(unknown)"
 
-        def empty_group():
-            return {
-                "calls": 0,
-                "cache_hit_calls": 0,
-                "identity_conflicts": 0,
-                "reported_input_sum": 0,
-                "input_present": 0,
-                "reported_output_sum": 0,
-                "output_present": 0,
-                "recalculated_input_sum": 0,
-                "input_recalculated": 0,
-                "image_input_recalculated": 0,
-                "image_input_token_sum": 0,
-                "compared_calls": 0,
-                "signed_input_delta_sum": 0,
-                "absolute_input_delta_sum": 0,
-                "recalculated_output_sum": 0,
-                "output_recalculated": 0,
-                "output_compared_calls": 0,
-                "signed_output_delta_sum": 0,
-                "absolute_output_delta_sum": 0,
-                "visible_output_recalculated": 0,
-                "visible_output_token_sum": 0,
-                "reasoning_output_recalculated": 0,
-                "reasoning_output_token_sum": 0,
-                "tool_output_recalculated": 0,
-                "tool_output_token_sum": 0,
-            }
-
         dimensions = row["observed_dimensions"]
         platforms_seen = {item["platform"] for item in dimensions}
         models_seen = {item["model"] for item in dimensions}
@@ -77,36 +49,7 @@ def summarize(
         groups = ((models, model), (platform_models, (platform_key, model_key)))
         for collection, group_key in groups:
             group = collection.get(group_key, empty_group())
-            group["calls"] += 1
-            if row["identity_conflict"]:
-                group["identity_conflicts"] += 1
-                collection[group_key] = group
-                continue
-            group["cache_hit_calls"] += call.get("cache_hit") is True
-            for direction in ("input", "output"):
-                value = call["usage"][direction + "_tokens"]
-                if value is not None:
-                    group[f"reported_{direction}_sum"] += value
-                    group[f"{direction}_present"] += 1
-            for direction in ("input", "output"):
-                if measured[f"{direction}_tokens"] is not None:
-                    group[f"recalculated_{direction}_sum"] += measured[f"{direction}_tokens"]
-                    group[f"{direction}_recalculated"] += 1
-                delta = measured[f"{direction}_delta"]
-                if delta is not None:
-                    group[
-                        "compared_calls" if direction == "input" else "output_compared_calls"
-                    ] += 1
-                    group[f"signed_{direction}_delta_sum"] += delta
-                    group[f"absolute_{direction}_delta_sum"] += abs(delta)
-            for component in ("visible", "reasoning", "tool"):
-                value = measured[f"{component}_output_tokens"]
-                if value is not None:
-                    group[f"{component}_output_token_sum"] += value
-                    group[f"{component}_output_recalculated"] += 1
-            if measured.get("image_input_tokens") is not None:
-                group["image_input_token_sum"] += measured["image_input_tokens"]
-                group["image_input_recalculated"] += 1
+            add_to_group(group, row)
             collection[group_key] = group
     # All-missing sums remain null. Counts make partial sums explicit.
     for collection in (models, platform_models):
@@ -120,13 +63,15 @@ def summarize(
                 if not group["compared_calls" if direction == "input" else "output_compared_calls"]:
                     group[f"signed_{direction}_delta_sum"] = None
                     group[f"absolute_{direction}_delta_sum"] = None
+                    group[f"compared_{direction}_reported_sum"] = None
+                    group[f"compared_{direction}_recalculated_sum"] = None
             for component in ("visible", "reasoning", "tool"):
                 if not group[f"{component}_output_recalculated"]:
                     group[f"{component}_output_token_sum"] = None
             if not group["image_input_recalculated"]:
                 group["image_input_token_sum"] = None
             collection[key] = group
-    selection["selected_calls"] = len(rows)
+    selection.setdefault("selected_calls", len(rows))
     platform_rows = working.sequence("platform_summary") if working is not None else []
     for (platform, model), values in (
         sorted(platform_models.items(), key=lambda item: dumps(item[0]))
@@ -162,7 +107,96 @@ def summarize(
         "selection": selection,
         "batch_read_complete": batch_read_complete,
     }
+    if sampling is not None:
+        sampling["frame_complete"] = (
+            batch_read_complete
+            and counters.get("invalid_records", 0) == 0
+            and sampling["time_unresolved_calls"] == 0
+        )
+        sampling["coverage"] = {}
+        for direction in ("input", "output"):
+            sampling["coverage"][direction] = {
+                "sample_calls": len(rows),
+                "eligible_calls": sampling["eligible_calls"],
+                "recalculated_calls": sum(
+                    group[direction + "_completed"] for group in platform_models.values()
+                ),
+                "compared_calls": sum(
+                    group["compared_calls" if direction == "input" else "output_compared_calls"]
+                    for group in platform_models.values()
+                ),
+            }
+        summary["sampling"] = sampling
     return BatchResult(rows, diagnostics, summary)
+
+
+def empty_group() -> dict:
+    """Shared integer accumulators for saved summaries and result exports."""
+    group = {"calls": 0, "cache_hit_calls": 0, "identity_conflicts": 0, "verdicts": {}}
+    for direction in ("input", "output"):
+        for field in (
+            f"reported_{direction}_sum",
+            f"{direction}_present",
+            f"recalculated_{direction}_sum",
+            f"{direction}_recalculated",
+            f"{direction}_completed",
+            f"signed_{direction}_delta_sum",
+            f"absolute_{direction}_delta_sum",
+            f"compared_{direction}_reported_sum",
+            f"compared_{direction}_recalculated_sum",
+        ):
+            group[field] = 0
+        group["compared_calls" if direction == "input" else "output_compared_calls"] = 0
+        for field in ("verdicts", "execution", "reasons"):
+            group[f"{direction}_{field}"] = {}
+    for component in ("image_input", "visible_output", "reasoning_output", "tool_output"):
+        group[f"{component}_recalculated"] = 0
+        group[f"{component}_token_sum"] = 0
+    return group
+
+
+def add_to_group(group: dict, row: dict) -> None:
+    """Accumulate one selected call without combining different usage cohorts."""
+    call, measured = row["call"], row["measurement"]
+    group["calls"] += 1
+    for field, value in (
+        ("verdicts", measured["verdict"]),
+        ("input_verdicts", measured["input_verdict"]),
+        ("output_verdicts", measured["output_verdict"]),
+        ("input_execution", measured["execution"]),
+        ("output_execution", measured["output_execution"]),
+        ("input_reasons", measured["reason"]),
+        ("output_reasons", measured["output_reason"]),
+    ):
+        if value is not None:
+            group[field][value] = group[field].get(value, 0) + 1
+    if row["identity_conflict"]:
+        group["identity_conflicts"] += 1
+        return
+    group["cache_hit_calls"] += call.get("cache_hit") is True
+    for direction in ("input", "output"):
+        reported = call["usage"][f"{direction}_tokens"]
+        counted = measured[f"{direction}_tokens"]
+        if reported is not None:
+            group[f"reported_{direction}_sum"] += reported
+            group[f"{direction}_present"] += 1
+        if counted is not None:
+            group[f"recalculated_{direction}_sum"] += counted
+            group[f"{direction}_recalculated"] += 1
+            execution = measured["execution" if direction == "input" else "output_execution"]
+            group[f"{direction}_completed"] += execution == "completed"
+        delta = measured[f"{direction}_delta"]
+        if delta is not None:
+            group["compared_calls" if direction == "input" else "output_compared_calls"] += 1
+            group[f"signed_{direction}_delta_sum"] += delta
+            group[f"absolute_{direction}_delta_sum"] += abs(delta)
+            group[f"compared_{direction}_reported_sum"] += reported
+            group[f"compared_{direction}_recalculated_sum"] += counted
+    for component in ("image_input", "visible_output", "reasoning_output", "tool_output"):
+        value = measured.get(f"{component}_tokens")
+        if value is not None:
+            group[f"{component}_token_sum"] += value
+            group[f"{component}_recalculated"] += 1
 
 
 def _input_batches(rows, working=None):

@@ -85,3 +85,31 @@ def test_batch_differences_keep_their_sign_and_do_not_cancel_between_sides():
     batch = summary(deepcopy(rows))["input_batches"][0]
     assert batch["input_delta"] == 1 and batch["output_delta"] == -1
     assert batch["verdict"] == "DEVIATION"
+
+
+def test_grouped_coverage_and_token_sums_use_the_same_comparable_calls():
+    rows = batch_rows()
+    rows[0]["call"]["usage"] = Usage(input_tokens=12, output_tokens=5).model_dump()
+    rows[0]["measurement"] = Measurement(
+        execution="completed",
+        input_tokens=10,
+        reported_input_tokens=12,
+        input_delta=2,
+        input_verdict="DEVIATION",
+        output_execution="partial",
+        visible_output_tokens=4,
+        output_reason="output_incomplete",
+    ).model_dump()
+    rows[1]["call"]["cache_hit"] = True
+    # Body is recounted, but there is no per-call usage comparison.
+    result = summary(rows)["by_platform_model"][0]
+    assert result["calls"] == 2 and result["cache_hit_calls"] == 1
+    assert result["input_completed"] == 2 and result["output_completed"] == 1
+    assert result["recalculated_input_sum"] == 30
+    assert result["compared_input_recalculated_sum"] == 10
+    assert result["compared_input_reported_sum"] == 12
+    assert result["signed_input_delta_sum"] == 2
+    assert result["compared_output_reported_sum"] is None
+    assert result["compared_output_recalculated_sum"] is None
+    assert result["input_verdicts"] == {"DEVIATION": 1, "UNVERIFIABLE": 1}
+    assert result["output_execution"] == {"partial": 1, "completed": 1}

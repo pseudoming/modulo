@@ -7,6 +7,7 @@ from modulo.adapters.protocols import DifyProtocol
 from modulo.adapters.sources import ElasticsearchSource, FileSource
 from modulo.application.image_cache import ImageDownloadOptions
 from modulo.application.importer import run_batch
+from modulo.core.domain.sampling import SamplingOptions
 from modulo.shared.serialization import dumps, loads
 from modulo.storage.query_index import details
 from modulo.storage.result_bundle import verify_bundle
@@ -27,6 +28,38 @@ def run_records(tmp_path, records, calculator, **kwargs):
         output_root=tmp_path / "runs",
         **kwargs,
     )
+
+
+def test_sampling_preserves_local_population_and_only_calculates_chosen_calls(
+    tmp_path, unit_calculator, dify_record, monkeypatch
+):
+    records = [{**copy.deepcopy(dify_record), "id": str(i)} for i in range(12)]
+    called = []
+    calculate = unit_calculator.calculate
+
+    def count(call, matches):
+        called.append(call.call_id)
+        return calculate(call, matches)
+
+    monkeypatch.setattr(unit_calculator, "calculate", count)
+    path, _ = run_records(
+        tmp_path, records, unit_calculator, sampling=SamplingOptions(mode="count", count=3)
+    )
+    summary = loads((path / "summary.json").read_bytes())
+    assert len(called) == summary["observed_calls"] == 3
+    assert summary["selection"]["selected_calls"] == 12
+    assert summary["sampling"]["eligible_calls"] == 12
+    assert summary["sampling"]["sampled_calls"] == 3
+    assert summary["sampling"]["coverage"]["input"] == {
+        "sample_calls": 3,
+        "eligible_calls": 12,
+        "recalculated_calls": 3,
+        "compared_calls": 3,
+    }
+    assert summary["sampling"]["frame_complete"] is True
+    assert len((path / "raw.jsonl").read_text().splitlines()) == 12
+    assert len((path / "diagnostics.jsonl").read_text().splitlines()) == 9
+    assert verify_bundle(path)["plan"]["sampling"]["count"] == 3
 
 
 @pytest.mark.parametrize("scenario", ["conflict", "unbound", "text-model", "filtered"])

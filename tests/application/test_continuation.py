@@ -8,6 +8,7 @@ from modulo.adapters.sources import ElasticsearchSource, FileSource
 from modulo.application.continuation import JournalSource
 from modulo.application.importer import run_batch
 from modulo.core.domain.data_models import SourceError
+from modulo.core.domain.sampling import SamplingOptions
 from modulo.shared.serialization import dumps, loads
 from modulo.storage.result_bundle import verify_bundle
 from modulo.storage.working_set import WorkingSet
@@ -28,6 +29,36 @@ def snapshot(tmp_path, source, calculator, protocol=None, **kwargs):
 
 def rows(path):
     return [loads(line) for line in (path / "results.jsonl").read_text().splitlines()]
+
+
+def test_sampling_windows_reuse_journal_and_can_replay_an_earlier_window(
+    tmp_path, unit_calculator, dify_record
+):
+    path = tmp_path / "access.jsonl"
+    records = []
+    for minute in (1, 6):
+        for i in range(4):
+            record = copy.deepcopy(dify_record)
+            record.update(id=f"{minute}-{i}", created_at=f"2026-10-13T10:0{minute}:00+08:00")
+            records.append(record)
+    path.write_text("".join(dumps(record) + "\n" for record in records))
+    first_options = SamplingOptions(
+        mode="window", window_minutes=5, count=2, before="2026-10-13T10:05:00+08:00"
+    )
+    first, _ = snapshot(tmp_path, FileSource(path), unit_calculator, sampling=first_options)
+    second, _ = snapshot(
+        tmp_path,
+        FileSource(path),
+        unit_calculator,
+        sampling=SamplingOptions(
+            mode="window", window_minutes=5, count=2, before="2026-10-13T10:10:00+08:00"
+        ),
+    )
+    assert len(rows(first)) == len(rows(second)) == 2
+    assert all(row["call"]["call_id"].startswith("1-") for row in rows(first))
+    assert all(row["call"]["call_id"].startswith("6-") for row in rows(second))
+    replay, reused = snapshot(tmp_path, FileSource(path), unit_calculator, sampling=first_options)
+    assert replay == first and reused
 
 
 def test_append_reuses_completed_calculations_and_preserves_old_result(

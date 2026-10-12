@@ -1,10 +1,12 @@
 """Run one synchronous log import with a frozen plan and result storage."""
 
+from datetime import UTC, datetime
 from functools import partial
 from pathlib import Path
 
 from modulo.core.domain.interfaces import ProtocolAdapter, SourceAdapter
 from modulo.core.domain.platforms import PlatformConfig
+from modulo.core.domain.sampling import SamplingOptions
 from modulo.core.main import run
 from modulo.core.processing.recalculation import Recalculator
 from modulo.shared.serialization import digest
@@ -33,6 +35,7 @@ def run_batch(
     memory_mib: int = 64,
     max_record_bytes: int = 8 * 1024 * 1024,
     state: Path | None = None,
+    sampling: SamplingOptions | None = None,
 ) -> tuple[Path, bool]:
     if not namespace or max_records < 0:
         raise ValueError("namespace and a nonnegative max_records are required")
@@ -43,6 +46,8 @@ def run_batch(
     plugin_modules = plugin_modules or []
     execution = collect_runtime_info(plugin_modules)
     image_download = image_download or ImageDownloadOptions()
+    sampling = sampling or SamplingOptions()
+    resolved_sampling = sampling.resolve(datetime.now(UTC))
     plan = {
         "source": source.describe(),
         "namespace": namespace,
@@ -63,6 +68,8 @@ def run_batch(
         "execution_hash": digest(execution),
         "image_download": image_download.model_dump(mode="json", by_alias=True),
     }
+    if sampling.mode != "all":
+        plan["sampling"] = resolved_sampling.model_dump(mode="json", by_alias=True)
 
     with (
         WorkingSet(state, memory_mib=memory_mib) as working,
@@ -83,8 +90,11 @@ def run_batch(
                     **{
                         key: value
                         for key, value in plan.items()
-                        if key not in {"source", "max_records"}
+                        if key not in {"source", "max_records", "sampling"}
                     },
+                    # The endpoint selects a window; it does not change the
+                    # sampling rules bound to this cumulative source journal.
+                    "sampling": sampling.model_dump(mode="json", by_alias=True, exclude={"before"}),
                     "source_kind": source.name,
                 }
             )
@@ -126,6 +136,7 @@ def run_batch(
             working=working,
             max_record_bytes=max_record_bytes,
             measurement_cache=working.mapping("saved:measurements") if state else None,
+            sampling=resolved_sampling,
         )
         if state is not None:
             working.mapping("saved:settings")["last_result"] = {

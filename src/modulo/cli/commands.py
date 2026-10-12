@@ -6,19 +6,28 @@ import time
 
 from modulo.application.factory import build_registry, make_calculator
 from modulo.application.importer import run_batch
+from modulo.application.prometheus_export import export_prometheus
 from modulo.application.tokenizer_assets import load_tokenizer_assets, prepare_assets
 from modulo.shared.serialization import dumps
 from modulo.storage.query_index import iter_details, rebuild_index
 from modulo.storage.result_bundle import verify_bundle
 
-from .configuration import asset_options, import_options, import_source, platform_options
+from .configuration import (
+    asset_options,
+    import_options,
+    import_source,
+    platform_options,
+    prometheus_options,
+)
 from .parser import parser
 
 
 def main(argv: list[str] | None = None) -> int:
     arguments = parser().parse_args(argv)
     try:
-        registry = build_registry(arguments.plugin)
+        registry = (
+            None if arguments.command == "export-prometheus" else build_registry(arguments.plugin)
+        )
         if arguments.command == "plugins":
             print(dumps(registry.describe()))
         elif arguments.command == "prepare-assets":
@@ -58,6 +67,7 @@ def main(argv: list[str] | None = None) -> int:
                     state=arguments.state,
                     memory_mib=arguments.memory_mib,
                     max_record_bytes=arguments.max_record_mib * 1024 * 1024,
+                    sampling=arguments.sampling,
                 )
                 manifest = verify_bundle(path)
                 if path != previous:
@@ -87,6 +97,8 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 with (arguments.run / "summary.json").open(encoding="utf-8") as stream:
                     shutil.copyfileobj(stream, sys.stdout, length=64 * 1024)
+        elif arguments.command == "export-prometheus":
+            print(dumps(export_prometheus(arguments.run, prometheus_options(arguments))))
         elif arguments.command == "verify":
             manifest = verify_bundle(arguments.run)
             print(

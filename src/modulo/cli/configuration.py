@@ -10,10 +10,12 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from modulo.application.image_cache import ImageDownloadOptions
+from modulo.application.prometheus_export import PrometheusOptions
 from modulo.application.registry import Registry
 from modulo.core.domain.bindings import Bindings
 from modulo.core.domain.interfaces import SourceAdapter
 from modulo.core.domain.platforms import PlatformConfig
+from modulo.core.domain.sampling import SamplingOptions
 from modulo.shared.serialization import loads
 
 
@@ -66,6 +68,7 @@ class ImportOptions(AssetOptions):
     follow: bool = False
     poll_seconds: float = Field(default=5, gt=0, allow_inf_nan=False)
     image_download: ImageDownloadOptions = Field(default_factory=ImageDownloadOptions)
+    sampling: SamplingOptions = Field(default_factory=SamplingOptions)
 
     @field_validator("page_size", "max_records", "memory_mib", "max_record_mib", mode="before")
     @classmethod
@@ -142,6 +145,20 @@ def read_config(path: Path) -> dict:
     return value
 
 
+def prometheus_options(arguments: argparse.Namespace) -> PrometheusOptions:
+    values = read_config(arguments.config) if hasattr(arguments, "config") else {}
+    allowed = {field.alias or name for name, field in PrometheusOptions.model_fields.items()}
+    if set(values) - allowed:
+        raise ValueError("unknown Prometheus export configuration key")
+    if values.get("ca-file"):
+        values["ca-file"] = (arguments.config.parent / values["ca-file"]).resolve()
+    for name, value in vars(arguments).items():
+        key = name.replace("_", "-")
+        if key in allowed:
+            values[key] = value
+    return PrometheusOptions.model_validate(values)
+
+
 SOURCE_FIELDS = {
     "file": {"path": "path", "pattern": "pattern"},
     "es": {
@@ -175,6 +192,7 @@ COMMON_FIELDS = {
     "state",
     "follow",
     "poll_seconds",
+    "sampling",
 }
 
 
@@ -236,6 +254,19 @@ def import_options(arguments: argparse.Namespace) -> argparse.Namespace:
     if "source" in explicit and explicit["source"] != options.get("source"):
         options.pop("source_config", None)
     options.update(explicit)
+    sampling_overrides = {
+        key.removeprefix("sample_").replace("_", "-"): value
+        for key, value in vars(arguments).items()
+        if key.startswith("sample_")
+    }
+    if sampling_overrides:
+        configured = options.get("sampling", {})
+        if not isinstance(configured, dict):
+            raise ValueError("sampling configuration must contain an object")
+        # A different mode must not inherit parameters from the previous mode.
+        if "mode" in sampling_overrides and sampling_overrides["mode"] != configured.get("mode"):
+            configured = {key: value for key, value in configured.items() if key == "seed"}
+        options["sampling"] = configured | sampling_overrides
     if hasattr(arguments, "download_images"):
         if not isinstance(options.get("image_download", {}), dict):
             raise ValueError("image-download configuration must contain an object")

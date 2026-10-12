@@ -67,6 +67,26 @@ output: ../runs
 # 大批量导入：中间数据落盘。此预算不包含 tokenizer 与单条调用的全部内存。
 memory-mib: 64
 max-records: 0          # 0 不限；正整数限制本次新增读取量
+
+# 全量为默认。ratio：各平台／模型按比例抽；count：每组最多抽 count 个单位。
+# window：最近一个已结束的 UTC 时间窗口，全窗口抽 count 个单位。
+# 普通调用算一个单位；共享总 usage 的 LangChain Run 整组算一个单位。
+sampling:
+  mode: all
+# sampling:
+#   mode: ratio
+#   ratio: 0.1
+#   seed: buyer-local-seed
+# sampling:
+#   mode: count
+#   count: 100
+#   seed: buyer-local-seed
+# sampling:
+#   mode: window
+#   window-minutes: 5
+#   count: 100
+#   seed: buyer-local-seed
+#   before: '2026-10-13T10:05:00+08:00'  # 可选：复跑历史窗口 [10:00, 10:05)
 max-record-mib: 8
 # 可选续读与持续导入。状态目录保存原文、进度和计算缓存。
 # state: ../runs/import-state

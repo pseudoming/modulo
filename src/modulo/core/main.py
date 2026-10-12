@@ -11,9 +11,11 @@ from .domain.interfaces import (
     WorkingStorage,
 )
 from .domain.platforms import PlatformConfig
+from .domain.sampling import SamplingOptions
 from .processing.aggregation import summarize
 from .processing.ingestion import collect_calls
 from .processing.recalculation import calculate_calls
+from .processing.sampling import sample_calls
 from .processing.selection import select_calls, selection_summary
 
 
@@ -32,6 +34,7 @@ def run[SavedResult](
     working: WorkingStorage | None = None,
     max_record_bytes: int = 8 * 1024 * 1024,
     measurement_cache=None,
+    sampling: SamplingOptions | None = None,
 ) -> SavedResult:
     """接收已经配置好的适配器与保存函数，按顺序执行完整导入。"""
     if not namespace or max_records < 0:
@@ -55,6 +58,9 @@ def run[SavedResult](
     # 2. 按平台与模型筛选；未入选记录保留原文和诊断。
     selection = selection_summary(batch, platform_config, working)
     selected = select_calls(batch, platform_config, selection)
+    selected, sampling_report = sample_calls(
+        selected, sampling or SamplingOptions(), batch.diagnostics, working=working
+    )
 
     # 3. 按显式配置补齐图片证据，再复算入选调用，保留分项状态与失败原因。
     rows = calculate_calls(
@@ -74,6 +80,7 @@ def run[SavedResult](
         selection,
         batch_read_complete=batch.complete,
         working=working,
+        sampling=sampling_report,
     )
 
     # 5. 保存完整结果；保存失败直接向上传递，不能返回成功。
