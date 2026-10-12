@@ -50,7 +50,10 @@ def test_real_es_seed_inputs_match_frozen_expectations(tmp_path, calculator, pro
     expected = LAB["expected"]()["per_protocol"]
     records = details(bundle)
     assert len(records) == expected["calls"]
-    assert Counter(row["measurement"]["verdict"] for row in records) == expected["verdicts"]
+    assert (
+        Counter(row["measurement"]["input_verdict"] for row in records)
+        == expected["input_verdicts"]
+    )
     assert (
         sum(row["measurement"]["input_tokens"] is not None for row in records)
         == (expected["recalculated_calls"])

@@ -4,10 +4,12 @@ import argparse
 import json
 import os
 from pathlib import Path
+from typing import Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from modulo.application.image_cache import ImageDownloadOptions
 from modulo.application.registry import Registry
 from modulo.core.domain.bindings import Bindings
 from modulo.core.domain.interfaces import SourceAdapter
@@ -15,12 +17,24 @@ from modulo.core.domain.platforms import PlatformConfig
 from modulo.shared.serialization import loads
 
 
-class ImportOptions(BaseModel):
-    """Resolved options passed from configuration and CLI into one import."""
+class AssetOptions(BaseModel):
+    """Local asset directory and explicit download region, shared by both commands."""
 
     model_config = ConfigDict(
         extra="forbid", populate_by_name=True, alias_generator=lambda name: name.replace("_", "-")
     )
+
+    assets: Path = Path("assets/tokenizers")
+    asset_source: Literal["global", "cn"] = "global"
+
+    @field_validator("asset_source", mode="before")
+    @classmethod
+    def normalize_source(cls, value):
+        return value.lower() if isinstance(value, str) else value
+
+
+class ImportOptions(AssetOptions):
+    """Resolved options passed from configuration and CLI into one import."""
 
     source: str
     protocol: str = Field(alias="adapter")
@@ -44,11 +58,16 @@ class ImportOptions(BaseModel):
     payload_field: str | None = None
     source_config: Path | None = None
     bindings: Bindings
-    assets: Path = Path("assets/tokenizers")
     output: Path = Path("runs")
-    max_records: int = Field(default=10_000, ge=1)
+    max_records: int = Field(default=0, ge=0)
+    memory_mib: int = Field(default=64, ge=8)
+    max_record_mib: int = Field(default=8, ge=1)
+    state: Path | None = None
+    follow: bool = False
+    poll_seconds: float = Field(default=5, gt=0, allow_inf_nan=False)
+    image_download: ImageDownloadOptions = Field(default_factory=ImageDownloadOptions)
 
-    @field_validator("page_size", "max_records", mode="before")
+    @field_validator("page_size", "max_records", "memory_mib", "max_record_mib", mode="before")
     @classmethod
     def integer_option(cls, value):
         if isinstance(value, str):
@@ -59,7 +78,7 @@ class ImportOptions(BaseModel):
 
 
 class ConfigLoader(yaml.BaseLoader):
-    """String scalars only; no implicit versions/dates/bools, aliases, or custom tags."""
+    """Keep names as strings; template parameters alone allow JSON scalar types."""
 
     def compose_node(self, parent, index):
         if self.check_event(yaml.AliasEvent):
@@ -79,8 +98,29 @@ class ConfigLoader(yaml.BaseLoader):
                 raise ValueError("configuration keys must be strings; YAML merges are unsupported")
             if key in result:
                 raise ValueError("duplicate configuration key")
-            result[key] = self.construct_object(value_node, deep=True)
+            value = self.construct_object(value_node, deep=True)
+            result[key] = (
+                self.template_parameters(value_node, value) if key == "template-kwargs" else value
+            )
         return result
+
+    def template_parameters(self, node, value):
+        if isinstance(node, yaml.ScalarNode) and node.style is None:
+            try:
+                return loads(node.value)
+            except ValueError:
+                return value
+        if isinstance(node, yaml.SequenceNode):
+            return [
+                self.template_parameters(child, item)
+                for child, item in zip(node.value, value, strict=True)
+            ]
+        if isinstance(node, yaml.MappingNode):
+            return {
+                key: self.template_parameters(child, value[key])
+                for (_, child), key in zip(node.value, value, strict=True)
+            }
+        return value
 
 
 def read_config(path: Path) -> dict:
@@ -126,8 +166,15 @@ COMMON_FIELDS = {
     "namespace",
     "payload_field",
     "assets",
+    "asset_source",
     "output",
     "max_records",
+    "image_download",
+    "memory_mib",
+    "max_record_mib",
+    "state",
+    "follow",
+    "poll_seconds",
 }
 
 
@@ -141,6 +188,21 @@ def relative_paths(options: dict, config_path: Path, names: set[str]) -> None:
     for name in names & options.keys():
         if isinstance(options[name], str):
             options[name] = str((config_path.resolve().parent / options[name]).resolve())
+
+
+def asset_options(arguments: argparse.Namespace) -> AssetOptions:
+    config_path = getattr(arguments, "config", None)
+    config = read_config(config_path) if config_path else {}
+    config.pop("models", None)
+    aliases = {ImportOptions.model_fields[name].alias: name for name in COMMON_FIELDS}
+    options = named_options(config, aliases, "main")
+    options = {key: value for key, value in options.items() if key in AssetOptions.model_fields}
+    if config_path:
+        relative_paths(options, config_path, {"assets"})
+    options.update(
+        {key: value for key, value in vars(arguments).items() if key in AssetOptions.model_fields}
+    )
+    return AssetOptions.model_validate(options)
 
 
 def import_options(arguments: argparse.Namespace) -> argparse.Namespace:
@@ -160,8 +222,11 @@ def import_options(arguments: argparse.Namespace) -> argparse.Namespace:
                 "source_config",
                 "assets",
                 "output",
+                "state",
             },
         )
+        if isinstance(options.get("image_download"), dict):
+            relative_paths(options["image_download"], config_path, {"cache-dir", "cache_dir"})
     explicit = {
         key: value
         for key, value in vars(arguments).items()
@@ -171,6 +236,13 @@ def import_options(arguments: argparse.Namespace) -> argparse.Namespace:
     if "source" in explicit and explicit["source"] != options.get("source"):
         options.pop("source_config", None)
     options.update(explicit)
+    if hasattr(arguments, "download_images"):
+        if not isinstance(options.get("image_download", {}), dict):
+            raise ValueError("image-download configuration must contain an object")
+        options["image_download"] = {
+            **options.get("image_download", {}),
+            "enabled": arguments.download_images,
+        }
     if getattr(arguments, "bindings", None):
         bindings = read_config(arguments.bindings)
     elif has_models:
@@ -194,6 +266,8 @@ def import_options(arguments: argparse.Namespace) -> argparse.Namespace:
         validated = ImportOptions.model_validate(source | options)
     if sum(getattr(validated, name) is not None for name in ("path", "file", "es_url")) > 1:
         raise ValueError("use only one of --path, --file and --es-url")
+    if validated.follow and validated.state is None:
+        raise ValueError("--follow requires --state to save reading progress")
     return argparse.Namespace(
         **(
             vars(arguments)
@@ -231,7 +305,7 @@ def import_source(arguments: argparse.Namespace, registry: Registry) -> SourceAd
         if not path:
             raise ValueError("--path is required for log source")
         return (
-            factory(Path(path), pattern=arguments.pattern)
+            factory(Path(path), pattern=arguments.pattern, allow_empty=arguments.follow)
             if arguments.pattern is not None
             else factory(Path(path))
         )

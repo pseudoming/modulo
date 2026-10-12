@@ -4,11 +4,13 @@ import json
 import pytest
 
 from modulo.adapters.protocols import NewAPIProtocol, OneAPIProtocol
-from modulo.adapters.protocols.shared.sse import assemble_sse
+from modulo.adapters.protocols.shared.api_bodies.chat_stream import assemble_sse
 from modulo.core.domain.data_models import RawRecord, SourceError
 from modulo.core.domain.interfaces import SourceAdapter
 from modulo.core.domain.platforms import PlatformConfig
 from modulo.core.processing.ingestion import collect_calls
+from tests.support.api_bodies import request_body, response_body, stream_events
+from tests.support.api_bodies import sse as api_sse
 
 REQUEST = {"model": "volc-deepseek", "messages": [{"role": "user", "content": "  中文🙂\n"}]}
 RESPONSE = {
@@ -56,7 +58,7 @@ def collect(rows, gateway="newapi", *, ordered=True, fail=False, payload_field=N
 
 
 def single(batch):
-    assert not batch.diagnostics
+    assert not [d for d in batch.diagnostics if d["level"] != "warning"]
     assert len(batch.calls) == 1
     return next(iter(batch.calls.values()))
 
@@ -103,6 +105,34 @@ def test_native_interleaving_association_is_independent_of_model_and_usage(gatew
     assert after["a"]["call"]["model"] == "volc-deepseek"
     assert after["a"]["call"]["usage"]["input_tokens"] == 999
     assert after["a"]["call"]["messages"][0]["content"] == "  中文🙂\n"
+
+
+@pytest.mark.parametrize("gateway", ["newapi", "oneapi"])
+@pytest.mark.parametrize("dialect", ["responses", "anthropic"])
+@pytest.mark.parametrize("streamed", [False, True])
+def test_api_bodies_in_native_wrappers_and_unordered_es(gateway, dialect, streamed):
+    request = request_body(
+        dialect, [{"role": "system", "content": "系统"}, {"role": "user", "content": "你好"}]
+    )
+    response = response_body(dialect, "回答", "思考", input_tokens=10, output_tokens=8)
+    rows = [native(gateway, "requestBody:" if gateway == "newapi" else "request body:", request)]
+    if streamed:
+        label = "stream scanner data:" if gateway == "newapi" else "stream response data:"
+        rows.extend(
+            native(gateway, label, line)
+            for line in api_sse(stream_events(dialect, response)).splitlines()
+        )
+    else:
+        label = "responseBody:" if gateway == "newapi" else "upstream response body:"
+        rows.append(native(gateway, label, response))
+    wrapped = [{"message": row, "event": {"sequence": i}} for i, row in enumerate(rows)]
+    result = single(collect(list(reversed(wrapped)), gateway, ordered=False))
+    assert not result["call"]["gaps"] and not result["call"]["output_gaps"]
+    assert result["call"]["output_text"] == "回答" and result["call"]["output_reasoning"] == "思考"
+    assert result["call"]["usage"]["input_tokens"] == 10
+    assert len(result["source_refs"]) == len(rows)
+    if streamed:
+        assert result["assemblies"][0]["sequence_basis"] == "event.sequence"
 
 
 def test_oneapi_multiline_prefers_actual_converted_request_and_ali_response():
@@ -304,7 +334,10 @@ def test_incomplete_multiline_and_bad_record_preserve_all_diagnostics():
         "oneapi",
     )
     assert batch.counters["invalid_records"] == 2 and len(batch.calls) == 1
-    assert {d["source_ref"]["locator"] for d in batch.diagnostics} == {"0", "1"}
+    assert {d["source_ref"]["locator"] for d in batch.diagnostics if d["level"] == "error"} == {
+        "0",
+        "1",
+    }
 
 
 @pytest.mark.parametrize("gateway", ["newapi", "oneapi"])
@@ -339,7 +372,7 @@ def test_exchange_done_marker_does_not_hide_invalid_content():
         "schema_version": "gateway.exchange.v1",
         "request_id": "r",
         "request_body": REQUEST,
-        "response_sse": "\n".join(sse({"content": []})),
+        "response_sse": "\n".join(sse({"content": {"invalid": "object"}})),
     }
     row = single(collect([record]))
     assert "unsupported_stream_content" in row["call"]["output_gaps"]
@@ -379,3 +412,51 @@ def test_same_file_offset_can_deduplicate_but_different_files_cannot_order_a_str
     rows[-1]["log"]["file"]["path"] = "b"
     row = single(collect(rows, ordered=False))
     assert row["call"]["output_gaps"] == ["stream_order_unknown"]
+
+
+@pytest.mark.parametrize("gateway", ["newapi", "oneapi"])
+@pytest.mark.parametrize(
+    "missing", ["request", "response", "request_id", "attempt_id", "order", "end"]
+)
+def test_report_warnings_explain_observed_missing_evidence(gateway, missing):
+    record = {
+        "schema_version": "gateway.exchange.v1",
+        "gateway": gateway,
+        "request_id": "r",
+        "request_body": REQUEST,
+        "response_body": RESPONSE,
+    }
+    ordered = True
+    if missing == "request":
+        record.pop("request_body")
+        reason = "gateway_request_body_required"
+    elif missing == "response":
+        record.pop("response_body")
+        reason = "gateway_response_body_required"
+    elif missing == "request_id":
+        record.pop("request_id")
+        reason = "gateway_correlation_id_required"
+    elif missing == "attempt_id":
+        label = "text request body:" if gateway == "newapi" else "converted request:"
+        rows = [native(gateway, label, REQUEST), native(gateway, label, REQUEST)]
+        reason = "gateway_attempt_id_required"
+    else:
+        label = "text request body:" if gateway == "newapi" else "converted request:"
+        stream_label = "stream scanner data:" if gateway == "newapi" else "stream response data:"
+        events = sse({"content": "answer"})
+        if missing == "end":
+            events = [line for line in events if "[DONE]" not in line]
+        ordered = missing != "order"
+        rows = [
+            native(gateway, label, REQUEST),
+            *[native(gateway, stream_label, line) for line in events],
+        ]
+        reason = (
+            "gateway_stream_order_required" if missing == "order" else "gateway_stream_end_required"
+        )
+    batch = collect(
+        rows if missing in {"attempt_id", "order", "end"} else [record], gateway, ordered=ordered
+    )
+    warning = next(d for d in batch.diagnostics if d["reason"] == reason)
+    assert warning["level"] == "warning"
+    assert warning["missing_fields"] and warning["message"] and warning["action"]

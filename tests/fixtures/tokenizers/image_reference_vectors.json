@@ -1,0 +1,4805 @@
+{
+  "sources": {
+    "deepseek-v4.1": [
+      {
+        "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/2cba9e42aa026125f3ed06c6d98c1db82f7ca027/inference/image_processor.py",
+        "sha256": "482759e3bcc4e9bb5ee582b244cc563f5d0e163d8b48dda91ebb7106e62f9272"
+      },
+      {
+        "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/2cba9e42aa026125f3ed06c6d98c1db82f7ca027/inference/config.json",
+        "sha256": "2e84f45cf1dac8c7fcbb200e96667d4b913275690668ed496f24c7747207a809"
+      }
+    ],
+    "kimi-k3": [
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/preprocessor_config.json",
+        "sha256": "4be333605990c53a816e586dee9d5dd545afb7a59947c17f8f7ef26b4782668e"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/kimi_k3_vision_processing.py",
+        "sha256": "d122b30bfd3a51a6f05d4bfcfda1e657827322b1353f7caefeebc2835d7736b5"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/media_utils.py",
+        "sha256": "78403540328f9847d6b7ebc5c44eb2e6a752863de0afb7d0710728bb161dc60d"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/modeling_kimi_k3.py",
+        "sha256": "b9171c96726eda55234c92ac8dfae7e24c512fda68968ae8f2c3782b42665ea2"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/kimi_k3_processor.py",
+        "sha256": "ec9f7e86d2ab0eee07a8e7e7c037046e77ac3c25a710ad1298ec13be3b585b54"
+      }
+    ],
+    "minimax-m3": [
+      {
+        "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/f0e1c1e04d40177e4673a22097036854f536e9c0/preprocessor_config.json",
+        "sha256": "36785da1dc7a00324048bd7c537c24247fca97c626884818257fd0b92287de31"
+      },
+      {
+        "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/f0e1c1e04d40177e4673a22097036854f536e9c0/image_processor.py",
+        "sha256": "8218f98634c365608a98ea887bfebac37131ec2acdb8445188350490de7cf994"
+      },
+      {
+        "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/f0e1c1e04d40177e4673a22097036854f536e9c0/processing_minimax.py",
+        "sha256": "0706ae8b93b3489a3b3bc7f48a5f29fb34b1449ebebb37586250e4d5fa8f5e35"
+      }
+    ],
+    "mimo-v2.6": [
+      {
+        "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/blob/b61f21852680ee02a29e946e18cf8697f4844061/preprocessor_config.json",
+        "sha256": "fbe073ccca943767c92ce3774f535dc8037e126f1594056f397ad3a4b1a1a7a4"
+      },
+      {
+        "url": "https://github.com/huggingface/transformers/blob/v4.57.6/src/transformers/models/qwen2_vl/image_processing_qwen2_vl.py",
+        "sha256": "7820a0fcca107e75605e08d9b774285ca2b0316f857bc0225c779794705ecf4f"
+      },
+      {
+        "url": "https://github.com/huggingface/transformers/blob/v4.57.6/src/transformers/models/qwen2_5_vl/processing_qwen2_5_vl.py",
+        "sha256": "6a88107b85320ca9ee1154731530db584ba048a12aff1ebab2f7bdc77062184d"
+      }
+    ],
+    "step-3.7": [
+      {
+        "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash/blob/5f6244077ac62e04eec3f320501ff8c2b293373a/processing_step3.py",
+        "sha256": "983f9fc399a5b14fe3e492f05d4e3c1b2d3b3fc589dc426da9e5a1731ed516ec"
+      }
+    ],
+    "qwen3.5-122b": [
+      {
+        "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B/blob/dc4d348443bc740c68e2d77492492c11606384d5/preprocessor_config.json",
+        "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.57.6/src/transformers/models/qwen2_vl/image_processing_qwen2_vl.py",
+        "sha256": "7820a0fcca107e75605e08d9b774285ca2b0316f857bc0225c779794705ecf4f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.57.6/src/transformers/models/qwen2_vl/image_processing_qwen2_vl_fast.py",
+        "sha256": "09bfa9b17df7c3f0c6159bc34008ee50f21d2472cd5bae7e5c21ba1ca13a423c"
+      }
+    ],
+    "qwen3.5-397b": [
+      {
+        "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B/blob/8472618112abcbd45acbcdc58436aff4233c23f7/preprocessor_config.json",
+        "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.57.6/src/transformers/models/qwen2_vl/image_processing_qwen2_vl.py",
+        "sha256": "7820a0fcca107e75605e08d9b774285ca2b0316f857bc0225c779794705ecf4f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.57.6/src/transformers/models/qwen2_vl/image_processing_qwen2_vl_fast.py",
+        "sha256": "09bfa9b17df7c3f0c6159bc34008ee50f21d2472cd5bae7e5c21ba1ca13a423c"
+      }
+    ],
+    "glm-5.3-flash": [
+      {
+        "url": "https://huggingface.co/zai-org/GLM-5.3-Flash/blob/eb9eb208eb0d988989d07a6a12d0fdeb5f52574a/processor_config.json",
+        "sha256": "aae38374c94b08cc9b0547c6e64f05b951bd9735cea571c6988f5ed552bed3ed"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/55c3cc9f03cd4fbf2d27d382dcc8fcc544631f8e/src/transformers/models/glm5_next/image_processing_glm5_next.py",
+        "sha256": "0771f6711d8b578a706297dd3445037a276e2c53eb001f6d4f2c69fea4be2d3f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/huggingface/transformers/55c3cc9f03cd4fbf2d27d382dcc8fcc544631f8e/src/transformers/models/glm5_next/processing_glm5_next.py",
+        "sha256": "7d7b6573a251dd248c51080f89953cde387b3c2d53726e76beba612c3fe1297e"
+      }
+    ],
+    "kimi-k2.6": [
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/preprocessor_config.json",
+        "sha256": "0c43520fbcc076dacbffcf0273f0dfa0ee318ff9aa55537cf7f2788d906de7b2"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/kimi_k25_processor.py",
+        "sha256": "537d7a708e1654766fc628c99667bdb9364136d3541633d6522ac43cef9bfea0"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/kimi_k25_vision_processing.py",
+        "sha256": "498e20753c9aa6b6224ddbcd05b04deb7e987b76595bf5c28ee8583f33ebc375"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/media_utils.py",
+        "sha256": "77a6b1fed3580b0562443092928a0240c2989e3950377e93893952123ae48e3d"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/modeling_kimi_k25.py",
+        "sha256": "ef28f469e7cb5ab91008a52c1b34718ad37de8428e2ed6aadc408d031a38a372"
+      }
+    ],
+    "kimi-k2.7-code": [
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/preprocessor_config.json",
+        "sha256": "bd9a1f5d7b1580b38093c35ca49162580a118485164fac48e1cdb224ee41fcff"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/kimi_k25_processor.py",
+        "sha256": "537d7a708e1654766fc628c99667bdb9364136d3541633d6522ac43cef9bfea0"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/kimi_k25_vision_processing.py",
+        "sha256": "498e20753c9aa6b6224ddbcd05b04deb7e987b76595bf5c28ee8583f33ebc375"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/media_utils.py",
+        "sha256": "77a6b1fed3580b0562443092928a0240c2989e3950377e93893952123ae48e3d"
+      },
+      {
+        "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/modeling_kimi_k25.py",
+        "sha256": "a1594f129ae8dc5fa3c9dbbc24e8e603b30d7caef1226669b4d95dc8f2a3e2dd"
+      }
+    ]
+  },
+  "vectors": [
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        184
+      ],
+      "input_tokens": 226,
+      "input_ids_sha256": "bece6c2b6e910325c5cb09c12eaff873453fbf1ce75aaa355d9cb81a9027324e",
+      "rendered_input_sha256": "e178216c7c7e9bf6293c3191453703ad59dc361c26ccdbd91a67a97317bc0c2e"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        184
+      ],
+      "input_tokens": 226,
+      "input_ids_sha256": "bece6c2b6e910325c5cb09c12eaff873453fbf1ce75aaa355d9cb81a9027324e",
+      "rendered_input_sha256": "e178216c7c7e9bf6293c3191453703ad59dc361c26ccdbd91a67a97317bc0c2e"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        198
+      ],
+      "image_input_tokens": [
+        233
+      ],
+      "input_tokens": 275,
+      "input_ids_sha256": "4d9853703c60720b0bfff1f4e1db4e80d09de079bd6dade7a6daa55b12104ad0",
+      "rendered_input_sha256": "5d39bd7126bc2afc21e4862c9f873aa3094e754c7b42525542a7adc90b431506"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        192
+      ],
+      "image_input_tokens": [
+        206
+      ],
+      "input_tokens": 248,
+      "input_ids_sha256": "e794d493932f28cded9cb08928dd86017eb967c3a9d5d96519ac1b76eefb9ac0",
+      "rendered_input_sha256": "074254b0244e636668d7fec3595116a337d221bb3f780745e369e41497e7c518"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        324
+      ],
+      "image_input_tokens": [
+        344
+      ],
+      "input_tokens": 386,
+      "input_ids_sha256": "f9bf328dd9a575f0b9be33b42bdeecdefa07baf0084c42c8674f6c6fafc15654",
+      "rendered_input_sha256": "7d447f83c168ff5801934856ded6cb7d9013dc81051d9911ad787ffc5645ce5b"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        324
+      ],
+      "image_input_tokens": [
+        344
+      ],
+      "input_tokens": 386,
+      "input_ids_sha256": "f9bf328dd9a575f0b9be33b42bdeecdefa07baf0084c42c8674f6c6fafc15654",
+      "rendered_input_sha256": "7d447f83c168ff5801934856ded6cb7d9013dc81051d9911ad787ffc5645ce5b"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        174
+      ],
+      "image_input_tokens": [
+        179
+      ],
+      "input_tokens": 221,
+      "input_ids_sha256": "c78aa4511dc6d35c8d952d228f2aede1a857e2333075e55e26e2022410bf31a4",
+      "rendered_input_sha256": "c4b55c4731347500cd6207c48503b71d1809745d402bf8324cf70d2194eeb1ed"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        174
+      ],
+      "image_input_tokens": [
+        234
+      ],
+      "input_tokens": 276,
+      "input_ids_sha256": "c6d5afb81d5d77a7a73b1b57d1c4c670992559c4befc8a9bf7ae1a32c331113e",
+      "rendered_input_sha256": "ca25b65c8231ae42ec4495cbf84f1884b482b1a2188944d83ed43127c36f3471"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        972
+      ],
+      "image_input_tokens": [
+        1001
+      ],
+      "input_tokens": 1043,
+      "input_ids_sha256": "1589118845134cf94b2c58203e491e3ee5bc3bfdda86b1ea7336b17515abeb1d",
+      "rendered_input_sha256": "c8acfe94dd4cdc75bdf7e71383c83244a5651476039a8988d53bc266c3469719"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        968
+      ],
+      "image_input_tokens": [
+        992
+      ],
+      "input_tokens": 1034,
+      "input_ids_sha256": "e13abd4635f4f464dd436be5da3c7df1abd7bff7960c0a0eb9da5912ae1ab82d",
+      "rendered_input_sha256": "c4a79054606db12b2b2b6a7ca2a670bbe09a4e7c6510885cda8dff51f0ce03aa"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        696
+      ],
+      "image_input_tokens": [
+        722
+      ],
+      "input_tokens": 764,
+      "input_ids_sha256": "1cceb39d1839e0bd962521887cba51a47b3f87f5c8861c478b1adf0a9c405508",
+      "rendered_input_sha256": "690b26bb935e4a64c2ff45c9b09a2d976c61ebfe707346bf6252a053442cc2e6"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        192,
+        174
+      ],
+      "image_input_tokens": [
+        206,
+        234
+      ],
+      "input_tokens": 491,
+      "input_ids_sha256": "5d41bd3355b7671aac6bc684db5473693bc595410d0364b41b4d13bba88fa544",
+      "rendered_input_sha256": "6bc545679e57a08ac8f99a383501602f6a7414991506079316f1d2f228f23835"
+    },
+    {
+      "asset": "deepseek-v4.1",
+      "backend": "deepseek",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "vision_max_n_token": 128,
+        "vision_min_pixels": 16384
+      },
+      "visual_tokens": [
+        108
+      ],
+      "image_input_tokens": [
+        119
+      ],
+      "input_tokens": 161,
+      "input_ids_sha256": "e386e42bd9c6daa29c43115ada0d595e6035dbb4237085d9e77acaf2b2734eb0",
+      "rendered_input_sha256": "6e036976da94e339be720a02e1e0e77ad55673bd2ed952f456f0fe6f29d8f1b1"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        9
+      ],
+      "input_tokens": 108,
+      "input_ids_sha256": "5ba9be4520b8435e45fdf180da9f868e06b3d8aa77c159df380349cbcf987b2c",
+      "rendered_input_sha256": "ecec5aa95cc32e73509f8e06b9bdf743ade53ac5e967b6721deae33f838e58af"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        9
+      ],
+      "input_tokens": 108,
+      "input_ids_sha256": "2233c259233747df1bc5bce0654ba968c8522811beca51e51800c9b7713a9650",
+      "rendered_input_sha256": "00d095ccd2b1e1d55ba06a23f45938ec2e9a6f89a78054783cd5830b102167c1"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        24
+      ],
+      "input_tokens": 123,
+      "input_ids_sha256": "0dc4b3d18c2d4c5093b9de581b581ba617874b9486fb69fb18532169e4a947aa",
+      "rendered_input_sha256": "9e76a1915c6a308d77ed4299b33d2e769df767effe9ff5799704c77538699e46"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414
+      ],
+      "image_input_tokens": [
+        422
+      ],
+      "input_tokens": 521,
+      "input_ids_sha256": "2dcf3ccdb5a4fc5e6ec27f3fa258b011074d18bc1234b2b129a366abb9b64873",
+      "rendered_input_sha256": "2e9cba2b0fc35f96ad9d38d74e7cac4436c401249dcbfcc94173ef32c6f0fe8d"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        676
+      ],
+      "image_input_tokens": [
+        684
+      ],
+      "input_tokens": 783,
+      "input_ids_sha256": "fbb6a421925a486af29ec08dff909dbc0309361139cabbb353e6f841cf5163bd",
+      "rendered_input_sha256": "97b19dffbef2043072f14161d6fd6289c954ebe7da536fcf6267a418ca4f3aaf"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        729
+      ],
+      "image_input_tokens": [
+        737
+      ],
+      "input_tokens": 836,
+      "input_ids_sha256": "d54d3af084ce3f09abcf4b0048670edff65ae0269df53dfb9a826f464d4459c0",
+      "rendered_input_sha256": "0f6fa5683260908a6ab9bcf9b4d102b0454e3093c35867c1db05af1517c13f54"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        81
+      ],
+      "input_tokens": 180,
+      "input_ids_sha256": "f13b57b63e2fa52b34763774b4b8119377a5aef8c196bb6f1e421449c4efa630",
+      "rendered_input_sha256": "9521f415e9f781048a794dc5cb6a347a443c57097b5fce8b596404d330f87827"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        81
+      ],
+      "input_tokens": 180,
+      "input_ids_sha256": "4fea392af6f872bba80707b13a4505270081c366a19740d93ebad30dd3fd185b",
+      "rendered_input_sha256": "02e9e0422e87acf90a997f9c2e79051b0d6713a2cde80ec841474007e6266f9a"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16170
+      ],
+      "image_input_tokens": [
+        16180
+      ],
+      "input_tokens": 16279,
+      "input_ids_sha256": "cccc3b9a4edc5b64d320b483b82e6774826626bfc7059a774f99591a73df2bd9",
+      "rendered_input_sha256": "01cacd1d3b618a15daae2e559fd0f53d8ada7fa59d88103d8b545025dde7cdb6"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        5995
+      ],
+      "image_input_tokens": [
+        6005
+      ],
+      "input_tokens": 6104,
+      "input_ids_sha256": "7dec8f1cfcf88611300fffc500fd39d867c17337ce5ff85632015859da7a9ff5",
+      "rendered_input_sha256": "0d1f044c07f16aa40d227fff6f92e34d85ade380213c86e0b8b3b446cb593297"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1548
+      ],
+      "image_input_tokens": [
+        1558
+      ],
+      "input_tokens": 1657,
+      "input_ids_sha256": "7b4065c0008fa9eef3ec1cc5693522c1e1fd8241dba588cd3b57e835f92bd64e",
+      "rendered_input_sha256": "2c144e2cba8bfb179ca67d5d7bd8c831f8f31529cec4d976996ce95898fd2cef"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414,
+        72
+      ],
+      "image_input_tokens": [
+        422,
+        81
+      ],
+      "input_tokens": 610,
+      "input_ids_sha256": "6b0873eecaca3a0d5a0dc815810a984325d55cb815e0c7861312e6438182530e",
+      "rendered_input_sha256": "d9b30e60d0550b21e11e154df8cca500973570bc8e78747f99e7cb0970d43997"
+    },
+    {
+      "asset": "kimi-k3",
+      "backend": "moonshot",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "in_patch_limit": 1024,
+        "patch_limit_on_one_side": 64
+      },
+      "visual_tokens": [
+        266
+      ],
+      "image_input_tokens": [
+        276
+      ],
+      "input_tokens": 375,
+      "input_ids_sha256": "cccc3b9a4edc5b64d320b483b82e6774826626bfc7059a774f99591a73df2bd9",
+      "rendered_input_sha256": "01cacd1d3b618a15daae2e559fd0f53d8ada7fa59d88103d8b545025dde7cdb6"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4
+      ],
+      "image_input_tokens": [
+        6
+      ],
+      "input_tokens": 191,
+      "input_ids_sha256": "1cdf10696d074ed10fb12c2ab1b076be2a1c2c0711029fe1ac1e7bc196fd7b3e",
+      "rendered_input_sha256": "57ddf4bf444cee5d53497e49058fafd66fa4ee8f6c1e1221b08ed0edce4f10aa"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4
+      ],
+      "image_input_tokens": [
+        6
+      ],
+      "input_tokens": 191,
+      "input_ids_sha256": "1cdf10696d074ed10fb12c2ab1b076be2a1c2c0711029fe1ac1e7bc196fd7b3e",
+      "rendered_input_sha256": "57ddf4bf444cee5d53497e49058fafd66fa4ee8f6c1e1221b08ed0edce4f10aa"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        7
+      ],
+      "image_input_tokens": [
+        9
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "6f396798158dea53e9fcf8c1b1c4d8a5fcc3aca1ebd4bd6c89e30b49b2ba1df6",
+      "rendered_input_sha256": "4a7d36a3aa26ca9d1a1e4618bfac7cf92e459b9c346eff621b0e2ebf556cbee0"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        391
+      ],
+      "image_input_tokens": [
+        393
+      ],
+      "input_tokens": 578,
+      "input_ids_sha256": "6c2a4f019d5509d6c43eb011b59f423bc14dae9c11a5b58af91f6c0ba297aa74",
+      "rendered_input_sha256": "6166bfd5bc53db9ddeb0833295282475328919edaf09eb59a5f2b8857f4c81b1"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        576
+      ],
+      "image_input_tokens": [
+        578
+      ],
+      "input_tokens": 763,
+      "input_ids_sha256": "4a2d4256c31f8a36b0909fd872e64a101e04c810015d700f55a8ee556b8ebd4b",
+      "rendered_input_sha256": "285e0b17529c426a6cd27131ec25fc17d94f14d9670a40357cb19d2687bccab9"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        576
+      ],
+      "image_input_tokens": [
+        578
+      ],
+      "input_tokens": 763,
+      "input_ids_sha256": "4a2d4256c31f8a36b0909fd872e64a101e04c810015d700f55a8ee556b8ebd4b",
+      "rendered_input_sha256": "285e0b17529c426a6cd27131ec25fc17d94f14d9670a40357cb19d2687bccab9"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 259,
+      "input_ids_sha256": "e0a39d8635e4a9d7f634135d3899662bc20510c5239a44830d31327891bc7591",
+      "rendered_input_sha256": "d1ac48d21190885a2d7eafd16a7222ca135a52c7bdb732df2fd512f26706187d"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 259,
+      "input_ids_sha256": "e0a39d8635e4a9d7f634135d3899662bc20510c5239a44830d31327891bc7591",
+      "rendered_input_sha256": "d1ac48d21190885a2d7eafd16a7222ca135a52c7bdb732df2fd512f26706187d"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        540
+      ],
+      "image_input_tokens": [
+        542
+      ],
+      "input_tokens": 727,
+      "input_ids_sha256": "33fb501bba7d5bce6d67f5eccbbf4520ce4b51116f9479414f9451e283a3563b",
+      "rendered_input_sha256": "7fdf4064a5c67f29b9f3a605715caa7f70e14854fe111de49435a63cdd9f1748"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        528
+      ],
+      "image_input_tokens": [
+        530
+      ],
+      "input_tokens": 715,
+      "input_ids_sha256": "304781479e81d9f4232ce23acd17413d606e5e6b79a49fcf7297bac3f1ec37cc",
+      "rendered_input_sha256": "6a5ec1d92b2a210423ee6138ee9cc0ca0da3012ca494a4bbd8a26ea816745d76"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        546
+      ],
+      "image_input_tokens": [
+        548
+      ],
+      "input_tokens": 733,
+      "input_ids_sha256": "57695dcaa6df1379da58c224ec19a9f4edc7d63b85bffe2e1004e69aea0a3514",
+      "rendered_input_sha256": "ee5110e40911a8c7fcb7688b603c8515972b47952d8e7373b9fdbe8127106c69"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        391,
+        72
+      ],
+      "image_input_tokens": [
+        393,
+        74
+      ],
+      "input_tokens": 658,
+      "input_ids_sha256": "b97fcbdfd76ab6cb9eee0edf1de4cd0d0275a1cc53a792f4e582ae91d5110125",
+      "rendered_input_sha256": "a6e3c0cc92ef29dab597561aea3436c31e31abf70f9051be96b84a8c8c516ee1"
+    },
+    {
+      "asset": "minimax-m3",
+      "backend": "minimax",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "max_pixels": 200704
+      },
+      "visual_tokens": [
+        234
+      ],
+      "image_input_tokens": [
+        236
+      ],
+      "input_tokens": 421,
+      "input_ids_sha256": "58da4480169736db90af1b66bc7ed780aa812f02b37628b7bdf162d569cd7eb9",
+      "rendered_input_sha256": "5686fafdc4bd2b9bb4ce1e2fd6629c16aac5701faa83f883e59394e17b895748"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        9
+      ],
+      "image_input_tokens": [
+        11
+      ],
+      "input_tokens": 27,
+      "input_ids_sha256": "eb1fc579a7ae921233b13efa5d8ca5102d56a233fbd80cfdf2a7d70de3821cb7",
+      "rendered_input_sha256": "06b56117b8a423160ddb516324e1f550b1b330f3aaca42a38dd3ec123832d27a"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        9
+      ],
+      "image_input_tokens": [
+        11
+      ],
+      "input_tokens": 27,
+      "input_ids_sha256": "eb1fc579a7ae921233b13efa5d8ca5102d56a233fbd80cfdf2a7d70de3821cb7",
+      "rendered_input_sha256": "06b56117b8a423160ddb516324e1f550b1b330f3aaca42a38dd3ec123832d27a"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        18
+      ],
+      "input_tokens": 34,
+      "input_ids_sha256": "9de02f139efeb1c4dfbdaa27e561881b6da33b5e431ef1bc1c497548e6d36c57",
+      "rendered_input_sha256": "4d822e8fed0a4759c53f7a7dc04f19237df5ca8a7644c044f1b139531cc17cae"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300
+      ],
+      "image_input_tokens": [
+        302
+      ],
+      "input_tokens": 318,
+      "input_ids_sha256": "7542df17bd1aba3e1e43b244a9e266b9ef29887ba48798b2a83b81246d662181",
+      "rendered_input_sha256": "9f52480ea06a9d18e525c6f04b6992b22d3c27d63748fa5dd3016b5bc5ce50db"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 547,
+      "input_ids_sha256": "22203c1c5d58c387008653fdfdaba2e59d9be7fc215153d20dff5418c682fd3d",
+      "rendered_input_sha256": "7fdcba20df7ef7f73ee9d7454e3aa27b19900dc51452582f6ff8c06498435fc3"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 547,
+      "input_ids_sha256": "22203c1c5d58c387008653fdfdaba2e59d9be7fc215153d20dff5418c682fd3d",
+      "rendered_input_sha256": "7fdcba20df7ef7f73ee9d7454e3aa27b19900dc51452582f6ff8c06498435fc3"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        62
+      ],
+      "image_input_tokens": [
+        64
+      ],
+      "input_tokens": 80,
+      "input_ids_sha256": "6a172c421b23cfece74bc98f3d4cba8853d85ff5591e7d40144392f7a258c143",
+      "rendered_input_sha256": "e6082edb2748c0f10fd7854bf6d1f7d31c36b9b721ece417f2048b5a604be306"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        62
+      ],
+      "image_input_tokens": [
+        64
+      ],
+      "input_tokens": 80,
+      "input_ids_sha256": "6a172c421b23cfece74bc98f3d4cba8853d85ff5591e7d40144392f7a258c143",
+      "rendered_input_sha256": "e6082edb2748c0f10fd7854bf6d1f7d31c36b9b721ece417f2048b5a604be306"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        8112
+      ],
+      "image_input_tokens": [
+        8114
+      ],
+      "input_tokens": 8130,
+      "input_ids_sha256": "b82b93a905c4ff0daf539a55fac81ff8757c5b3bd4d46e61f2647090b868c1f2",
+      "rendered_input_sha256": "41599d7560da58538637b8859de809f634de6228a125c606f3ba1425f7bd7130"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4465
+      ],
+      "image_input_tokens": [
+        4467
+      ],
+      "input_tokens": 4483,
+      "input_ids_sha256": "809eb11c06f96f332ab5d169800fa625eeed8faa87a938230b8340588beed15e",
+      "rendered_input_sha256": "f9f9c1bae23d8287bb4b64578c4adf56b3aebcaff100ce7a3aaf29d359cf2050"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1178
+      ],
+      "image_input_tokens": [
+        1180
+      ],
+      "input_tokens": 1196,
+      "input_ids_sha256": "cf6f6ccbe71f98573a2b64ee66d7f2506e86098d8c774fd56dad4e543444b19e",
+      "rendered_input_sha256": "ea3f99a5cd1ec1b24a2130593e9a77a3395a9525c473af0930e16fbd98d75bcb"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300,
+        62
+      ],
+      "image_input_tokens": [
+        302,
+        64
+      ],
+      "input_tokens": 388,
+      "input_ids_sha256": "7c99f6b047d905b3d5cb1001dcac49bc6d49399c73933d28467a47b71d5927fc",
+      "rendered_input_sha256": "9c80a68c5ae9732d7a5d37b2e504fd54666157e8a7e061a88409c20640beb72b"
+    },
+    {
+      "asset": "mimo-v2.6",
+      "backend": "mimo",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "max_pixels": 200704
+      },
+      "visual_tokens": [
+        192
+      ],
+      "image_input_tokens": [
+        194
+      ],
+      "input_tokens": 210,
+      "input_ids_sha256": "2349bac88c2bff5f6da3302aa8722f524a4af7197dc492aae7809e6b00fd2298",
+      "rendered_input_sha256": "854c28b7fbdac85b60c4654c83970bdbca4d9311f6b74d7fd426047f1b08f355"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        171
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "a7ae7620b5c2a588215213946f4aab13bd7976865c0d9a12e859604e4c780c92",
+      "rendered_input_sha256": "9c21d67b6e069e0e8bc9e2fdd1e7354c4c6dab676b6ad0440abb0b9ed66730f4"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        171
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "a7ae7620b5c2a588215213946f4aab13bd7976865c0d9a12e859604e4c780c92",
+      "rendered_input_sha256": "9c21d67b6e069e0e8bc9e2fdd1e7354c4c6dab676b6ad0440abb0b9ed66730f4"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        171
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "a7ae7620b5c2a588215213946f4aab13bd7976865c0d9a12e859604e4c780c92",
+      "rendered_input_sha256": "9c21d67b6e069e0e8bc9e2fdd1e7354c4c6dab676b6ad0440abb0b9ed66730f4"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        171
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "a7ae7620b5c2a588215213946f4aab13bd7976865c0d9a12e859604e4c780c92",
+      "rendered_input_sha256": "9c21d67b6e069e0e8bc9e2fdd1e7354c4c6dab676b6ad0440abb0b9ed66730f4"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169
+      ],
+      "image_input_tokens": [
+        171
+      ],
+      "input_tokens": 194,
+      "input_ids_sha256": "a7ae7620b5c2a588215213946f4aab13bd7976865c0d9a12e859604e4c780c92",
+      "rendered_input_sha256": "9c21d67b6e069e0e8bc9e2fdd1e7354c4c6dab676b6ad0440abb0b9ed66730f4"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        493
+      ],
+      "image_input_tokens": [
+        504
+      ],
+      "input_tokens": 527,
+      "input_ids_sha256": "544d41a4f13753cc97a6186995bc8a5d3ef44d54a7d5deb507f0ea350f8ef8f8",
+      "rendered_input_sha256": "646d80b8b2fa83e7df81e1fa4e7afbc1263332a66b12743ccc6154203450e66c"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1789
+      ],
+      "image_input_tokens": [
+        1831
+      ],
+      "input_tokens": 1854,
+      "input_ids_sha256": "2f9ecbcf973863bdb0f2162141871c5424d06e0e3bc436f9748dfd67a6bbefcc",
+      "rendered_input_sha256": "cec8c0bb26129fc926a22df1e1f6fec3e853dfcc246464aac46bd306240320ab"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1789
+      ],
+      "image_input_tokens": [
+        1850
+      ],
+      "input_tokens": 1873,
+      "input_ids_sha256": "afa1cf7fd8d8ae5999ec8128f9af76316fb6072a77bca9f2460fc6ea2e7f3c59",
+      "rendered_input_sha256": "478c599c33ab8b192bd00408f53c2b26ad77f954280db1287bd5d1d06c226f73"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        2599
+      ],
+      "image_input_tokens": [
+        2665
+      ],
+      "input_tokens": 2688,
+      "input_ids_sha256": "b5cafc8c28b6cdbe3cb7ec56bf86732b2793c3b3f05d351b5d1bf960ff570cde",
+      "rendered_input_sha256": "d67805cc831bc2dc5ba1976cc8b7b425887c44cbb2a7b0d19eff449423c7dbf6"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1627
+      ],
+      "image_input_tokens": [
+        1667
+      ],
+      "input_tokens": 1690,
+      "input_ids_sha256": "519a038a40332d6ae8c372e741d98dfcfc3a45a85f9480fa3a3da0c18b24eb61",
+      "rendered_input_sha256": "44e0a8910537ff98b98b4e873dbe660c16b01254c9cd579ec76900731f38bac6"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        655
+      ],
+      "image_input_tokens": [
+        670
+      ],
+      "input_tokens": 693,
+      "input_ids_sha256": "560690aeadf0f881a2aa7b9a4845f57316e9d0c2ee79757c8f8ab737affbbdf5",
+      "rendered_input_sha256": "cb033f9ea34dc66133164139ff202eb7e2e966a7cc82622c64f6aca688344879"
+    },
+    {
+      "asset": "step-3.7",
+      "backend": "stepfun",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        169,
+        1789
+      ],
+      "image_input_tokens": [
+        171,
+        1850
+      ],
+      "input_tokens": 2052,
+      "input_ids_sha256": "f92cf428f6d7ac14f7839c9bef2db8303d40dfc968bbd4df67b238588a001e5d",
+      "rendered_input_sha256": "42de0de3a24666c9cff10ba9472ca2356e45cb1d81e420755819ac8a13db935a"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        64
+      ],
+      "image_input_tokens": [
+        66
+      ],
+      "input_tokens": 84,
+      "input_ids_sha256": "e54fc99e029c7b6d4f12ea53f41d2c894b8b24eac1204c9b56542587c3aa3301",
+      "rendered_input_sha256": "81d17f1a08dcdad1d96b29e548d66d57374c68ffc5a553f3865330c5481439a6"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        64
+      ],
+      "image_input_tokens": [
+        66
+      ],
+      "input_tokens": 84,
+      "input_ids_sha256": "e54fc99e029c7b6d4f12ea53f41d2c894b8b24eac1204c9b56542587c3aa3301",
+      "rendered_input_sha256": "81d17f1a08dcdad1d96b29e548d66d57374c68ffc5a553f3865330c5481439a6"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        84
+      ],
+      "image_input_tokens": [
+        86
+      ],
+      "input_tokens": 104,
+      "input_ids_sha256": "bfb670c36368617acfb2b2c7653bfcfef037c85d961c6cc604828ff82fe5942c",
+      "rendered_input_sha256": "ebb47234929280547918bce5c68aa844fd391c9625d44f9ec558cf22de3502d6"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300
+      ],
+      "image_input_tokens": [
+        302
+      ],
+      "input_tokens": 320,
+      "input_ids_sha256": "d3f72a9ee751ca08a7abe4d590d94558acba1c75f893de7024b5429bc6546b33",
+      "rendered_input_sha256": "83b999c2d3f7fd2d7d859f6999a5cd312f64d35fe9be9b4fdec43ea3b0fea9ce"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 549,
+      "input_ids_sha256": "21f2fe647eacabea2527474240805742ea0f7311d311dd6fb4d7fbbe8eee50f4",
+      "rendered_input_sha256": "2a68d370a7ec9ddb2cb1343b2d46a505c39d5fb7b7b3d4503bab40a826261246"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 549,
+      "input_ids_sha256": "21f2fe647eacabea2527474240805742ea0f7311d311dd6fb4d7fbbe8eee50f4",
+      "rendered_input_sha256": "2a68d370a7ec9ddb2cb1343b2d46a505c39d5fb7b7b3d4503bab40a826261246"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 92,
+      "input_ids_sha256": "1aa51a02b56f3551df80a8d258e43c4294041020a6ae6b47d76a6f2ecf3d2302",
+      "rendered_input_sha256": "4af07e8ddf96977761943003b96cac31a39ce46b5def09c843828a8581b9e6fa"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 92,
+      "input_ids_sha256": "1aa51a02b56f3551df80a8d258e43c4294041020a6ae6b47d76a6f2ecf3d2302",
+      "rendered_input_sha256": "4af07e8ddf96977761943003b96cac31a39ce46b5def09c843828a8581b9e6fa"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        12288
+      ],
+      "image_input_tokens": [
+        12290
+      ],
+      "input_tokens": 12308,
+      "input_ids_sha256": "29f25bc7c8ad05186a296e39499387cce148cd78ce1038876e65757819f0ce54",
+      "rendered_input_sha256": "4cd8a5289cad991854fff6419c32e2e766034378a8637f38026991768c6fee81"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4465
+      ],
+      "image_input_tokens": [
+        4467
+      ],
+      "input_tokens": 4485,
+      "input_ids_sha256": "d808fac2cfdf6c04518ea702914c0ef490cea0a8d2be6351a96b1d3b30825c70",
+      "rendered_input_sha256": "9820061b2943306d5b93b223d93306f8ec72ca9af8883eb4f6fbe33d3f677e30"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1178
+      ],
+      "image_input_tokens": [
+        1180
+      ],
+      "input_tokens": 1198,
+      "input_ids_sha256": "1fc90ca01c7120c602e83563b71521f72281899cd85cc20467d206779e98c6d4",
+      "rendered_input_sha256": "2d8d16904b64f1c8f7e441fcd1e1fb01cfa7a532bc86b6e63df398255520d563"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300,
+        72
+      ],
+      "image_input_tokens": [
+        302,
+        74
+      ],
+      "input_tokens": 400,
+      "input_ids_sha256": "743986803bbe45c0fc09eb0f1bad847a376ea6403112abf7ff9adc958c5137ab",
+      "rendered_input_sha256": "172fe964266f8c2e3e65db8d86dd64c9068bff67cf1acd8b0bb688298ea3c45e"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "max_pixels": 200704
+      },
+      "visual_tokens": [
+        192
+      ],
+      "image_input_tokens": [
+        194
+      ],
+      "input_tokens": 212,
+      "input_ids_sha256": "96c41371dd2c062dac6bdba405e44b3d47eafe288fd5673608d98060eaef193b",
+      "rendered_input_sha256": "b1d13f3e0f59e44f5ba39b55b1f316f7c4eb3d08efad9ec29a7a9451240025d8"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        64
+      ],
+      "image_input_tokens": [
+        66
+      ],
+      "input_tokens": 84,
+      "input_ids_sha256": "e54fc99e029c7b6d4f12ea53f41d2c894b8b24eac1204c9b56542587c3aa3301",
+      "rendered_input_sha256": "81d17f1a08dcdad1d96b29e548d66d57374c68ffc5a553f3865330c5481439a6"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        64
+      ],
+      "image_input_tokens": [
+        66
+      ],
+      "input_tokens": 84,
+      "input_ids_sha256": "e54fc99e029c7b6d4f12ea53f41d2c894b8b24eac1204c9b56542587c3aa3301",
+      "rendered_input_sha256": "81d17f1a08dcdad1d96b29e548d66d57374c68ffc5a553f3865330c5481439a6"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        84
+      ],
+      "image_input_tokens": [
+        86
+      ],
+      "input_tokens": 104,
+      "input_ids_sha256": "bfb670c36368617acfb2b2c7653bfcfef037c85d961c6cc604828ff82fe5942c",
+      "rendered_input_sha256": "ebb47234929280547918bce5c68aa844fd391c9625d44f9ec558cf22de3502d6"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300
+      ],
+      "image_input_tokens": [
+        302
+      ],
+      "input_tokens": 320,
+      "input_ids_sha256": "d3f72a9ee751ca08a7abe4d590d94558acba1c75f893de7024b5429bc6546b33",
+      "rendered_input_sha256": "83b999c2d3f7fd2d7d859f6999a5cd312f64d35fe9be9b4fdec43ea3b0fea9ce"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 549,
+      "input_ids_sha256": "21f2fe647eacabea2527474240805742ea0f7311d311dd6fb4d7fbbe8eee50f4",
+      "rendered_input_sha256": "2a68d370a7ec9ddb2cb1343b2d46a505c39d5fb7b7b3d4503bab40a826261246"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        529
+      ],
+      "image_input_tokens": [
+        531
+      ],
+      "input_tokens": 549,
+      "input_ids_sha256": "21f2fe647eacabea2527474240805742ea0f7311d311dd6fb4d7fbbe8eee50f4",
+      "rendered_input_sha256": "2a68d370a7ec9ddb2cb1343b2d46a505c39d5fb7b7b3d4503bab40a826261246"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 92,
+      "input_ids_sha256": "1aa51a02b56f3551df80a8d258e43c4294041020a6ae6b47d76a6f2ecf3d2302",
+      "rendered_input_sha256": "4af07e8ddf96977761943003b96cac31a39ce46b5def09c843828a8581b9e6fa"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 92,
+      "input_ids_sha256": "1aa51a02b56f3551df80a8d258e43c4294041020a6ae6b47d76a6f2ecf3d2302",
+      "rendered_input_sha256": "4af07e8ddf96977761943003b96cac31a39ce46b5def09c843828a8581b9e6fa"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        12288
+      ],
+      "image_input_tokens": [
+        12290
+      ],
+      "input_tokens": 12308,
+      "input_ids_sha256": "29f25bc7c8ad05186a296e39499387cce148cd78ce1038876e65757819f0ce54",
+      "rendered_input_sha256": "4cd8a5289cad991854fff6419c32e2e766034378a8637f38026991768c6fee81"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4465
+      ],
+      "image_input_tokens": [
+        4467
+      ],
+      "input_tokens": 4485,
+      "input_ids_sha256": "d808fac2cfdf6c04518ea702914c0ef490cea0a8d2be6351a96b1d3b30825c70",
+      "rendered_input_sha256": "9820061b2943306d5b93b223d93306f8ec72ca9af8883eb4f6fbe33d3f677e30"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1178
+      ],
+      "image_input_tokens": [
+        1180
+      ],
+      "input_tokens": 1198,
+      "input_ids_sha256": "1fc90ca01c7120c602e83563b71521f72281899cd85cc20467d206779e98c6d4",
+      "rendered_input_sha256": "2d8d16904b64f1c8f7e441fcd1e1fb01cfa7a532bc86b6e63df398255520d563"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        300,
+        72
+      ],
+      "image_input_tokens": [
+        302,
+        74
+      ],
+      "input_tokens": 400,
+      "input_ids_sha256": "743986803bbe45c0fc09eb0f1bad847a376ea6403112abf7ff9adc958c5137ab",
+      "rendered_input_sha256": "172fe964266f8c2e3e65db8d86dd64c9068bff67cf1acd8b0bb688298ea3c45e"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "max_pixels": 200704
+      },
+      "visual_tokens": [
+        192
+      ],
+      "image_input_tokens": [
+        194
+      ],
+      "input_tokens": 212,
+      "input_ids_sha256": "96c41371dd2c062dac6bdba405e44b3d47eafe288fd5673608d98060eaef193b",
+      "rendered_input_sha256": "b1d13f3e0f59e44f5ba39b55b1f316f7c4eb3d08efad9ec29a7a9451240025d8"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        18
+      ],
+      "input_tokens": 39,
+      "input_ids_sha256": "3c32bbff0f49f8456ce0755126854c5dced7f003929057ffd8c1b2a49127f2a8",
+      "rendered_input_sha256": "b192022fa193c40950836b6d90ae0190ee6d25eb3e668caf791d00bf5c8e9963"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        18
+      ],
+      "input_tokens": 39,
+      "input_ids_sha256": "3c32bbff0f49f8456ce0755126854c5dced7f003929057ffd8c1b2a49127f2a8",
+      "rendered_input_sha256": "b192022fa193c40950836b6d90ae0190ee6d25eb3e668caf791d00bf5c8e9963"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        18
+      ],
+      "input_tokens": 39,
+      "input_ids_sha256": "3c32bbff0f49f8456ce0755126854c5dced7f003929057ffd8c1b2a49127f2a8",
+      "rendered_input_sha256": "b192022fa193c40950836b6d90ae0190ee6d25eb3e668caf791d00bf5c8e9963"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414
+      ],
+      "image_input_tokens": [
+        416
+      ],
+      "input_tokens": 437,
+      "input_ids_sha256": "af6148b4e1da0601999862e15bc0004569d692c3d6cd00b593a443af96cb9e13",
+      "rendered_input_sha256": "7df2e0781f33fa472307aab996da55cd68caedaeae5afe4899331beb2f5e83b7"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        676
+      ],
+      "image_input_tokens": [
+        678
+      ],
+      "input_tokens": 699,
+      "input_ids_sha256": "70d61571f85efeaf51d5a9929a0beb6d5979625edb203d3d9b3c7b988d3178fc",
+      "rendered_input_sha256": "8cd6f95d9eeb963277339d2ee427115b7b4283319defbe4698cf7c792190bc4a"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        729
+      ],
+      "image_input_tokens": [
+        731
+      ],
+      "input_tokens": 752,
+      "input_ids_sha256": "776d1ecf1348f814ab6c00082063b53f689b1c30f1be40e3ad29f1d27a4fa341",
+      "rendered_input_sha256": "6d241d8022433685c6e30b67ad9be139c38c479ae4c8516d798e30511068204e"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 95,
+      "input_ids_sha256": "110d5cc4cc0895272af5bff9dd6875d8e327d8c7f0d9edf862f68d644310c1f5",
+      "rendered_input_sha256": "b68539d83041634ed0f2237551a69a1c249b9dc54496c4c67cd86d18522761a6"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        74
+      ],
+      "input_tokens": 95,
+      "input_ids_sha256": "110d5cc4cc0895272af5bff9dd6875d8e327d8c7f0d9edf862f68d644310c1f5",
+      "rendered_input_sha256": "b68539d83041634ed0f2237551a69a1c249b9dc54496c4c67cd86d18522761a6"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        7931
+      ],
+      "image_input_tokens": [
+        7933
+      ],
+      "input_tokens": 7954,
+      "input_ids_sha256": "9fac9781fca3597b298430f5ebc80330abed90ad6a39383df2d2d47854963ed2",
+      "rendered_input_sha256": "df9610332ea4bbac3232b90fd4f328d1f5c65aa9eed34928f1a654848e8cb441"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        5995
+      ],
+      "image_input_tokens": [
+        5997
+      ],
+      "input_tokens": 6018,
+      "input_ids_sha256": "9105045d68092319d6517bc6ec91760bb65e9341b5e5afaecb60a7ca901c11ef",
+      "rendered_input_sha256": "a4a6e8194662192f9aa94ccb99b181f8afba12575793f907d34ad054b8ec8bcd"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1548
+      ],
+      "image_input_tokens": [
+        1550
+      ],
+      "input_tokens": 1571,
+      "input_ids_sha256": "6a61a265095060cc2f416e57fd73d83194e4895977796c6d6719a73dff5da86d",
+      "rendered_input_sha256": "3d85d3abc288daf3e4eb0324cbe59f5b39175f8c3bad6735ccbf289b0331a5ec"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414,
+        72
+      ],
+      "image_input_tokens": [
+        416,
+        74
+      ],
+      "input_tokens": 517,
+      "input_ids_sha256": "1571b4ce14cbb6e47c3affc88e7800d3d604b3bbe8b65a2df43f5c11717ad98a",
+      "rendered_input_sha256": "041fe948f382003f539cc1fa9bc4f34ff1836123bf1d0a730a84a7c53483ca57"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "max_image_tokens": 1024
+      },
+      "visual_tokens": [
+        972
+      ],
+      "image_input_tokens": [
+        974
+      ],
+      "input_tokens": 995,
+      "input_ids_sha256": "284438ddcce921b72631ba2b29605af62ad163c9ffb21b3f24b7f3155a176fb5",
+      "rendered_input_sha256": "31b5767337c7db8740fa315e4cbfee750a6aef07f2817c3f11f633d199aa5d10"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        5
+      ],
+      "input_tokens": 25,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        5
+      ],
+      "input_tokens": 25,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        20
+      ],
+      "input_tokens": 40,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414
+      ],
+      "image_input_tokens": [
+        418
+      ],
+      "input_tokens": 438,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        676
+      ],
+      "image_input_tokens": [
+        680
+      ],
+      "input_tokens": 700,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        729
+      ],
+      "image_input_tokens": [
+        733
+      ],
+      "input_tokens": 753,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        76
+      ],
+      "input_tokens": 96,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        76
+      ],
+      "input_tokens": 96,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4200
+      ],
+      "image_input_tokens": [
+        4204
+      ],
+      "input_tokens": 4224,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4186
+      ],
+      "image_input_tokens": [
+        4190
+      ],
+      "input_tokens": 4210,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1548
+      ],
+      "image_input_tokens": [
+        1552
+      ],
+      "input_tokens": 1572,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414,
+        72
+      ],
+      "image_input_tokens": [
+        418,
+        76
+      ],
+      "input_tokens": 523,
+      "input_ids_sha256": "2619e83da375ec63d5836d294866f35743ecc1b2b90752cfb4fc51673cb91325",
+      "rendered_input_sha256": "c81d55989fb2d0521343e1aab502ddd461b8c3e42ce5ee9179a0cdf7a6059fee"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "in_patch_limit": 1024,
+        "patch_limit_on_one_side": 64
+      },
+      "visual_tokens": [
+        266
+      ],
+      "image_input_tokens": [
+        270
+      ],
+      "input_tokens": 290,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "1x1",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1,
+              "height": 1
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        5
+      ],
+      "input_tokens": 25,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "28x28",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 28,
+              "height": 28
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1
+      ],
+      "image_input_tokens": [
+        5
+      ],
+      "input_tokens": 25,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "31x200",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 31,
+              "height": 200
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        16
+      ],
+      "image_input_tokens": [
+        20
+      ],
+      "input_tokens": 40,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "640x480",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414
+      ],
+      "image_input_tokens": [
+        418
+      ],
+      "input_tokens": 438,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "728x728",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 728,
+              "height": 728
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        676
+      ],
+      "image_input_tokens": [
+        680
+      ],
+      "input_tokens": 700,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "729x729",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 729,
+              "height": 729
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        729
+      ],
+      "image_input_tokens": [
+        733
+      ],
+      "input_tokens": 753,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "1000x50",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1000,
+              "height": 50
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        76
+      ],
+      "input_tokens": 96,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "50x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        72
+      ],
+      "image_input_tokens": [
+        76
+      ],
+      "input_tokens": 96,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "4096x3072",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4200
+      ],
+      "image_input_tokens": [
+        4204
+      ],
+      "input_tokens": 4224,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "3025x1513",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 3025,
+              "height": 1513
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        4186
+      ],
+      "image_input_tokens": [
+        4190
+      ],
+      "input_tokens": 4210,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "1200x1000",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 1200,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        1548
+      ],
+      "image_input_tokens": [
+        1552
+      ],
+      "input_tokens": 1572,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "two_images",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 640,
+              "height": 480
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            },
+            {
+              "type": "image",
+              "width": 50,
+              "height": 1000
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {},
+      "visual_tokens": [
+        414,
+        72
+      ],
+      "image_input_tokens": [
+        418,
+        76
+      ],
+      "input_tokens": 523,
+      "input_ids_sha256": "2619e83da375ec63d5836d294866f35743ecc1b2b90752cfb4fc51673cb91325",
+      "rendered_input_sha256": "c81d55989fb2d0521343e1aab502ddd461b8c3e42ce5ee9179a0cdf7a6059fee"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "name": "explicit_options",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "图片之前\n"
+            },
+            {
+              "type": "image",
+              "width": 4096,
+              "height": 3072
+            },
+            {
+              "type": "text",
+              "text": " 图片之后 é🙂 "
+            }
+          ]
+        }
+      ],
+      "overrides": {
+        "in_patch_limit": 1024,
+        "patch_limit_on_one_side": 64
+      },
+      "visual_tokens": [
+        266
+      ],
+      "image_input_tokens": [
+        270
+      ],
+      "input_tokens": 290,
+      "input_ids_sha256": "f0b0062690f66c336ed8e2164746e097fa1c14bab4a4fe921c7ae70f81517116",
+      "rendered_input_sha256": "e66dca91239dd0149e27f5eb18702f3e05ae1e1c6526053a004017652fa81e71"
+    }
+  ]
+}

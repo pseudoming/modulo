@@ -4,7 +4,7 @@ import json
 import pytest
 
 from modulo.application.registry import builtins
-from modulo.application.tokenizer_assets import asset_lock
+from modulo.application.tokenizer_assets import load_tokenizer_assets
 from modulo.core.domain.bindings import Binding
 from modulo.core.domain.data_models import Call, Message
 from modulo.core.domain.interfaces import AssetError
@@ -29,7 +29,9 @@ def backends():
 def test_frozen_family_reference(official_assets, backends, vector):
     asset, family = vector["asset"], vector["backend"]
     if asset not in backends:
-        backends[asset] = builtins().get("tokenizers", family)(official_assets, asset, asset_lock())
+        backends[asset] = builtins().get("tokenizers", asset)(
+            official_assets, load_tokenizer_assets()
+        )
     backend = backends[asset]
     call = Call(
         call_id="frozen-reference",
@@ -37,19 +39,24 @@ def test_frozen_family_reference(official_assets, backends, vector):
         messages=[Message(**m) for m in vector["messages"]],
         output_text=vector["output"],
     )
-    measured = backend.count(call, Binding(modelnames=[asset], asset=asset))
+    measured = {
+        **backend.count(call, Binding(aliases=[asset], name=asset)),
+        **backend.count_output(call),
+    }
     assert measured["input_tokens"] == len(vector["input_ids"])
     assert measured["input_ids_sha256"] == digest(vector["input_ids"])
     assert measured["rendered_input_sha256"] == bytes_digest(vector["rendered"].encode())
     assert measured["visible_output_tokens"] == vector["visible_output_tokens"]
     assert measured["asset_revision"] == vector["asset_revision"]
-    if family != "moonshot":
+    if family != "moonshot" and not load_tokenizer_assets()["assets"][asset].get(
+        "template_file", ""
+    ).endswith(".py"):
         assert (
             backend.tokenizer.apply_chat_template(
                 vector["messages"],
                 tokenize=True,
                 add_generation_prompt=True,
-                **asset_lock()["assets"][asset]["template_kwargs"],
+                **load_tokenizer_assets()["assets"][asset]["template_kwargs"],
             )
             == vector["input_ids"]
         )
@@ -57,21 +64,20 @@ def test_frozen_family_reference(official_assets, backends, vector):
 
 @pytest.mark.parametrize("asset", ASSETS)
 def test_new_assets_do_not_fall_back_to_downloads(tmp_path, asset):
-    entry = asset_lock()["assets"][asset]
     with pytest.raises(AssetError, match="asset_missing"):
-        builtins().get("tokenizers", entry["family"])(tmp_path, asset, asset_lock())
+        builtins().get("tokenizers", asset)(tmp_path, load_tokenizer_assets())
 
 
 def test_unreviewed_repo_is_rejected_before_loading(tmp_path):
-    lock = copy.deepcopy(asset_lock())
-    lock["assets"]["qwen3.8"]["repo"] = "Qwen/unknown-next-model"
-    with pytest.raises(AssetError, match="asset_family_mismatch"):
-        builtins().get("tokenizers", "qwen")(tmp_path, "qwen3.8", lock)
+    lock = copy.deepcopy(load_tokenizer_assets())
+    lock["assets"]["qwen-3.8-2.4t"]["repo"] = "Qwen/unknown-next-model"
+    with pytest.raises(AssetError, match="asset_repository_mismatch"):
+        builtins().get("tokenizers", "qwen-3.8-2.4t")(tmp_path, lock)
 
 
 @pytest.mark.assets
 def test_profile_is_part_of_asset_identity_and_kimi_cannot_ignore_an_override(official_assets):
-    lock = copy.deepcopy(asset_lock())
+    lock = copy.deepcopy(load_tokenizer_assets())
     lock["assets"]["kimi-k3"]["template_kwargs"]["thinking"] = False
     with pytest.raises(AssetError, match="asset_profile_unsupported"):
-        builtins().get("tokenizers", "moonshot")(official_assets, "kimi-k3", lock)
+        builtins().get("tokenizers", "kimi-k3")(official_assets, lock)

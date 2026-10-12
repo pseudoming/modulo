@@ -66,7 +66,7 @@ def test_gateway_logs_share_sources_platform_filter_bindings_and_storage(
     for field in ("parsed_calls", "selected_calls", "excluded_calls"):
         assert summary["selection"][field] == expected[field]
     assert summary["selection"]["unresolved_calls"] == 0
-    assert summary["verdicts"] == expected["verdicts"]
+    assert summary["input_verdicts"] == expected["input_verdicts"]
     bundle = Path(imported["run"])
     rows = details(bundle)
     assert len(rows) == expected["selected_calls"]
@@ -130,4 +130,4 @@ def test_gateway_row_identity_not_request_id_or_usage(tmp_path, capsys, adapter)
     assert result["summary"]["observed_calls"] == 2
     assert result["summary"]["counters"]["duplicate_calls"] == 1
     assert result["summary"]["counters"]["identity_conflicts"] == 1
-    assert result["summary"]["verdicts"] == {"UNVERIFIABLE": 2}
+    assert result["summary"]["input_verdicts"] == {"UNVERIFIABLE": 2}

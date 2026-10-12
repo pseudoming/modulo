@@ -30,11 +30,11 @@ def test_text_bytes_and_empty_content_not_normalized(dify_record):
     assert DifyProtocol().parse(dify_record).calls[0].messages[0].content == ""
 
 
-def test_dify_envelope_and_tool_gap(dify_record):
+def test_dify_envelope_with_separate_attachment_keeps_text_and_order_gap(dify_record):
     dify_record["process_data"]["prompts"][0]["files"] = [{"type": "image"}]
     call = DifyProtocol().parse({"event": "node_finished", "data": dify_record}).calls[0]
-    assert call.messages is None
-    assert "unsupported_message_features" in call.gaps
+    assert call.messages[0].content == "Hello"
+    assert call.messages[0].gaps == ["attachment_content_order_missing"]
 
 
 def test_missing_output_is_not_zero_tokens(dify_record):

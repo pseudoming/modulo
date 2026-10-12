@@ -373,7 +373,7 @@ def audit(es_url: str) -> list[dict]:
         verify_bundle(bundle)
         rows = details(bundle)
         summary = imported["summary"]
-        actual = Counter(row["measurement"]["verdict"] for row in rows)
+        input_verdicts = Counter(row["measurement"]["input_verdict"] for row in rows)
         deltas = sorted(
             row["measurement"]["input_delta"]
             for row in rows
@@ -384,7 +384,7 @@ def audit(es_url: str) -> list[dict]:
             len(rows) != spec["calls"]
             or recalculated != spec["recalculated_calls"]
             or len(deltas) != spec["compared_calls"]
-            or actual != spec["verdicts"]
+            or input_verdicts != spec["input_verdicts"]
             or deltas != spec["deltas"]
             or summary["run_status"] != "COMPLETE"
             or not summary["batch_read_complete"]
@@ -398,7 +398,9 @@ def audit(es_url: str) -> list[dict]:
                 "calls": len(rows),
                 "recalculated_calls": recalculated,
                 "compared_calls": len(deltas),
-                "verdicts": dict(actual),
+                "verdicts": summary["verdicts"],
+                "input_verdicts": dict(input_verdicts),
+                "output_verdicts": summary["output_verdicts"],
                 "deltas": deltas,
                 "batch_read_complete": summary["batch_read_complete"],
             }

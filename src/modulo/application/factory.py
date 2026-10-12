@@ -3,11 +3,10 @@
 from pathlib import Path
 
 from modulo.core.domain.bindings import Binding, Bindings
-from modulo.core.domain.interfaces import TokenizerBackend
+from modulo.core.domain.interfaces import AssetError, TokenizerBackend
 from modulo.core.processing.recalculation import Recalculator
 
 from .registry import Registry, builtins
-from .tokenizer_assets import get_backend_name
 
 
 def build_registry(plugin_modules: list[str]) -> Registry:
@@ -19,10 +18,18 @@ def build_registry(plugin_modules: list[str]) -> Registry:
 
 def make_calculator(registry: Registry, root: Path, bindings: Bindings, lock: dict) -> Recalculator:
     for binding in bindings.models:
-        registry.get("tokenizers", get_backend_name(binding.asset, lock))
+        registry.get("tokenizers", binding.name)
+        if binding.name not in lock.get("assets", {}):
+            raise ValueError(f"unknown tokenizer asset: {binding.name}")
 
     def load(binding: Binding) -> TokenizerBackend:
-        factory = registry.get("tokenizers", get_backend_name(binding.asset, lock))
-        return factory(root, binding.asset, lock)
+        factory = registry.get("tokenizers", binding.name)
+        backend = factory(root, lock)
+        if binding.reference_key != binding.name:
+            configure = getattr(backend, "configure_reference", None)
+            if configure is None:
+                raise AssetError("custom_reference_not_supported_by_backend")
+            configure(binding)
+        return backend
 
     return Recalculator(bindings, load, lock)

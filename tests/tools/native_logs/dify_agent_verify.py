@@ -39,9 +39,12 @@ def check_rows(actual, expected):
             measured["rendered_input_sha256"]
             == hashlib.sha256(ref["rendered_input"].encode()).hexdigest()
         )
-        assert measured["output_execution"] == "completed"
+        # Only the streamed final answer retains both inline reasoning and finish.
+        complete_output = call["output_finish_reason"] == "stop"
+        assert measured["output_execution"] == ("completed" if complete_output else "partial")
+        assert measured["output_tokens"] == (21 if complete_output else None)
         assert measured["input_delta"] == 123 - ref["input_tokens"]
-        assert measured["verdict"] == "DEVIATION"
+        assert measured["input_verdict"] == "DEVIATION"
         assert json.loads(call["output_tool_calls_json"] or "[]") == ref["tool_calls"]
         assert len(row["source_refs"]) == 2
         assert row["assemblies"][0]["method"] == "explicit_invocation_id"
@@ -104,7 +107,7 @@ def verify(es=None):
                     )
                 )
             else:
-                assert all(r["measurement"]["verdict"] == "UNVERIFIABLE" for r in actual)
+                assert all(r["measurement"]["input_verdict"] == "UNVERIFIABLE" for r in actual)
                 assert all(r["call"]["usage"]["input_tokens"] == 123 for r in actual)
             report.append(
                 {
@@ -114,6 +117,8 @@ def verify(es=None):
                     "index": index,
                     "run": str(bundle),
                     "verdicts": imported["summary"]["verdicts"],
+                    "input_verdicts": imported["summary"]["input_verdicts"],
+                    "output_verdicts": imported["summary"]["output_verdicts"],
                     "output_execution": imported["summary"]["output_execution"],
                 }
             )

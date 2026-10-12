@@ -1,34 +1,58 @@
 models:
-- modelnames:
+- name: qwen-3.8-2.4t
+  aliases:
   - Qwen/Qwen3.8-2.4T-A95B
-  asset: qwen3.8
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - deepseek-ai/DeepSeek-V4.1-Flash
-  asset: deepseek-v4.1
-- modelnames:
+- name: kimi-k3
+  aliases:
   - moonshotai/Kimi-K3
-  asset: kimi-k3
-- modelnames:
+- name: minimax-m3
+  aliases:
   - MiniMaxAI/MiniMax-M3
-  asset: minimax-m3
-- modelnames:
+- name: longcat-2.0
+  aliases:
   - meituan-longcat/LongCat-2.0
-  asset: longcat-2.0
-- modelnames:
+- name: glm-5.3
+  aliases:
   - zai-org/GLM-5.3
-  asset: glm-5.3
-- modelnames:
+- name: mimo-v2.6
+  aliases:
   - XiaomiMiMo/MiMo-V2.6-Pro-RL
-  asset: mimo-v2.6
-- modelnames:
+- name: step-3.7
+  aliases:
   - stepfun-ai/Step-3.7-Flash
-  asset: step-3.7
-- modelnames:
+- name: hy4-preview
+  aliases:
   - tencent/Hy4-preview
-  asset: hy4-preview
-- modelnames:
+- name: ling-3.0
+  aliases:
   - inclusionAI/Ling-3.0-flash
-  asset: ling-3.0
-- modelnames:
+- name: ring-2.6
+  aliases:
   - inclusionAI/Ring-2.6-1T
-  asset: ring-2.6
+- name: qwen3.5-122b
+  aliases:
+  - Qwen/Qwen3.5-122B-A10B
+- name: qwen3.5-397b
+  aliases:
+  - Qwen/Qwen3.5-397B-A17B
+- name: deepseek-v4-pro-0813
+  aliases:
+  - deepseek-ai/DeepSeek-V4-Pro-0813
+- name: glm-5.3-flash
+  aliases:
+  - zai-org/GLM-5.3-Flash
+- name: glm-5.2
+  aliases:
+  - zai-org/GLM-5.2
+- name: minimax-m2.7
+  aliases:
+  - MiniMaxAI/MiniMax-M2.7
+- name: kimi-k2.6
+  aliases:
+  - moonshotai/Kimi-K2.6
+- name: kimi-k2.7-code
+  aliases:
+  - moonshotai/Kimi-K2.7-Code

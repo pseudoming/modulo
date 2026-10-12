@@ -1,26 +1,51 @@
-"""Explicit platform/model aliases bound to fixed reference assets."""
+"""Explicit log aliases bound to named tokenizers and optional platform conditions."""
 
 from dataclasses import dataclass
 from typing import Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
+
+from modulo.shared.serialization import digest, loads, ordered_json
 
 from .data_models import Call, Contract, ProtocolContext
 from .platforms import PlatformConfig, PlatformTag, resolve_platform
 
 
 class Binding(Contract):
-    modelnames: list[str] = Field(min_length=1)
-    asset: str
+    name: str = Field(min_length=1)
+    aliases: list[str] = Field(min_length=1)
     platform: str | None = None
     platform_tag_source: str | None = Field(default=None, alias="platform-tag-source")
     endpoint_source: str = Field(default="field:endpoint", alias="endpoint-source")
     endpoint_map: dict[str, str] = Field(default_factory=dict, alias="endpoint-map")
     mode: Literal["text_chat"] = "text_chat"
-    add_generation_prompt: Literal[True] = True
+    add_generation_prompt: bool = True
+    chat_template: str | None = Field(default=None, alias="chat-template", min_length=1)
+    template_kwargs: dict = Field(default_factory=dict, alias="template-kwargs")
+    template_kwargs_json: str | None = None
+
+    @field_validator("add_generation_prompt", mode="before")
+    @classmethod
+    def read_generation_prompt(cls, value):
+        return {"true": True, "false": False}.get(value, value) if isinstance(value, str) else value
+
+    @property
+    def reference_key(self) -> str:
+        if self.chat_template is None and not self.template_kwargs and self.add_generation_prompt:
+            return self.name
+        return (
+            self.name
+            + ":"
+            + digest((self.chat_template, self.template_kwargs_json, self.add_generation_prompt))
+        )
 
     @model_validator(mode="after")
     def validate_platform(self):
+        if self.template_kwargs_json is not None:
+            options = loads(self.template_kwargs_json)
+            if digest(options) == digest(self.template_kwargs):
+                object.__setattr__(self, "template_kwargs", options)
+        object.__setattr__(self, "template_kwargs_json", ordered_json(self.template_kwargs))
         if self.platform is not None and not self.platform.strip():
             raise ValueError("binding platform must be nonempty")
         if self.platform_tag_source is not None:
@@ -70,12 +95,12 @@ class Bindings(Contract):
                 binding.endpoint_source,
                 tuple(sorted(binding.endpoint_map.items())),
             )
-            for name in binding.modelnames:
+            for name in binding.aliases:
                 if not name.strip():
-                    raise ValueError("binding modelnames must be nonempty")
+                    raise ValueError("binding aliases must be nonempty")
                 key = (*scope, name)
                 if key in seen:
-                    raise ValueError(f"duplicate modelname {name!r} in the same binding condition")
+                    raise ValueError(f"duplicate alias {name!r} in the same binding condition")
                 seen.add(key)
         return self
 
@@ -83,10 +108,7 @@ class Bindings(Contract):
         candidates = [self.models[index] for index in matches]
         specific = [item for item in candidates if item.platform is not None]
         candidates = specific or candidates
-        targets = {
-            (item.platform, item.asset, item.mode, item.add_generation_prompt)
-            for item in candidates
-        }
+        targets = {(item.platform, item.reference_key, item.mode) for item in candidates}
         if len(targets) > 1:
             raise BindingConflict("binding_rule_conflict")
         return candidates[0] if candidates else None
@@ -96,7 +118,7 @@ class Bindings(Contract):
         return [
             index
             for index, item in enumerate(self.models)
-            if call.model in item.modelnames
+            if call.model in item.aliases
             and (
                 item.platform is None
                 or (
@@ -112,7 +134,7 @@ class Bindings(Contract):
         matches, tags, matched_tags = [], [], []
         evidence = []
         for index, item in enumerate(self.models):
-            if call.model not in item.modelnames:
+            if call.model not in item.aliases:
                 continue
             if item.platform is None:
                 matches.append(index)

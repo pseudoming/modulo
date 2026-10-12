@@ -1,6 +1,6 @@
 """New API consumption rows, native debug bodies and captured HTTP exchanges."""
 
-from ..shared.gateway import GatewayProtocol
+from modulo.adapters.protocols.shared.gateway.adapter import GatewayProtocol
 
 
 class NewAPIProtocol(GatewayProtocol):

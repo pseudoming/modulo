@@ -25,6 +25,15 @@ def test_file_detects_change_and_size_limit(tmp_path):
         list(FileSource(path, max_record_bytes=3).read())
 
 
+def test_one_shot_reads_the_selected_prefix_when_live_file_keeps_growing(tmp_path):
+    path = tmp_path / "live.log"
+    path.write_bytes(b"one\n")
+    source = FileSource(path)
+    with path.open("ab") as stream:
+        stream.write(b"two\n")
+    assert [row.data for row in source.read()] == [b"one\n"]
+
+
 def test_directory_freezes_matching_files_and_keeps_file_and_line_references(tmp_path):
     second = tmp_path / "dify-20261002.jsonl"
     first = tmp_path / "dify-20261001.jsonl"
@@ -35,7 +44,11 @@ def test_directory_freezes_matching_files_and_keeps_file_and_line_references(tmp
     source = FileSource(tmp_path, pattern="dify-202610*.jsonl")
     description = source.describe()
     assert description["files"] == [
-        {"path": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        {
+            "path": path.name,
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "size_bytes": path.stat().st_size,
+        }
         for path in [first, second]
     ]
     # This batch uses the recorded selection; a later file belongs to a later import.

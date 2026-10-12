@@ -1,0 +1,433 @@
+{
+  "assets": {
+    "qwen-3.8-2.4t": {
+      "repo": "Qwen/Qwen3.8-2.4T-A95B",
+      "revision": "207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
+      "files": {
+        "chat_template.jinja": "40ce34a5bcbc0231462740761215bc31a83882a8b3a4b6aa1c6e869b95945e4e",
+        "tokenizer.json": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+        "tokenizer_config.json": "a4a70308585bebf75f240af83d569586dbcce75626ec324e2f4fe82a72153623"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "xhigh",
+        "preserve_thinking": true
+      },
+      "modelscope": {
+        "repo": "Qwen/Qwen3.8-2.4T-A95B",
+        "revision": "23579a7f482de290af989ff6eae61e4e92956570"
+      }
+    },
+    "deepseek-v4.1": {
+      "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "revision": "2cba9e42aa026125f3ed06c6d98c1db82f7ca027",
+      "files": {
+        "chat_template.jinja": "d959d804d5101b79a49b6ff1bf3c54cd5affa9a5a78c503d925f3090040b31c3",
+        "tokenizer.json": "c90dfa01249db1be4245780a052ede752e1361c612ac6d08e2bdada7d599476b",
+        "tokenizer_config.json": "6ac8c8dc065ed118161d02dd532749ae3f52c243deac27872134fae2f50d8547"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "thinking_mode": "thinking",
+        "reasoning_effort": "high",
+        "drop_thinking": true
+      },
+      "image_processing": {
+        "parameters": {
+          "vision_patch_size": 14,
+          "vision_downsample_ratio": 3,
+          "vision_max_n_token": 1024,
+          "vision_min_pixels": 295936,
+          "vision_max_wh_ratio": null
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "revision": "93cb8a53e99013b02e1a3762bde2742f9afec2d2"
+      }
+    },
+    "kimi-k3": {
+      "repo": "moonshotai/Kimi-K3",
+      "revision": "f831ab66814297da540d832a5235f8e904f29d06",
+      "files": {
+        "tiktoken.model": "b6c497a7469b33ced9c38afb1ad6e47f03f5e5dc05f15930799210ec050c5103",
+        "tokenizer_config.json": "5d0803c94db9cd78763499e0956c95fd5a225c14a727e5a6cf5db3f96f010a6e"
+      },
+      "template_kwargs": {
+        "thinking": true,
+        "thinking_effort": "max"
+      },
+      "image_processing": {
+        "parameters": {
+          "in_patch_limit": 65536,
+          "patch_size": 14,
+          "merge_kernel_size": 2,
+          "fixed_output_tokens": null,
+          "patch_limit_on_one_side": 512
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "moonshotai/Kimi-K3",
+        "revision": "51ae7bcc1db8552aed56451929f2be3024ea38ff"
+      }
+    },
+    "minimax-m3": {
+      "repo": "MiniMaxAI/MiniMax-M3",
+      "revision": "f0e1c1e04d40177e4673a22097036854f536e9c0",
+      "files": {
+        "chat_template.jinja": "11421244f67553498e5c8112dae02802025bcc4305ec45ad380af95c96f9fe64",
+        "tokenizer.json": "bb1f1626cf01448f1e3b6036d0a061ffc66c91d9046aada14ea23a5441b5ad6e",
+        "tokenizer_config.json": "15caca9f74fbce9b86dc014e9324cbefa56703d81ccd6d56020faa1c41d2eae5"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "thinking_mode": "adaptive"
+      },
+      "image_processing": {
+        "parameters": {
+          "patch_size": 14,
+          "merge_size": 2,
+          "temporal_patch_size": 2,
+          "max_pixels": 451584,
+          "do_resize": true
+        },
+        "exif_transpose": true
+      },
+      "modelscope": {
+        "repo": "MiniMax/MiniMax-M3",
+        "revision": "0fa1c8080a8aa180e2f77758810a1e56f09a24d5"
+      }
+    },
+    "longcat-2.0": {
+      "repo": "meituan-longcat/LongCat-2.0",
+      "revision": "834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+      "files": {
+        "tokenizer.json": "7b1163a456094f3c86c1a32f7b4153d603c589f4c05c3aedbb4d8ad8e0419e7d",
+        "tokenizer_config.json": "8fa2b1c1051060d81a0951e187824e7995b8b4d4fdf271d6406c21f9a4d60bab"
+      },
+      "template_kwargs": {
+        "enable_thinking": true,
+        "save_history_reasoning_content": true
+      },
+      "modelscope": {
+        "repo": "meituan-longcat/LongCat-2.0",
+        "revision": "a2a38fcf94f457539c31a2e68e6fda21e324aa2a"
+      }
+    },
+    "glm-5.3": {
+      "repo": "zai-org/GLM-5.3",
+      "revision": "aca966e4e02791568aa6a4ced368624b3d897f42",
+      "files": {
+        "chat_template.jinja": "3740abcea51c45830cb3ca562084ad5fb2ef53589376f73332e9886f93ade41c",
+        "tokenizer.json": "19e773648cb4e65de8660ea6365e10acca112d42a854923df93db4a6f333a82d",
+        "tokenizer_config.json": "98b1271574f41abf89427ae2dda030d94dc9478f0edc5a8bd240db213c6fd5fc"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": false
+      },
+      "modelscope": {
+        "repo": "ZhipuAI/GLM-5.3",
+        "revision": "ee9c2c45ecabc5910797a30b1b42022ee41b4150"
+      }
+    },
+    "mimo-v2.6": {
+      "repo": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "revision": "b61f21852680ee02a29e946e18cf8697f4844061",
+      "files": {
+        "chat_template.jinja": "11ea52e156de38a458e6b7720ad45915d65b97d4ec979a09f55e3c9bd1b4d059",
+        "tokenizer.json": "ff15eb925890d6b71b5160de4b846fbd13178438ab463b38ecc953e8cd1dcb3e",
+        "tokenizer_config.json": "413a7845f52943ccf4de0e5c838414507d16c44dbf573da9e20bc8902b384d06"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "image_processing": {
+        "parameters": {
+          "min_pixels": 8192,
+          "max_pixels": 8388608,
+          "patch_size": 16,
+          "temporal_patch_size": 2,
+          "merge_size": 2,
+          "do_resize": true
+        },
+        "exif_transpose": true
+      },
+      "modelscope": {
+        "repo": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+        "revision": "6a2beffb323f410837c1474db45aa5fbc210aa05"
+      }
+    },
+    "step-3.7": {
+      "repo": "stepfun-ai/Step-3.7-Flash",
+      "revision": "5f6244077ac62e04eec3f320501ff8c2b293373a",
+      "files": {
+        "chat_template.jinja": "f428623fc81c940c35be3509fbffc086b4b4360d8800e46103e6f34d02891633",
+        "tokenizer.json": "b564c620eb77fa11d0926011c2202347d6cfc358d79724ee04ae7007e13636f0",
+        "tokenizer_config.json": "78202af487f4d4360e8d15cb0506d60718f8599770599c6f28f7f1fa045a591f"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {},
+      "image_processing": {
+        "parameters": {},
+        "exif_transpose": true
+      },
+      "modelscope": {
+        "repo": "stepfun-ai/Step-3.7-Flash",
+        "revision": "2b93ee09953a152ace88c21afa599d91e5f101a0"
+      }
+    },
+    "hy4-preview": {
+      "repo": "tencent/Hy4-preview",
+      "revision": "705d81ee51566a186d645b74c974d642ef2828fe",
+      "files": {
+        "chat_template.jinja": "8a9925228e1c72edc6806b985ba06a4df2cc4ff803b4710a6d6e25d0ac03fae2",
+        "tokenizer.json": "ff67615de6e6ee073a20bd1fe3a776053e821573f4ae566aeb8e9d43de801201",
+        "tokenizer_config.json": "15267c495102b0ce259408a0b3a9dc11a6de74dd7dd8ef5b9757f64252a9b2df"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "high",
+        "preserved_thinking": false
+      },
+      "modelscope": {
+        "repo": "Tencent-Hunyuan/Hy4-preview",
+        "revision": "5f1b609bd0383bd17ede34b5d2fa9c3171debf49"
+      }
+    },
+    "ling-3.0": {
+      "repo": "inclusionAI/Ling-3.0-flash",
+      "revision": "ef06d91fe382109ae82647da88ff99b0f11745b0",
+      "files": {
+        "chat_template.jinja": "b4ab3a1c8f748e6f874d9aea102333efe7ab82528e8ab81c2eb155851e8705c6",
+        "tokenizer.json": "40fb9d7d7795b8bd305aeff39ce9963f3f450915b9553f2938e009be9a1fed60",
+        "tokenizer_config.json": "2456b0372956cd3e82f17e33372148b115a94970bfd4878ba5e7e60cd3204f74"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "modelscope": {
+        "repo": "inclusionAI/Ling-3.0-flash",
+        "revision": "5b9e14a4d1f26c992c663e3d1a8f12fa20885a8d"
+      }
+    },
+    "ring-2.6": {
+      "repo": "inclusionAI/Ring-2.6-1T",
+      "revision": "2314abdf9e380b7fa7b4b79369ceb5f69cc46b32",
+      "files": {
+        "chat_template.jinja": "b772fbb4cee2672e8d983dd840470249d35246af026ff62a0a03b2bd2343363b",
+        "tokenizer.json": "40fb9d7d7795b8bd305aeff39ce9963f3f450915b9553f2938e009be9a1fed60",
+        "tokenizer_config.json": "10036cb5ca43862c2b2177023c6ecbcb16f32b170ab73fe63073440dc495c34a"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "high"
+      },
+      "modelscope": {
+        "repo": "inclusionAI/Ring-2.6-1T",
+        "revision": "ee867c76380d343899f4bae66d63bd996170a330"
+      }
+    },
+    "qwen3.5-122b": {
+      "repo": "Qwen/Qwen3.5-122B-A10B",
+      "revision": "dc4d348443bc740c68e2d77492492c11606384d5",
+      "files": {
+        "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+        "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+        "tokenizer_config.json": "316230d6a809701f4db5ea8f8fc862bc3a6f3229c937c174e674ff3ca0a64ac8"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "image_processing": {
+        "parameters": {
+          "patch_size": 16,
+          "merge_size": 2,
+          "temporal_patch_size": 2,
+          "min_pixels": 65536,
+          "max_pixels": 16777216,
+          "do_resize": true
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "Qwen/Qwen3.5-122B-A10B",
+        "revision": "d405e79055d730b51a6d8b3529a088299dc92943"
+      }
+    },
+    "qwen3.5-397b": {
+      "repo": "Qwen/Qwen3.5-397B-A17B",
+      "revision": "8472618112abcbd45acbcdc58436aff4233c23f7",
+      "files": {
+        "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+        "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+        "tokenizer_config.json": "316230d6a809701f4db5ea8f8fc862bc3a6f3229c937c174e674ff3ca0a64ac8"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "image_processing": {
+        "parameters": {
+          "patch_size": 16,
+          "merge_size": 2,
+          "temporal_patch_size": 2,
+          "min_pixels": 65536,
+          "max_pixels": 16777216,
+          "do_resize": true
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "Qwen/Qwen3.5-397B-A17B",
+        "revision": "b7609b9b476bf1e15a63cb8c4f761e02566cdfc6"
+      }
+    },
+    "deepseek-v4-pro-0813": {
+      "repo": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "revision": "72e1d3230f6c080a530b0a1d46f8eb4602340597",
+      "files": {
+        "encoding/encoding_dsv4.py": "abc0d26120250dda0ae077dc64aa28836026e61e970854aaeb792445e6a0dde6",
+        "tokenizer.json": "8f9f37ca37fdc4f5fd36d5cf4d3b0e8392edb4e894fd10cc0d70b4957c8633cf",
+        "tokenizer_config.json": "6ac8c8dc065ed118161d02dd532749ae3f52c243deac27872134fae2f50d8547"
+      },
+      "template_file": "encoding/encoding_dsv4.py",
+      "template_kwargs": {
+        "thinking_mode": "thinking",
+        "reasoning_effort": "low",
+        "drop_thinking": true
+      },
+      "modelscope": {
+        "repo": "deepseek-ai/DeepSeek-V4-Pro-0813",
+        "revision": "02ad9210c2431f314aa9722f35e5bc25050de9a5"
+      }
+    },
+    "glm-5.3-flash": {
+      "repo": "zai-org/GLM-5.3-Flash",
+      "revision": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "files": {
+        "chat_template.jinja": "0c4099f3382d6c92700dfb99725025360966fd73032f0ecf32377c0d9e6309c5",
+        "tokenizer.json": "19e773648cb4e65de8660ea6365e10acca112d42a854923df93db4a6f333a82d",
+        "tokenizer_config.json": "98b1271574f41abf89427ae2dda030d94dc9478f0edc5a8bd240db213c6fd5fc"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": false
+      },
+      "image_processing": {
+        "parameters": {
+          "patch_size": 14,
+          "merge_size": 2,
+          "temporal_patch_size": 2,
+          "patch_expand_factor": 1,
+          "min_image_tokens": 16,
+          "max_image_tokens": 8000
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "ZhipuAI/GLM-5.3-Flash",
+        "revision": "d2450c788ba0d83b1fdcd45e5a3ed4e9b28aa02f"
+      }
+    },
+    "glm-5.2": {
+      "repo": "zai-org/GLM-5.2",
+      "revision": "cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "files": {
+        "chat_template.jinja": "172dc74a35e1752df75ecfb2b2cf9326d2852bb1379868ebeec9571654489679",
+        "tokenizer.json": "19e773648cb4e65de8660ea6365e10acca112d42a854923df93db4a6f333a82d",
+        "tokenizer_config.json": "98b1271574f41abf89427ae2dda030d94dc9478f0edc5a8bd240db213c6fd5fc"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": true,
+        "enable_thinking": true
+      },
+      "modelscope": {
+        "repo": "ZhipuAI/GLM-5.2",
+        "revision": "13e2b650de59797bbb2391419efe91288336efcd"
+      }
+    },
+    "minimax-m2.7": {
+      "repo": "MiniMaxAI/MiniMax-M2.7",
+      "revision": "d494266a4affc0d2995ba1fa35c8481cbd84294b",
+      "files": {
+        "chat_template.jinja": "893d908f7b5cc65fdde270dcae5ea1a99647c6a7ce572ae874a57b7160069566",
+        "tokenizer.json": "757622126525aeeb131756849d93298070ff3f0319c455ec8c5bb0f6b1cebbe8",
+        "tokenizer_config.json": "60e392fea8d47660584deb3c6a716aab7b9f11fed24bc494baf5eb7ba809e882"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "thinking_mode": "enabled"
+      },
+      "modelscope": {
+        "repo": "MiniMax/MiniMax-M2.7",
+        "revision": "83facf145aa3e3c842d6674b20d1aaf98ba9e3cb"
+      }
+    },
+    "kimi-k2.6": {
+      "repo": "moonshotai/Kimi-K2.6",
+      "revision": "7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+      "files": {
+        "chat_template.jinja": "8bf859698fd4781c0e1e1c63ce74422aab27e53ccc5f47116317c64cda06132f",
+        "tiktoken.model": "b6c497a7469b33ced9c38afb1ad6e47f03f5e5dc05f15930799210ec050c5103",
+        "tokenizer_config.json": "12fcab43d2b6068f46769f5ff373960bf7c17a94d7abbc50e2491306b2f6cf58"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "thinking": true,
+        "preserve_thinking": false
+      },
+      "image_processing": {
+        "parameters": {
+          "in_patch_limit": 16384,
+          "patch_size": 14,
+          "merge_kernel_size": 2,
+          "fixed_output_tokens": null,
+          "patch_limit_on_one_side": 512
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "moonshotai/Kimi-K2.6",
+        "revision": "4d8432c5606b3b41a2129fcf2528703f86832ec5"
+      }
+    },
+    "kimi-k2.7-code": {
+      "repo": "moonshotai/Kimi-K2.7-Code",
+      "revision": "74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+      "files": {
+        "chat_template.jinja": "8d21200dff7e85beaf51c8b110952e039ffd0779f615d64d63293d74773360f9",
+        "tiktoken.model": "b6c497a7469b33ced9c38afb1ad6e47f03f5e5dc05f15930799210ec050c5103",
+        "tokenizer_config.json": "6dfafeacca3d44748fc4a2fcc6725be5ea616ecc5b95f5a8b4277077c06e7d9f"
+      },
+      "template_file": "chat_template.jinja",
+      "template_kwargs": {
+        "thinking": true,
+        "preserve_thinking": true
+      },
+      "image_processing": {
+        "parameters": {
+          "in_patch_limit": 16384,
+          "patch_size": 14,
+          "merge_kernel_size": 2,
+          "fixed_output_tokens": null,
+          "patch_limit_on_one_side": 512
+        },
+        "exif_transpose": false
+      },
+      "modelscope": {
+        "repo": "moonshotai/Kimi-K2.7-Code",
+        "revision": "225320e77210469e1aaa0274306ca2bc6209d70a"
+      }
+    }
+  }
+}

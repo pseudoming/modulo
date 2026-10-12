@@ -1,23 +1,23 @@
 models:
-- modelnames:
+- name: qwen-3.8-2.4t
+  aliases:
   - Qwen/Qwen3.8-2.4T-A95B
-  asset: qwen3.8
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - volc-deepseek
-  asset: deepseek-v4.1
-- modelnames:
+- name: qwen-3.8-2.4t
+  aliases:
   - Qwen/Qwen3.8-2.4T-A95B
-  asset: qwen3.8
   platform: volcengine
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - volc-deepseek
-  asset: deepseek-v4.1
   platform: volcengine
-- modelnames:
+- name: qwen-3.8-2.4t
+  aliases:
   - Qwen/Qwen3.8-2.4T-A95B
-  asset: qwen3.8
   platform: synthetic-gateway
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - volc-deepseek
-  asset: deepseek-v4.1
   platform: synthetic-gateway

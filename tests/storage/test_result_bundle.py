@@ -9,7 +9,7 @@ from modulo.shared.serialization import dumps
 def test_projection_failure_never_publishes_a_partially_prepared_bundle(
     tmp_path, unit_calculator, dify_record, monkeypatch
 ):
-    def fail_index(directory):
+    def fail_index(directory, **kwargs):
         assert (directory / "manifest.json").is_file()
         raise RuntimeError("injected_index_failure")
 

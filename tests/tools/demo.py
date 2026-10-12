@@ -46,7 +46,7 @@ def main() -> None:
             summary = imported["summary"]
             if (
                 summary["run_status"] != "COMPLETE"
-                or summary["verdicts"] != expected["expected_input_verdicts"]
+                or summary["input_verdicts"] != expected["expected_input_verdicts"]
             ):
                 raise RuntimeError(
                     f"demo acceptance failed: {physical}/{protocol}; inspect {bundle}"
@@ -62,6 +62,8 @@ def main() -> None:
                     "reused": imported["reused"],
                     "calls": len(rows),
                     "verdicts": summary["verdicts"],
+                    "input_verdicts": summary["input_verdicts"],
+                    "output_verdicts": summary["output_verdicts"],
                     "batch_read_complete": summary["batch_read_complete"],
                 }
             )

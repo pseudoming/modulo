@@ -1,8 +1,8 @@
 models:
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - volc-deepseek
-  asset: deepseek-v4.1
-- modelnames:
+- name: deepseek-v4.1
+  aliases:
   - volc-deepseek
-  asset: deepseek-v4.1
   platform: volcengine

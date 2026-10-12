@@ -27,7 +27,7 @@ flowchart LR
 
 ## 功能
 
-- **核对用量**：按供应商和模型汇总输入 token 差额，单独查看回答与思考正文的本地计数。
+- **核对用量**：按供应商和模型分别汇总输入、输出 token 差额；输出包含回答、思考、工具调用和模板控制标记。
 - **映射内部模型名称**：多个别名共用同一 tokenizer 参照；同名模型可以按供应商分别配置。
 - **看清数据缺口**：区分一致、有差异和不可核验，保留未能复算的具体原因。
 - **回查计算依据**：保存原文位置、字段转换、tokenizer／模板版本和计算参数，支持结果包内容校验。
@@ -41,32 +41,44 @@ flowchart LR
 | 日志来源与官方资料 | `adapter` | 接受的记录 | modulo 样例 |
 | --- | --- | --- | --- |
 | [Dify](https://docs.dify.ai/en/home) | `dify` | LLM 节点执行记录、Agent thought 导出及已声明的逐轮事件格式 | [样例](examples/dify/README.md) |
-| [LangChain](https://docs.langchain.com/oss/python/langchain/overview) | `langchain` | Run 对象，包括嵌套 `child_runs` | [样例](examples/langchain/README.md) |
+| [LangChain](https://docs.langchain.com/oss/python/langchain/overview) | `langchain` | Run 对象，包括嵌套 `child_runs` 和多组输入 | [样例](examples/langchain/README.md) |
 | [New API](https://docs.newapi.pro/en) | `newapi` | 消费行、已支持的 DEBUG 请求／响应与 OpenAI 兼容 SSE 日志 | [样例](examples/newapi/README.md) |
 | [One API](https://github.com/songquanpeng/one-api) | `oneapi` | 消费行、已支持的请求／响应文本及配对记录 | [样例](examples/oneapi/README.md) |
-| [LiteLLM 日志规范](https://docs.litellm.ai/docs/proxy/logging_spec) | `litellm` | 终态 `StandardLoggingPayload` 或单条 `LiteLLM_SpendLogs` 导出 | [样例](examples/litellm/README.md) |
+| [LiteLLM 日志规范](https://docs.litellm.ai/docs/proxy/logging_spec) | `litellm` | `StandardLoggingPayload`、`LiteLLM_SpendLogs` 与已保存的流片段 | [样例](examples/litellm/README.md) |
 
 结构化文件使用 **JSONL，一行一个记录**，JSON 数组需先展开。New API／One API 还接受已支持的 DEBUG 文本；消费表通常只有 usage，缺正文时记录对应缺口。消费行需要稳定的原始行 ID；请求／响应日志需要明确的关联 ID。
 
 日志对象包在 `payload` 等字段中时，设置 `payload-field: payload`。ES 中的流式事件需要明确顺序，例如 `event.sequence`；不能用 ES 返回顺序猜测流片段顺序。支持范围由实际字段与格式决定，不表示这些系统默认日志都包含完整请求和响应。
 
+New API、One API、LiteLLM 日志中的 Chat Completions、[Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses) 和 [Anthropic Messages](https://platform.claude.com/docs/en/api/messages/create) 正文均可解析，包括文本、思考、函数工具调用／结果和图片输入。这三个适配器均支持日志中已有的流片段组装。[可运行样例](examples/newapi/README.md#api-正文)。
+
+Dify thought 导出中已有的结构化 `message` 可以复算；空字段仍标缺失。LangChain 多组输入逐组保存与计数，只有 Run 总 usage 时在 `input_batches` 中比较整批，不摊到各组。LiteLLM 缓存命中仍计算正文并保留 `cache_hit`，缓存 usage 不作为本次新推理的差额依据。New API／One API 缺少正文、关联 ID、重试标识或流顺序时，报告的 `warnings` 会说明影响、缺少字段及重新导入方法。
+
 <a id="tokenizers"></a>
 
 ## 支持的 tokenizer
 
-已接入以下 **11 个固定型号的文本参照**，包含日志已有的思考与工具上下文。型号名称链接到官方模型资料；`asset` 用于配置映射及准备对应 tokenizer。
+已接入以下 **19 个固定型号参照**，包含日志已有的思考与工具上下文；其中十个视觉型号另支持图片输入。型号名称链接到官方模型资料；`name` 用于配置映射及准备对应 tokenizer。
 
 <details>
-<summary>展开型号、官方来源与 asset 名称</summary>
+<summary>展开型号、官方来源与标准名称</summary>
 
-| 家族 | 固定型号／官方来源 | `asset` |
+| 家族 | 固定型号／官方来源 | `name` |
 | --- | --- | --- |
-| Qwen | [Qwen3.8-2.4T-A95B](https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B) | `qwen3.8` |
+| Qwen | [Qwen3.8-2.4T-A95B](https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B) | `qwen-3.8-2.4t` |
+| Qwen | [Qwen3.5-122B-A10B](https://huggingface.co/Qwen/Qwen3.5-122B-A10B) | `qwen3.5-122b` |
+| Qwen | [Qwen3.5-397B-A17B](https://huggingface.co/Qwen/Qwen3.5-397B-A17B) | `qwen3.5-397b` |
 | DeepSeek | [DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) | `deepseek-v4.1` |
+| DeepSeek | [DeepSeek-V4-Pro-0813](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813) | `deepseek-v4-pro-0813` |
 | Moonshot / Kimi | [Kimi-K3](https://huggingface.co/moonshotai/Kimi-K3) | `kimi-k3` |
+| Moonshot / Kimi | [Kimi-K2.6](https://huggingface.co/moonshotai/Kimi-K2.6) | `kimi-k2.6` |
+| Moonshot / Kimi | [Kimi-K2.7-Code](https://huggingface.co/moonshotai/Kimi-K2.7-Code) | `kimi-k2.7-code` |
 | MiniMax | [MiniMax-M3](https://huggingface.co/MiniMaxAI/MiniMax-M3) | `minimax-m3` |
+| MiniMax | [MiniMax-M2.7](https://huggingface.co/MiniMaxAI/MiniMax-M2.7) | `minimax-m2.7` |
 | LongCat | [LongCat-2.0](https://huggingface.co/meituan-longcat/LongCat-2.0) | `longcat-2.0` |
 | GLM | [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3) | `glm-5.3` |
+| GLM | [GLM-5.3-Flash](https://huggingface.co/zai-org/GLM-5.3-Flash) | `glm-5.3-flash` |
+| GLM | [GLM-5.2](https://huggingface.co/zai-org/GLM-5.2) | `glm-5.2` |
 | 小米 MiMo | [MiMo-V2.6-Pro-RL](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL) | `mimo-v2.6` |
 | 阶跃 Step | [Step-3.7-Flash](https://huggingface.co/stepfun-ai/Step-3.7-Flash) | `step-3.7` |
 | 腾讯混元 | [Hy4-preview](https://huggingface.co/tencent/Hy4-preview) | `hy4-preview` |
@@ -75,7 +87,9 @@ flowchart LR
 
 </details>
 
-每个参照固定词表、模板和参数，提交与文件摘要保存在 [资产清单](src/modulo/application/assets-lock.json)。新增内部别名时应选择适用的参照；同家族其他型号和云 API 别名不会自动视为兼容。模板如何影响输入计数，可参考 [Hugging Face 聊天模板说明](https://huggingface.co/docs/transformers/chat_templating)。
+每个参照固定词表、模板和参数，提交与文件摘要保存在 [tokenizer 资源清单](static/tokenizer-assets.json)。新增内部别名时应选择适用的参照；同家族其他型号和云 API 别名不会自动视为兼容。模板如何影响输入计数，可参考 [Hugging Face 聊天模板说明](https://huggingface.co/docs/transformers/chat_templating)。
+
+运行清单保留下载、校验和计算所需字段；[图片处理规则的来源](static/image-processing-sources.json)与[官方许可材料](licenses/README.md)单独保留，供审阅查证。
 
 <a id="quick-start"></a>
 
@@ -85,13 +99,15 @@ flowchart LR
 
 ```bash
 uv sync --locked
-uv run modulo prepare-assets --only qwen3.8 deepseek-v4.1
+uv run modulo prepare-assets --config config/modulo.yaml --only qwen-3.8-2.4t deepseek-v4.1
 uv run modulo import --config config/modulo.yaml
 ```
 
-首次准备下载词表、模板等 tokenizer 文件，不下载模型权重。复算在本地完成，无需 GPU 或调用模型服务。准备其他型号时，将 `--only` 后的名称替换为上表的 asset；省略 `--only` 则准备全部。
+首次准备下载词表、模板等 tokenizer 文件，不下载模型权重。复算在本地完成，无需 GPU 或调用模型服务。准备其他型号时，将 `--only` 后的名称替换为上表的 `name`；省略 `--only` 则准备全部。
 
-默认配置读取自带的 Dify 合成样例，得到 **8 条调用：2 条一致、1 条有差异、5 条不可核验**。样例特意包含差额和缺字段场景。
+下载源默认 `global`（Hugging Face）。国内网络可将 [modulo.yaml](config/modulo.yaml) 中的 `asset-source` 改为 `cn`（[魔搭 ModelScope](https://modelscope.cn/models)），也可在 `prepare-assets` 后加 `--asset-source cn` 临时覆盖。目前 19 个型号均已固定魔搭仓库与提交，两种来源使用同一组文件 SHA-256 校验；已有文件可复用，`cn` 下载失败不会自动切回国外源。
+
+默认配置读取自带的 Dify 合成样例，得到 **8 条调用，输入结论为：2 条一致、1 条有差异、5 条不可核验**。样例特意包含差额和缺字段场景。
 
 导入后会打印结果目录，将下面的 `RUN_DIR` 替换为该路径：
 
@@ -107,13 +123,33 @@ uv run modulo verify RUN_DIR            # 结果包内容校验
 
 以下是 [Dify 样例](examples/dify/basic.jsonl) 部分实际结果的表格展示。差额为 **日志报告值 − 本地参照值**：
 
-| 日志中的模型名 | 报告输入 token | 本地输入 token | 差额 | 结论 |
+| 日志中的模型名 | 报告输入 token | 本地输入 token | 差额 | 输入结论 |
 | --- | ---: | ---: | ---: | --- |
 | Qwen/Qwen3.8-2.4T-A95B | 66 | 66 | 0 | 一致 `CONSISTENT` |
 | deepseek-ai/DeepSeek-V4.1-Flash | 58 | 55 | +3 | 有差异 `DEVIATION` |
 | Qwen/Qwen3.8-2.4T-A95B | 未记录 | 59 | — | 不可核验 `UNVERIFIABLE` |
 
-结论针对固定 tokenizer／模板下的**输入参照比较**。回答与思考正文另列分项重编码计数，不等于完整的服务端输出 token 计量；一致也不证明供应商实际部署的模型身份。汇总差额只覆盖可比较的调用，缺失值不填零。样例预期见 [样例登记](tests/fixtures/expected/basic.json)。
+上表是固定 tokenizer／模板下的**输入参照比较**。输出另有 `output_tokens`、`output_delta`、`output_verdict`，计入回答、思考、工具调用及结束标记，并扣除已在输入中的生成前缀。差额均为报告值减本地参照值，输入与输出独立判定。
+
+结果同时提供三组结论，汇总统计各状态的条数：
+
+| 汇总字段 | 明细字段 | 含义 |
+| --- | --- | --- |
+| `verdicts` | `verdict` | 整次调用 |
+| `input_verdicts` | `input_verdict` | 输入比较 |
+| `output_verdicts` | `output_verdict` | 输出比较 |
+
+**整体规则：任一侧有差异 → 有差异；两侧都一致 → 一致；其余 → 不可核验。** 输入和输出的正负差额不能相互抵消成“一致”。
+
+[输出样例](examples/litellm/output-audit.jsonl) 的同一段回答、思考与工具调用，本地完整参照为 **45 token**：报告 45 判一致，48 的差额为 +3，42 为 −3。其余三条演示缺 usage、缺结束原因和截断，均不判一致。可用下列命令查看明细：
+
+```bash
+uv run modulo import --source log --adapter litellm \
+  --path examples/litellm/output-audit.jsonl \
+  --bindings examples/litellm/basic.bindings.yaml
+```
+
+结论是本地固定参照比较，不证明服务端实际生成的 token ID 或模型身份。正文分项不能直接相加替代总数。汇总保留可比较条数，缺失不填零；基础输入样例的预期见 [样例登记](tests/fixtures/expected/basic.json)。
 
 每次导入保存原始记录及位置、调用明细、差额、缺失诊断和计算依据。JSON／JSONL 保留复核材料，DuckDB 提供可重建的本地查询。`verify` 校验内容摘要；新配置或规则产生新结果，旧结果保留。
 
@@ -126,7 +162,7 @@ uv run modulo verify RUN_DIR            # 结果包内容校验
 <details open>
 <summary>主配置：日志格式、模型别名与供应商</summary>
 
-`config/modulo.yaml` 示意；下面只展示两项模型映射，仓库文件已列齐 11 个型号：
+`config/modulo.yaml` 示意；下面只展示两项模型映射，仓库文件已列齐 19 个型号：
 
 ```yaml
 source: log
@@ -138,16 +174,16 @@ adapter: dify
 # platforms: [volcengine, huaweicloud]
 
 models:
-  - modelnames: [Qwen/Qwen3.8-2.4T-A95B, qwen-2.4t]
-    asset: qwen3.8
-  - modelnames: [deepseek-ai/DeepSeek-V4.1-Flash, volc-deepseek]
-    asset: deepseek-v4.1
+  - name: qwen-3.8-2.4t
+    aliases: [Qwen/Qwen3.8-2.4T-A95B, qwen-2.4t]
+  - name: deepseek-v4.1
+    aliases: [deepseek-ai/DeepSeek-V4.1-Flash, volc-deepseek]
 
 assets: ../assets/tokenizers
 output: ../runs
 ```
 
-内部别名直接追加到对应 `modelnames` 数组。`models` 是映射表；临时只扫描某些模型用 CLI `--models`。映射之外的型号仍可导入，但缺少参照时不可复算。
+`name` 选择标准型号；日志里的官方名称和内部别名都填写在对应 `aliases` 数组中，按原文精确匹配。`models` 是映射表；临时只扫描某些模型用 CLI `--models`。映射之外的型号仍可导入，但缺少参照时不可复算。
 
 `platform-tag-source` 支持 `field:<路径>`、`metadata:<路径>`、`endpoint`、`literal:<供应商名>` 和 `none`。不筛选供应商就省略 `platforms`；整批属于同一供应商可以用 `literal:volcengine`。endpoint 模式需通过 `endpoint-source` 和 `endpoint-map` 明确取值与映射，可参考 [配套配置样例](examples/dify/platforms-endpoint.yaml)。
 
@@ -207,7 +243,17 @@ uv run modulo import --config config/modulo.yaml \
 uv run modulo import --help
 ```
 
-默认每批最多读取 10,000 条原始记录，可通过 `--max-records` 调整；截断、读取错误和数据缺口会反映在结果状态中。更多可运行输入见 [协议样例](examples/README.md)。
+大批量导入默认不限条数，中间记录、去重和待关联片段落入本地磁盘工作区，逐条计算与写出。`--memory-mib 64` 设置工作缓存预算；tokenizer、单条调用和 JSON 解码的内存另计，不是进程总内存上限。`--max-record-mib` 默认 8；`--max-records N` 可限制一次新增读取量，0 表示不限。
+
+需要续读或让分批到达的请求／响应继续关联时，指定状态目录；持续读取再加 `--follow`：
+
+```bash
+uv run modulo import --config config/modulo.yaml --state runs/import-state
+uv run modulo import --config config/modulo.yaml --state runs/import-state \
+  --follow --poll-seconds 30
+```
+
+同一状态目录生成累计结果快照，旧快照保留，未变化调用复用已有计算。Ctrl+C 停止后可用同一命令继续；未提交的读取会重读并去重。文件追加及重命名轮转可续读，半行等到换行后再处理，已读前缀被改写／截短会报错。ES 快照有效时从游标继续，过期或开始新一轮扫描时重新分页并按来源记录去重，因此会重新读取旧文档。状态和历史快照占用磁盘，按审计周期使用独立目录；计算规则或程序变更时使用新状态目录。读取不完整和数据缺口继续反映在报告中。更多输入见 [协议样例](examples/README.md)。
 
 <a id="faq"></a>
 
@@ -223,7 +269,37 @@ uv run modulo import --help
 <details>
 <summary>工具调用和思考内容能复算吗？</summary>
 
-已支持上述固定型号在日志中记录的思考与工具上下文，包括输入中的工具定义、历史调用和工具返回。回答与思考正文分别重编码计数，完整工具输出的生成 token 核验尚未提供。图片、音视频、未支持的参数或不完整日志会记录对应缺口。
+19 个固定型号均支持输入工具上下文和完整输出参照复算，包括思考正文、并行工具调用、控制与结束标记。正常结束按模板计入结束标记；`length`／`max_tokens` 达到上限时按已生成正文计算，不补 EOS。自定义停止词或 token ID 有实际命中记录时计一次；缺少命中依据时保留具体原因。有报告 usage 才产生输出差额和结论。真实日志截断、缺字段、音视频或未知参数仍保留缺口，`partial` 不表示完整核验。
+
+支持 `response_format`／JSON Schema、`tool_choice`（含指定函数）、`parallel_tool_calls` 和生成前缀参数。约束交给选定模板，不凭空增加提示词。Responses 的多条 assistant 消息保留边界；交错正文可通过绑定中的 `chat-template`／`template-kwargs` 指定参照，模板由配置提供。见 [参数与模板配置](examples/litellm/README.md#请求参数与自定义模板)。
+
+支持日志中 `thinking`／`reasoning` 等结构化正文块，保留原始块与来源；签名不计入正文，摘要或脱敏内容不冒充完整思考。LangChain、LiteLLM、New API、One API 的多候选回答按候选分别复算，再与一次请求的总 usage 比较，不重复累计。见 [可运行样例](examples/litellm/README.md#结构化正文与多候选)。
+
+</details>
+
+<details>
+<summary>图片输入能复算吗？</summary>
+
+支持 Qwen3.5-122B-A10B／397B-A17B、DeepSeek-V4.1-Flash、Kimi-K3／K2.6／K2.7-Code、GLM-5.3-Flash、MiniMax-M3、MiMo-V2.6-Pro-RL、Step-3.7-Flash 的固定图片参照，计入视觉位置、图片边界和切图标记，再与文字组成完整输入；无需模型权重或 GPU。
+
+日志需保留图片在正文中的顺序，以及内嵌图片或可信宽高；Qwen3.5／GLM-5.3-Flash／MiniMax-M3／MiMo 也可使用逐图记录的 `image_grid_thw`。缺省处理参数明确标为固定参照默认值。五种日志适配器共用该能力，见 [图片样例与结果](examples/litellm/README.md#图片输入)。
+
+只有 URL、缺少尺寸时，可在主配置中开启下载。**默认关闭**；启用后下载公网 HTTP(S) 图片，读取尺寸并复算：
+
+```yaml
+image-download:
+  enabled: true
+  cache-dir: /tmp/modulo-images  # 可省略，默认使用系统临时目录下的专用目录
+  max-file-bytes: 10485760      # 单图 10 MiB
+  max-cache-bytes: 268435456    # 缓存总量 256 MiB
+  ttl-seconds: 86400           # 保留 24 小时
+```
+
+`--download-images`／`--no-download-images` 可临时覆盖开关。启用下载的导入在开始、结束和缓存写入后清理过期与超额文件；没有后台常驻进程，缓存不作为永久归档。相对缓存路径以主配置所在目录为准。
+
+下载时间、SHA-256、字节数和来源进入明细。失效链接、超限、图片截断、顺序丢失及未支持的裁剪／`detail` 参数会保留缺口，输出复算仍独立进行。不会读取日志中的本地文件路径，也不继承系统代理／登录凭证。
+
+内网地址默认拒绝。若使用内网图片库或 DNS 的 Fake-IP 映射，可在 `image-download` 下添加 `allow-private-hosts: [images.example.com]`，仅放行明确可信的完整域名；不支持 `*`，重定向后的域名也逐一检查。
 
 </details>
 
@@ -249,4 +325,4 @@ uv run modulo import --source es --path http://localhost:9200 \
 
 ## 许可证
 
-modulo 采用 [Apache License 2.0](LICENSE)。第三方依赖、tokenizer 和模板资产遵循各自的许可证。
+modulo 采用 [Apache License 2.0](LICENSE)。第三方依赖、tokenizer 和模板资产遵循各自的许可证；已保留的上游许可见 [licenses/](licenses/README.md)。

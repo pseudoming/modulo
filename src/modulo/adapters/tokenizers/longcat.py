@@ -3,10 +3,10 @@
 from .shared.huggingface import HuggingFaceTextTokenizer
 
 
-class LongCatTokenizer(HuggingFaceTextTokenizer):
-    name = "longcat"
+class LongCat20Tokenizer(HuggingFaceTextTokenizer):
+    name = "longcat-2.0"
     family = "longcat"
-    allowed_repo = "meituan-longcat/LongCat-2.0"
+    repo = "meituan-longcat/LongCat-2.0"
     option_rules = {
         "enable_thinking": bool,
         "save_history_reasoning_content": bool,

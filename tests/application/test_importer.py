@@ -5,10 +5,12 @@ import pytest
 
 from modulo.adapters.protocols import DifyProtocol
 from modulo.adapters.sources import ElasticsearchSource, FileSource
+from modulo.application.image_cache import ImageDownloadOptions
 from modulo.application.importer import run_batch
 from modulo.shared.serialization import dumps, loads
 from modulo.storage.query_index import details
 from modulo.storage.result_bundle import verify_bundle
+from tests.support.image_http import mock_image_http
 from tests.support.mock_es import MockElasticsearch
 
 
@@ -25,6 +27,39 @@ def run_records(tmp_path, records, calculator, **kwargs):
         output_root=tmp_path / "runs",
         **kwargs,
     )
+
+
+@pytest.mark.parametrize("scenario", ["conflict", "unbound", "text-model", "filtered"])
+def test_excluded_or_ineligible_calls_do_not_fetch_images(
+    tmp_path, monkeypatch, unit_calculator, dify_record, scenario
+):
+    requests = mock_image_http(monkeypatch)
+    dify_record["process_data"]["prompts"][0]["text"] = [
+        {
+            "type": "image_url",
+            "image_url": {"url": "https://example.test/image.png"},
+        }
+    ]
+    records, kwargs = [dify_record], {}
+    if scenario != "text-model":
+        unit_calculator.lock["assets"]["test-only"]["image_processing"] = {"enabled": True}
+    if scenario == "conflict":
+        second = copy.deepcopy(dify_record)
+        second["outputs"]["usage"]["prompt_tokens"] += 1
+        records.append(second)
+    elif scenario == "unbound":
+        dify_record["process_data"]["model_name"] = "not-bound"
+    elif scenario == "filtered":
+        kwargs["models"] = ["not-selected"]
+    path, _ = run_records(
+        tmp_path,
+        records,
+        unit_calculator,
+        image_download=ImageDownloadOptions(enabled=True, cache_dir=tmp_path / "images"),
+        **kwargs,
+    )
+    verify_bundle(path)
+    assert requests == []
 
 
 def test_idempotency_distinct_same_content_and_reopen(tmp_path, unit_calculator, dify_record):
@@ -70,7 +105,7 @@ def test_missing_usage_keeps_recount_but_never_passes(tmp_path, unit_calculator,
     path, _ = run_records(tmp_path, [dify_record], unit_calculator)
     row = details(path)[0]
     assert row["measurement"]["input_tokens"] == 13
-    assert row["measurement"]["verdict"] == "UNVERIFIABLE"
+    assert row["measurement"]["input_verdict"] == "UNVERIFIABLE"
     assert row["measurement"]["input_delta"] is None
 
 
@@ -80,8 +115,9 @@ def test_signed_delta_and_no_output_false_comparison(tmp_path, unit_calculator, 
     path, _ = run_records(tmp_path, [dify_record], unit_calculator)
     row = details(path)[0]
     assert row["measurement"]["input_delta"] == -3
-    assert row["measurement"]["verdict"] == "DEVIATION"
-    assert "output_delta" not in row["measurement"]
+    assert row["measurement"]["input_verdict"] == "DEVIATION"
+    assert row["measurement"]["output_delta"] is None
+    assert row["measurement"]["output_verdict"] == "UNVERIFIABLE"
     assert row["measurement"]["model_identity"] == "UNVERIFIED"
 
 
@@ -145,7 +181,7 @@ def test_backend_failure_still_persists_raw_and_error(
     row = details(path)[0]
     assert row["measurement"]["execution"] == "error"
     assert row["measurement"]["reason"] == "backend_error:RuntimeError"
-    assert row["measurement"]["verdict"] == "UNVERIFIABLE"
+    assert row["measurement"]["input_verdict"] == "UNVERIFIABLE"
     assert "private text" not in (path / "diagnostics.jsonl").read_text()
 
 

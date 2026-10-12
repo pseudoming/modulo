@@ -2,10 +2,9 @@
 
 from typing import Any, ClassVar, Literal
 
+from modulo.adapters.protocols.shared.fields import json_object, text_or_none, usage_from
 from modulo.core.domain.data_models import Call, DataError, Parsed, ProtocolContext
 from modulo.core.domain.interfaces import ProtocolAdapter
-
-from .fields import json_object, text_or_none, usage_from
 
 
 class UsageLogProtocol(ProtocolAdapter):

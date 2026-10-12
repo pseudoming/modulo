@@ -5,11 +5,12 @@ import pytest
 
 from modulo.application.factory import make_calculator
 from modulo.application.registry import builtins
-from modulo.application.tokenizer_assets import asset_lock
+from modulo.application.tokenizer_assets import load_tokenizer_assets
 from modulo.cli.configuration import read_config
 from modulo.core.domain.bindings import Bindings
 from tests.support.mock_es import MockElasticsearch
 from tests.support.paths import ROOT
+from tests.tools.references.assets import reference_assets
 
 
 @pytest.fixture
@@ -42,11 +43,14 @@ def pytest_addoption(parser):
 @pytest.fixture
 def official_assets(request):
     root = ROOT / "assets/tokenizers"
-    for asset, entry in asset_lock()["assets"].items():
+    for asset, entry in reference_assets()["assets"].items():
         for filename in entry["files"]:
             if not (root / asset / filename).is_file():
                 if request.config.getoption("--require-assets"):
-                    pytest.fail("prepare official assets before running acceptance tests")
+                    pytest.fail(
+                        "prepare test references with tests/tools/references/assets.py "
+                        "before running acceptance tests"
+                    )
                 pytest.skip("official tokenizer assets are not prepared")
     return root
 
@@ -56,7 +60,7 @@ def calculator(official_assets):
     bindings = Bindings.model_validate(
         {"models": read_config(ROOT / "config/modulo.yaml")["models"]}
     )
-    return make_calculator(builtins(), official_assets, bindings, asset_lock())
+    return make_calculator(builtins(), official_assets, bindings, load_tokenizer_assets())
 
 
 @pytest.fixture
@@ -95,7 +99,7 @@ def unit_registry():
 @pytest.fixture
 def unit_calculator(tmp_path, unit_registry):
     bindings = Bindings.model_validate(
-        {"models": [{"modelnames": ["test-model"], "asset": "test-only"}]}
+        {"models": [{"aliases": ["test-model"], "name": "test-only"}]}
     )
     return make_calculator(
         unit_registry, tmp_path, bindings, {"assets": {"test-only": {"family": "test-only"}}}

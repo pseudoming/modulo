@@ -2,9 +2,136 @@ import json
 
 import pytest
 
-from modulo.cli.configuration import import_options, read_config
+from modulo.cli.configuration import asset_options, import_options, read_config
 from modulo.cli.parser import parser
 from modulo.core.domain.platforms import PlatformConfig
+
+
+def test_asset_region_configuration_and_explicit_cli_overrides(tmp_path):
+    path = tmp_path / "modulo.yaml"
+    path.write_text(
+        "source: log\nadapter: dify\nmodels: []\nassets: local-assets\nasset-source: CN\n"
+    )
+    args = ["prepare-assets", "--config", str(path)]
+    configured = asset_options(parser().parse_args(args))
+    assert configured.assets == tmp_path / "local-assets"
+    assert configured.asset_source == "cn"
+    overridden = asset_options(
+        parser().parse_args([*args, "--assets", "cli-assets", "--asset-source", "Global"])
+    )
+    assert str(overridden.assets) == "cli-assets"
+    assert overridden.asset_source == "global"
+    imported = import_options(parser().parse_args(["import", "--config", str(path)]))
+    assert imported.asset_source == "cn"
+
+
+def test_asset_preparation_does_not_require_log_source_or_bindings(tmp_path):
+    path = tmp_path / "modulo.yaml"
+    path.write_text("assets: local-assets\nasset-source: cn\n")
+    assert (
+        asset_options(parser().parse_args(["prepare-assets", "--config", str(path)])).asset_source
+        == "cn"
+    )
+    default = asset_options(parser().parse_args(["prepare-assets"]))
+    assert default.asset_source == "global"
+    assert str(default.assets) == "assets/tokenizers"
+
+
+@pytest.mark.parametrize("value", ["cn-mirror", "", None, False, ["cn"]])
+def test_invalid_asset_region_is_rejected_by_both_commands(tmp_path, value):
+    path = tmp_path / "modulo.json"
+    path.write_text(
+        json.dumps({"source": "log", "adapter": "dify", "models": [], "asset-source": value})
+    )
+    for command, resolve in [("import", import_options), ("prepare-assets", asset_options)]:
+        with pytest.raises(ValueError):
+            resolve(parser().parse_args([command, "--config", str(path)]))
+
+
+def test_template_parameters_are_typed_but_model_names_stay_strings(tmp_path):
+    path = tmp_path / "modulo.yaml"
+    path.write_text(
+        "source: log\nadapter: litellm\nmodels:\n"
+        "  - aliases: [on, 1.10]\n    name: qwen-3.8-2.4t\n"
+        "    add_generation_prompt: false\n"
+        "    chat-template: '{{ messages[0].content }}'\n"
+        "    template-kwargs:\n      enable_thinking: true\n"
+        "      parallel_tool_calls: false\n      count: 0\n"
+        "      schema: {properties: {z: [1.2300, null], a: 'false'}}\n"
+    )
+    binding = import_options(
+        parser().parse_args(["import", "--config", str(path)])
+    ).bindings.models[0]
+    assert binding.aliases == ["on", "1.10"]
+    assert binding.add_generation_prompt is False
+    options = binding.template_kwargs
+    assert options["enable_thinking"] is True and options["parallel_tool_calls"] is False
+    assert type(options["count"]) is int and options["count"] == 0
+    assert str(options["schema"]["properties"]["z"][0]) == "1.2300"
+    assert options["schema"]["properties"]["z"][1] is None
+    assert options["schema"]["properties"]["a"] == "false"
+
+
+def test_image_download_configuration_paths_and_explicit_enable_disable(tmp_path):
+    path = tmp_path / "modulo.yaml"
+    path.write_text(
+        "source: log\nadapter: dify\nmodels: []\n"
+        "image-download:\n  enabled: false\n  cache-dir: image-cache\n"
+        "  max-file-bytes: 1024\n  max-cache-bytes: 8192\n  ttl-seconds: 3600\n"
+    )
+    args = ["import", "--config", str(path)]
+    configured = import_options(parser().parse_args(args)).image_download
+    assert configured.enabled is False
+    assert configured.cache_dir == tmp_path / "image-cache"
+    assert (configured.max_file_bytes, configured.max_cache_bytes, configured.ttl_seconds) == (
+        1024,
+        8192,
+        3600,
+    )
+    enabled = import_options(parser().parse_args([*args, "--download-images"])).image_download
+    assert enabled.enabled is True and enabled.cache_dir == configured.cache_dir
+    path.write_text(path.read_text().replace("enabled: false", "enabled: true"))
+    assert import_options(parser().parse_args(args)).image_download.enabled is True
+    assert (
+        import_options(parser().parse_args([*args, "--no-download-images"])).image_download.enabled
+        is False
+    )
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        None,
+        [],
+        {"enabled": "maybe"},
+        {"enabled": 1},
+        {"cache-dir": ["bad"]},
+        {"max-file-bytes": 0},
+        {"max-cache-bytes": 1000},
+        {"max-file-bytes": True},
+        {"ttl-seconds": -1},
+        {"max-cache-bytes": 1.5},
+        {"unkown": 12},
+        {"allow-private-hosts": ["*"]},
+        {"allow-private-hosts": ["https://example.test"]},
+        {"allow-private-hosts": "example.test"},
+        {"allow-private-hosts": ["example.test:8080"]},
+    ],
+)
+def test_invalid_image_download_configuration_fails(tmp_path, value):
+    path = tmp_path / "modulo.json"
+    path.write_text(
+        json.dumps(
+            {
+                "source": "log",
+                "adapter": "dify",
+                "models": [],
+                "image-download": value,
+            }
+        )
+    )
+    with pytest.raises(ValueError):
+        import_options(parser().parse_args(["import", "--config", str(path)]))
 
 
 @pytest.mark.parametrize(
@@ -41,13 +168,13 @@ def test_import_config_paths_and_explicit_cli_overrides(tmp_path, monkeypatch):
     source.write_text("path: ../logs\npattern: '*.jsonl'\n")
     path.write_text(
         "source: log\nsource-config: import-log-file.yaml\nadapter: dify\n"
-        "models: [{modelnames: [configured-model], asset: test-only}]\noutput: ../results\n"
+        "models: [{aliases: [configured-model], name: test-only}]\noutput: ../results\n"
         "max-records: 12\n"
     )
     monkeypatch.chdir(tmp_path)
     configured = import_options(parser().parse_args(["import", "--config", str(path)]))
     assert configured.path == str(tmp_path / "logs")
-    assert configured.bindings.models[0].modelnames == ["configured-model"]
+    assert configured.bindings.models[0].aliases == ["configured-model"]
     assert configured.models is None  # Declaring a mapping does not select a scan scope.
     assert configured.output == tmp_path / "results"
     assert configured.max_records == 12
@@ -112,7 +239,7 @@ def test_es_config_preserves_url_and_cli_location_alias_replaces_it(tmp_path):
         {"models": "not-an-array"},
         {"models": ["not-a-binding"]},
         {"models": None},
-        {"max-records": 0},
+        {"max-records": -1},
         {"path": "belongs-in-source-config"},
         {"index": "belongs-in-source-config"},
         {"bindings": "models-are-inline.yaml"},
@@ -179,7 +306,7 @@ def test_source_paths_are_relative_to_source_file_and_explicit_binding_replaces_
     path = tmp_path / "modulo.yaml"
     path.write_text("source: es\nsource-config: connections/es.yaml\nadapter: dify\nmodels: []\n")
     binding = tmp_path / "aliases.yaml"
-    binding.write_text("models: [{modelnames: [on, 1.10], asset: test-only}]\n")
+    binding.write_text("models: [{aliases: [on, 1.10], name: test-only}]\n")
     options = import_options(
         parser().parse_args(
             [
@@ -192,4 +319,4 @@ def test_source_paths_are_relative_to_source_file_and_explicit_binding_replaces_
         )
     )
     assert options.es_query == tmp_path / "connections/query.json"
-    assert options.bindings.models[0].modelnames == ["on", "1.10"]
+    assert options.bindings.models[0].aliases == ["on", "1.10"]

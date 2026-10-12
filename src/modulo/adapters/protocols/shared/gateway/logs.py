@@ -22,6 +22,7 @@ LABELS = {
         "requestBody:": ("upstream_request", "openai"),
         "text request body:": ("upstream_request", "openai"),
         "upstream response body:": ("response", "openai"),
+        "responseBody:": ("response", "auto"),
         "stream scanner data:": ("sse", "openai"),
     },
     "oneapi": {

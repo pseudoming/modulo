@@ -3,27 +3,33 @@
 import time
 from importlib.resources import files
 from pathlib import Path
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 from modulo.shared.serialization import bytes_digest, loads
 
 
-def asset_lock() -> dict:
-    return loads(files("modulo.application").joinpath("assets-lock.json").read_bytes())
+def load_tokenizer_assets() -> dict:
+    """Load the built-in catalog of fixed tokenizer files and calculation parameters."""
+    packaged = files("modulo").joinpath("static/tokenizer-assets.json")
+    if packaged.is_file():
+        return loads(packaged.read_bytes())
+    # Editable installs use the repository's single source of truth. Never look
+    # relative to the working directory, which may contain customer material.
+    root = Path(__file__).resolve().parents[3]
+    return loads((root / "static/tokenizer-assets.json").read_bytes())
 
 
-def get_backend_name(asset: str, lock: dict) -> str:
-    entry = lock.get("assets", {}).get(asset)
-    if entry is None:
-        raise ValueError(f"unknown tokenizer asset: {asset}")
-    backend = entry.get("family")
-    if not isinstance(backend, str) or not backend.strip():
-        raise ValueError(f"tokenizer asset has no backend: {asset}")
-    return backend
-
-
-def prepare_assets(root: Path, only: list[str] | None = None) -> list[str]:
-    entries = asset_lock()["assets"]
+def prepare_assets(
+    root: Path,
+    only: list[str] | None = None,
+    *,
+    source: str = "global",
+    catalog: dict | None = None,
+) -> list[str]:
+    if source not in {"global", "cn"}:
+        raise ValueError("asset source must be global or cn")
+    entries = (load_tokenizer_assets() if catalog is None else catalog)["assets"]
     selected = list(entries) if only is None else list(dict.fromkeys(only))
     unknown = set(selected) - set(entries)
     if unknown:
@@ -35,13 +41,11 @@ def prepare_assets(root: Path, only: list[str] | None = None) -> list[str]:
         directory.mkdir(parents=True, exist_ok=True)
         for name, expected in entry["files"].items():
             path = directory / name
+            path.parent.mkdir(parents=True, exist_ok=True)
             if path.is_file() and bytes_digest(path.read_bytes()) == expected:
                 verified.append(f"{asset}/{name}")
                 continue
-            url = (
-                f"https://huggingface.co/api/resolve-cache/models/{entry['repo']}/"
-                f"{entry['revision']}/{name}"
-            )
+            url = download_url(entry, name, source)
             for attempt in range(3):
                 try:
                     with urlopen(
@@ -63,3 +67,16 @@ def prepare_assets(root: Path, only: list[str] | None = None) -> list[str]:
                 temporary.unlink(missing_ok=True)
             verified.append(f"{asset}/{name}")
     return verified
+
+
+def download_url(entry: dict, filename: str, source: str) -> str:
+    if source == "cn":
+        mirror = entry.get("modelscope")
+        if not mirror or not mirror.get("repo") or not mirror.get("revision"):
+            raise ValueError(f"no locked ModelScope source for {entry['repo']}")
+        query = urlencode({"Revision": mirror["revision"], "FilePath": filename})
+        return f"https://modelscope.cn/api/v1/models/{quote(mirror['repo'], safe='/')}/repo?{query}"
+    return (
+        f"https://huggingface.co/api/resolve-cache/models/{quote(entry['repo'], safe='/')}/"
+        f"{quote(entry['revision'], safe='')}/{quote(filename, safe='/')}"
+    )

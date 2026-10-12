@@ -3,14 +3,16 @@
 from modulo.core.domain.data_models import Call, DataError, ProtocolContext, Usage
 from modulo.shared.serialization import digest
 
-from .chat import decode_response, message, output_fields, request_options
-from .fields import text_or_none, usage_from
-from .gateway_logs import body_object
-from .sse import assemble_sse
+from ..api_bodies.parsing import FORMATS, assemble_sse, request_fields
+from ..api_bodies.parsing import response_fields as api_response_fields
+from ..fields import text_or_none, usage_from
+from ..messages.candidates import expected_candidates, response_outputs
+from ..messages.chat import output_fields
+from .logs import body_object
 
 
 def response_fields(response, format="openai"):
-    if format not in ("openai", "ali", "ollama"):
+    if format not in FORMATS | {"ali", "ollama"}:
         raise DataError("unsupported_gateway_response_format")
     if response is None:
         return {"output_gaps": ["missing_response_body"]}, Usage(), None
@@ -21,14 +23,18 @@ def response_fields(response, format="openai"):
         output = response.get("output") or {}
         if not isinstance(output, dict):
             raise DataError("invalid_ali_response_output")
-        body = decode_response(output)
-        if body is None and isinstance(output.get("text"), str):
-            body = {"content": output["text"]}
+        fields = response_outputs(output, path="response_body.ali.output.choices.")
+        if "choices" not in output and isinstance(output.get("text"), str):
+            body = {"content": output["text"], "finish_reason": output.get("finish_reason")}
+            fields = output_fields(body, path="response_body.ali.output.")
         usage = usage_from(response.get("usage"), "input_tokens", "output_tokens")
     elif format == "ollama":
         body = response.get("message")
         if body is not None and not isinstance(body, dict):
             raise DataError("invalid_ollama_response_message")
+        fields = output_fields(
+            body, path="response_body.ollama.", finish_reason=response.get("done_reason")
+        )
         usage = usage_from(
             {
                 "prompt_eval_count": response.get("prompt_eval_count"),
@@ -38,9 +44,16 @@ def response_fields(response, format="openai"):
             "eval_count",
         )
     else:
-        body = decode_response(response)
-        usage = usage_from(response.get("usage"), "prompt_tokens", "completion_tokens")
-    return output_fields(body, path=f"response_body.{format}."), usage, response.get("model")
+        return api_response_fields(
+            response,
+            "response_body.openai" if format == "openai" else "response_body",
+            format=format,
+        )
+    return (
+        fields,
+        usage,
+        response.get("model"),
+    )
 
 
 def build_call(
@@ -54,37 +67,26 @@ def build_call(
     *,
     gaps=(),
     status="unknown",
+    request_format="auto",
 ):
     request = body_object(request) if request is not None else {}
-    values = request.get("messages")
-    if values is None and isinstance(request.get("input"), dict):
-        values = request["input"].get("messages")  # One API's Alibaba outbound body.
     input_gaps = list(gaps)
     if status == "failed":
         input_gaps.append("failed_call")
-    messages = None
-    if not isinstance(values, list) or not values:
-        input_gaps.append("missing_messages")
-    else:
-        try:
-            messages = [
-                message(body_object(v), path=f"request_body.messages.{i}.")
-                for i, v in enumerate(values)
-            ]
-        except DataError as exc:
-            input_gaps.append(str(exc))
-    options, sources, tools, option_gaps = request_options(
-        ("request_body", request), ("request_body.parameters", request.get("parameters"))
+    fields = request_fields(
+        request,
+        format=request_format,
+        extra_roots=(("request_body.parameters", request.get("parameters")),),
     )
-    input_gaps.extend(option_gaps)
+    input_gaps.extend(fields.pop("gaps", []))
+    output = expected_candidates(
+        output, ("request_body", request), ("request_body.parameters", request.get("parameters"))
+    )
     return Call(
         call_id="body:" + digest([request_id, attempt_id])[:32],
         protocol=gateway,
         model=text_or_none(request.get("model", response_model), "model") or None,
-        messages=messages,
-        tools_json=tools,
-        render_options=options,
-        render_option_sources=sources,
+        **fields,
         usage=usage,
         gaps=sorted(set(input_gaps)),
         status=status,
@@ -106,17 +108,17 @@ def exchange(record, gateway):
     if record.get("request_stage", "unspecified") not in ("ingress", "upstream", "unspecified"):
         raise DataError("invalid_gateway_request_stage")
     response_format = record.get("response_format", "openai")
-    if response_format not in ("openai", "ali", "ollama"):
+    if response_format not in FORMATS | {"ali", "ollama"}:
         raise DataError("unsupported_gateway_response_format")
     if record.get("response_body") is not None and record.get("response_sse") is not None:
         raise DataError("ambiguous_gateway_response")
     stream = None
     if record.get("response_sse") is not None:
-        if response_format != "openai":
+        if response_format not in FORMATS:
             raise DataError("unsupported_gateway_stream_format")
         if not isinstance(record["response_sse"], str):
             raise DataError("response_sse_must_be_text")
-        stream = assemble_sse(record["response_sse"].splitlines())
+        stream = assemble_sse(record["response_sse"].splitlines(), response_format)
         output, usage, model = stream.output, stream.usage, stream.model
     else:
         output, usage, model = response_fields(record.get("response_body"), response_format)
@@ -137,7 +139,17 @@ def exchange(record, gateway):
             else "unknown"
         )
     )
-    call = build_call(gateway, request_id, attempt_id, request, output, usage, model, status=status)
+    call = build_call(
+        gateway,
+        request_id,
+        attempt_id,
+        request,
+        output,
+        usage,
+        model,
+        status=status,
+        request_format=record.get("request_format", "auto"),
+    )
     context = ProtocolContext(record.get("metadata"), "metadata")
     assembly = {
         "schema_version": "gateway-assembly.v1",

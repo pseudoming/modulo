@@ -31,7 +31,7 @@
     "input_delta": 3
   },
   "reference_assets": {
-    "qwen": "qwen3.8",
+    "qwen": "qwen-3.8-2.4t",
     "deepseek": "deepseek-v4.1"
   }
 }

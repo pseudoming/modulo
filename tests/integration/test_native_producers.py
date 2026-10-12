@@ -70,7 +70,7 @@ def test_native_capture_through_cli(
     rows = details(Path(result["run"]))
     assert len(rows) == count
     assert result["summary"]["counters"]["invalid_records"] == 0
-    assert result["summary"]["verdicts"] == {
+    assert result["summary"]["input_verdicts"] == {
         "UNVERIFIABLE" if label == "oneapi" else "CONSISTENT": count
     }
     family = json.loads(
@@ -79,7 +79,7 @@ def test_native_capture_through_cli(
     reasoning = json.loads(
         (ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json").read_text()
     )["vectors"]
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     for row in rows:
         call, measurement = row["call"], row["measurement"]
         candidates = [
@@ -98,7 +98,9 @@ def test_native_capture_through_cli(
             assert call["output_gaps"] == ["missing_response_body"]
         else:
             assert not call["gaps"] and not call["output_gaps"]
-            assert measurement["output_execution"] == "completed"
+            assert measurement["output_execution"] == (
+                "partial" if label == "dify" else "completed"
+            )
             assert measurement["visible_output_tokens"] == vector["visible_output_tokens"]
             if label != "dify":
                 assert call["output_reasoning"] == vector["output_reasoning"]

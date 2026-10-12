@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from decimal import Decimal
 from typing import Any
 
@@ -46,6 +47,29 @@ def dumps(value: Any) -> str:
         allow_nan=False,
         default=_default,
     )
+
+
+def iter_dumps(value):
+    """Write artifact JSON incrementally, including replayable disk collections."""
+    if isinstance(value, Mapping):
+        yield "{"
+        keys = sorted(value) if isinstance(value, dict) else value
+        for index, key in enumerate(keys):
+            if index:
+                yield ","
+            yield dumps(key)
+            yield ":"
+            yield from iter_dumps(value[key])
+        yield "}"
+    elif isinstance(value, Sequence) and not isinstance(value, (str, bytes)):
+        yield "["
+        for index, item in enumerate(value):
+            if index:
+                yield ","
+            yield from iter_dumps(item)
+        yield "]"
+    else:
+        yield dumps(value)
 
 
 def _default(value: Any) -> str:

@@ -1,10 +1,10 @@
 {
   "synthetic": true,
-  "reviewed_on": "2026-10-10",
+  "reviewed_on": "2026-10-11",
   "scope": "fixed plain-text local references, no service calls or weights",
   "assets": [
     {
-      "asset": "qwen3.8",
+      "asset": "qwen-3.8-2.4t",
       "backend": "qwen",
       "repo": "Qwen/Qwen3.8-2.4T-A95B",
       "revision": "207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
@@ -172,11 +172,114 @@
         "reasoning_effort": "high"
       },
       "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "qwen3.5-122b",
+      "backend": "qwen",
+      "repo": "Qwen/Qwen3.5-122B-A10B",
+      "revision": "dc4d348443bc740c68e2d77492492c11606384d5",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B/tree/dc4d348443bc740c68e2d77492492c11606384d5",
+      "readme_sha256": "1775bb720398d6107cce3da0c3129abfd24ec639fd9853d5134df1e5c6118a4d",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "qwen3.5-397b",
+      "backend": "qwen",
+      "repo": "Qwen/Qwen3.5-397B-A17B",
+      "revision": "8472618112abcbd45acbcdc58436aff4233c23f7",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B/tree/8472618112abcbd45acbcdc58436aff4233c23f7",
+      "readme_sha256": "bda4b24e975f65ac677985306ddbad33362e65064637660654c8bb7dea7edf50",
+      "template_kwargs": {
+        "enable_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "deepseek-v4-pro-0813",
+      "backend": "deepseek",
+      "repo": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "revision": "72e1d3230f6c080a530b0a1d46f8eb4602340597",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813/tree/72e1d3230f6c080a530b0a1d46f8eb4602340597",
+      "readme_sha256": "61755d88e95789fcd7a36f50892f97bba977a30fc99d0f2907ab787ed10b0e66",
+      "template_kwargs": {
+        "thinking_mode": "thinking",
+        "reasoning_effort": "low",
+        "drop_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "glm-5.3-flash",
+      "backend": "glm",
+      "repo": "zai-org/GLM-5.3-Flash",
+      "revision": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash/tree/eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "readme_sha256": "e6c5d41400e28f5a89418a0d15b09b9c113314a7553d40d7d4a8a72fcdb87d02",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": false
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "glm-5.2",
+      "backend": "glm",
+      "repo": "zai-org/GLM-5.2",
+      "revision": "cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "url": "https://huggingface.co/zai-org/GLM-5.2/tree/cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "readme_sha256": "7ba22185651d8f69fbf6227ee718eb680fd834ec8e79ba78df6fa54896614b3d",
+      "template_kwargs": {
+        "reasoning_effort": "max",
+        "clear_thinking": true,
+        "enable_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "minimax-m2.7",
+      "backend": "minimax",
+      "repo": "MiniMaxAI/MiniMax-M2.7",
+      "revision": "d494266a4affc0d2995ba1fa35c8481cbd84294b",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7/tree/d494266a4affc0d2995ba1fa35c8481cbd84294b",
+      "readme_sha256": "2e871f2f502616c7168e4db41427c0d58c3906ba7357e73064a4564c93c33c62",
+      "template_kwargs": {
+        "thinking_mode": "enabled"
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "kimi-k2.6",
+      "backend": "moonshot",
+      "repo": "moonshotai/Kimi-K2.6",
+      "revision": "7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.6/tree/7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+      "readme_sha256": "95db3be1d0473e482c7aa901f237ad7af8bb7929625a777b27428081bb8ea9f7",
+      "template_kwargs": {
+        "thinking": true,
+        "preserve_thinking": false
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
+    },
+    {
+      "asset": "kimi-k2.7-code",
+      "backend": "moonshot",
+      "repo": "moonshotai/Kimi-K2.7-Code",
+      "revision": "74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/tree/74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+      "readme_sha256": "c78bbe5af19636b180eda956abf1f30a79027ec04d6642ebddc44edbc4470879",
+      "template_kwargs": {
+        "thinking": true,
+        "preserve_thinking": true
+      },
+      "reference": "../tokenizers/family_reference_vectors.json"
     }
   ],
-  "raw_records": 15,
-  "verdicts": {
-    "CONSISTENT": 11,
+  "raw_records": 23,
+  "input_verdicts": {
+    "CONSISTENT": 19,
     "DEVIATION": 1,
     "UNVERIFIABLE": 3
   },

@@ -83,7 +83,7 @@ def main():
         def serialize(self, *, model_mode, prompt_messages):
             return util.prompt_messages_to_prompt_for_saving(model_mode, prompt_messages)
 
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     vectors = json.loads(
         (ROOT / "tests/fixtures/tokenizers/family_reference_vectors.json").read_text()
     )["vectors"]

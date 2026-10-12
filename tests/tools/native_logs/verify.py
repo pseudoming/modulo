@@ -31,7 +31,7 @@ def expected_counts(data, label, call):
     vectors = json.loads(
         (ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json").read_text()
     )["vectors"]
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     vector = next(v for v in vectors if assets[v["asset"]]["repo"] == call["model"])
     return {
         "input_tokens": len(vector["input_ids"]),
@@ -144,7 +144,9 @@ def verify(data, es=None, cases=None):
                                 measurement[key],
                                 expected[key],
                             )
-                    assert measurement["output_execution"] == "completed"
+                    assert measurement["output_execution"] == (
+                        "partial" if label == "dify" else "completed"
+                    )
             projection = sorted(
                 [{"call": row["call"], "measurement": row["measurement"]} for row in rows],
                 key=lambda row: row["call"]["call_id"],
@@ -160,6 +162,8 @@ def verify(data, es=None, cases=None):
                 "index": index,
                 "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                 "verdicts": summary["verdicts"],
+                "input_verdicts": summary["input_verdicts"],
+                "output_verdicts": summary["output_verdicts"],
                 "output_execution": summary["output_execution"],
             }
             report.append(item)

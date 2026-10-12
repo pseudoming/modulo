@@ -1,6 +1,6 @@
 """One API consumption rows and body logs, including optional response instrumentation."""
 
-from ..shared.gateway import GatewayProtocol
+from modulo.adapters.protocols.shared.gateway.adapter import GatewayProtocol
 
 
 class OneAPIProtocol(GatewayProtocol):

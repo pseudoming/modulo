@@ -98,3 +98,92 @@ def test_native_aggregated_tool_chunks_preserve_argument_bytes():
     call = LangChainProtocol().parse(run).calls[0]
     assert not call.output_gaps
     assert json.loads(call.output_tool_calls_json)[0]["function"]["arguments"] == '{ "q": "合成" }'
+
+
+def test_real_langchain_serializes_reasoning_blocks_without_losing_text():
+    collector = RunCollectorCallbackHandler(_schema_format="original+chat")
+    response = AIMessage(
+        content=[
+            {"type": "thinking", "thinking": "完整思考\n", "signature": "sig"},
+            {"type": "text", "text": "答案"},
+        ],
+        response_metadata={"finish_reason": "stop"},
+    )
+    FakeMessagesListChatModel(responses=[response]).invoke(
+        [HumanMessage(content=[{"type": "text", "text": "问题"}])],
+        config={"callbacks": [collector]},
+    )
+    run = json.loads(collector.traced_runs[0].model_dump_json())
+    call = LangChainProtocol().parse(run).calls[0]
+    assert call.messages[0].content == "问题"
+    assert call.output_reasoning == "完整思考\n" and call.output_text == "答案"
+    assert call.output_finish_reason == "stop" and not call.output_gaps
+    assert "sig" in call.output_structured_content_json
+
+
+def test_conflicting_usage_copies_are_not_added_or_arbitrarily_selected():
+    run = native_tool_run()
+    generations = run["outputs"]["generations"][0]
+    second = copy.deepcopy(generations[0])
+    second["message"]["kwargs"]["usage_metadata"]["output_tokens"] = 7
+    generations.append(second)
+    call = LangChainProtocol().parse(run).calls[0]
+    assert len(call.output_candidates) == 2
+    assert call.usage.input_tokens is None and call.usage.output_tokens is None
+    assert "conflicting_langchain_usage" in call.gaps
+    assert "conflicting_langchain_usage" in call.output_gaps
+
+
+def test_invalid_candidate_usage_keeps_available_response_content():
+    run = native_tool_run()
+    generations = run["outputs"]["generations"][0]
+    second = copy.deepcopy(generations[0])
+    second["message"]["kwargs"]["usage_metadata"]["output_tokens"] = -1
+    generations.append(second)
+    call = LangChainProtocol().parse(run).calls[0]
+    assert len(call.output_candidates) == 2
+    assert all(item.output_text == "合成回答\n" for item in call.output_candidates)
+    assert call.usage.output_tokens is None
+    assert "invalid_langchain_usage" in call.output_gaps
+
+
+def test_multiple_input_groups_keep_pairing_candidates_and_usage_scope():
+    run = native_tool_run()
+    second = copy.deepcopy(run["inputs"]["messages"][0])
+    second[0]["kwargs"]["content"] = "第二个问题"
+    run["inputs"]["messages"].append(second)
+    output = copy.deepcopy(run["outputs"]["generations"][0])
+    output[0]["message"]["kwargs"]["content"] = "第二个答案"
+    output[0]["message"]["kwargs"]["usage_metadata"] = {
+        "input_tokens": 20,
+        "output_tokens": 8,
+        "total_tokens": 28,
+    }
+    run["outputs"]["generations"].append([*output, copy.deepcopy(output[0])])
+    run["outputs"]["llm_output"] = {
+        "token_usage": {"prompt_tokens": 30, "completion_tokens": 13, "total_tokens": 43}
+    }
+    calls = LangChainProtocol().parse(run).calls
+    assert len(calls) == 2 and all(not call.gaps for call in calls)
+    assert calls[1].messages[0].content == "第二个问题"
+    assert len(calls[1].output_candidates) == 2
+    assert [c.usage.input_tokens for c in calls] == [10, 20]
+    assert calls[1].usage.output_tokens == 8  # Repeated candidate metadata counted once.
+    assert [c.input_batch.index for c in calls] == [0, 1]
+    assert all(c.input_batch.usage.input_tokens == 30 for c in calls)
+    assert all(c.input_batch.run_id == run["id"] for c in calls)
+    for group in run["outputs"]["generations"]:
+        for generation in group:
+            generation["message"]["kwargs"].pop("usage_metadata")
+    calls = LangChainProtocol().parse(run).calls
+    assert all(c.usage.input_tokens is None and c.usage.output_tokens is None for c in calls)
+    assert all(not c.gaps and not c.output_gaps for c in calls)
+
+
+def test_unmatched_input_output_groups_remain_visible():
+    run = native_tool_run()
+    run["outputs"]["generations"].append(copy.deepcopy(run["outputs"]["generations"][0]))
+    calls = LangChainProtocol().parse(run).calls
+    assert len(calls) == 2 and calls[1].messages is None
+    assert all("langchain_input_output_group_mismatch" in c.output_gaps for c in calls)
+    assert calls[1].output_text == "合成回答\n"

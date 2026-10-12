@@ -63,7 +63,7 @@
       "selected_calls": 4,
       "excluded_calls": 1,
       "ignored_records": 1,
-      "verdicts": {
+      "input_verdicts": {
         "UNVERIFIABLE": 4
       }
     },
@@ -73,7 +73,7 @@
       "selected_calls": 3,
       "excluded_calls": 1,
       "ignored_records": 2,
-      "verdicts": {
+      "input_verdicts": {
         "UNVERIFIABLE": 3
       }
     },
@@ -83,7 +83,7 @@
       "selected_calls": 7,
       "excluded_calls": 1,
       "ignored_records": 0,
-      "verdicts": {
+      "input_verdicts": {
         "CONSISTENT": 1,
         "DEVIATION": 2,
         "UNVERIFIABLE": 4
@@ -91,7 +91,7 @@
     }
   },
   "reference_assets": {
-    "qwen": "qwen3.8",
+    "qwen": "qwen-3.8-2.4t",
     "deepseek": "deepseek-v4.1"
   }
 }

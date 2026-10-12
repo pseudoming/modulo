@@ -10,11 +10,65 @@ from modulo.storage.result_bundle import verify_bundle
 from tests.support.mock_es import MockElasticsearch
 
 
+@pytest.mark.assets
+def test_configured_template_is_frozen_and_reused_through_cli(tmp_path, official_assets, capsys):
+    from tokenizers import Tokenizer
+
+    template = (
+        "{{ response_schema | tojson }}{% for m in messages %}"
+        "[{{ m.role }}]{{ m.content }}{{ eos_token }}{% endfor %}"
+        "{% if add_generation_prompt %}[assistant]{% endif %}"
+    )
+    encoder = Tokenizer.from_file(str(official_assets / "qwen-3.8-2.4t/tokenizer.json"))
+    expected_input = '{"z": 1.2300, "a": false}[user]x<|im_end|>[assistant]'
+    counts = {
+        "prompt_tokens": len(encoder.encode(expected_input, add_special_tokens=False).ids),
+        "completion_tokens": len(encoder.encode("ok<|im_end|>", add_special_tokens=False).ids),
+    }
+    row = {
+        "id": "custom-template",
+        "call_type": "completion",
+        "model": "internal",
+        "messages": [{"role": "user", "content": "x"}],
+        **counts,
+        "response": {
+            "choices": [
+                {
+                    "message": {"role": "assistant", "content": "ok", "reasoning_content": ""},
+                    "finish_reason": "stop",
+                }
+            ]
+        },
+    }
+    (tmp_path / "input.jsonl").write_text(json.dumps(row) + "\n")
+    (tmp_path / "source.yaml").write_text("path: input.jsonl\n")
+    config = tmp_path / "modulo.yaml"
+    config.write_text(
+        "source: log\nsource-config: source.yaml\nadapter: litellm\n"
+        f"assets: {official_assets}\noutput: runs\nmodels:\n"
+        "  - aliases: [internal]\n    name: qwen-3.8-2.4t\n"
+        f"    chat-template: |-\n      {template}\n"
+        "    template-kwargs:\n      response_schema: {z: 1.2300, a: false}\n"
+    )
+    args = ["import", "--config", str(config)]
+    assert main(args) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["summary"]["verdicts"] == {"CONSISTENT": 1}
+    bundle = Path(result["run"])
+    verify_bundle(bundle)
+    frozen = json.loads((bundle / "bindings.json").read_text())["models"][0]
+    assert frozen["chat-template"] == template
+    assert frozen["template_kwargs_json"] == '{"response_schema": {"z": 1.2300, "a": false}}'
+    assert details(bundle)[0]["measurement"]["input_tokens"] == counts["prompt_tokens"]
+    assert main(args) == 0
+    assert json.loads(capsys.readouterr().out)["reused"] is True
+
+
 @pytest.fixture
 def configured_import(tmp_path, unit_registry, monkeypatch):
     directory = tmp_path / "config"
     directory.mkdir()
-    models = "models: [{modelnames: [test-model, internal-model], asset: test-only}]\n"
+    models = "models: [{aliases: [test-model, internal-model], name: test-only}]\n"
     (directory / "bindings.yaml").write_text(models)
     (directory / "modulo.yaml").write_text(
         "source: log\nsource-config: import-log-file.yaml\nadapter: dify\n"
@@ -23,7 +77,7 @@ def configured_import(tmp_path, unit_registry, monkeypatch):
     )
     monkeypatch.setattr("modulo.cli.commands.build_registry", lambda _plugins: unit_registry)
     monkeypatch.setattr(
-        "modulo.cli.commands.asset_lock",
+        "modulo.cli.commands.load_tokenizer_assets",
         lambda: {
             "assets": {"test-only": {"family": "test-only"}},
         },
@@ -51,7 +105,7 @@ def test_dated_files_config_matches_cli_and_keeps_one_batch_budget(
     assert main(["import", "--config", str(config)]) == 0
     first = json.loads(capsys.readouterr().out)
     bundle = Path(first["run"])
-    assert first["summary"]["verdicts"] == {"CONSISTENT": 2}
+    assert first["summary"]["input_verdicts"] == {"CONSISTENT": 2}
     assert len(details(bundle)) == 2
     manifest = verify_bundle(bundle)
     assert [item["path"] for item in manifest["plan"]["source"]["files"]] == [
@@ -177,13 +231,13 @@ def test_main_config_maps_internal_aliases_and_filters_platforms(
     (configured_import / "import-log-file.yaml").write_text("path: ../logs.jsonl\n")
     assert main(["import", "--config", str(config)]) == 0
     result = json.loads(capsys.readouterr().out)
-    assert result["summary"]["verdicts"] == {"CONSISTENT": 1}
+    assert result["summary"]["input_verdicts"] == {"CONSISTENT": 1}
     assert result["summary"]["selection"]["excluded_calls"] == 1
     bundle = Path(result["run"])
     (row,) = details(bundle)
     assert row["call"]["model"] == "internal-model"
     assert row["call"]["platform"] == "supplier-a"
-    assert json.loads((bundle / "bindings.json").read_text())["models"][0]["asset"] == "test-only"
+    assert json.loads((bundle / "bindings.json").read_text())["models"][0]["name"] == "test-only"
     assert verify_bundle(bundle)["plan"]["selection"]["platforms"] == ["supplier-a"]
     assert main(["import", "--config", str(config), "--platforms", "supplier-b"]) == 0
     other = json.loads(capsys.readouterr().out)

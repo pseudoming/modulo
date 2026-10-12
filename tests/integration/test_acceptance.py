@@ -38,10 +38,10 @@ def test_two_by_two_real_recount_matrix(tmp_path, calculator, protocol_name, phy
     assert summary["counters"]["raw_records"] == expected["raw_records_per_protocol"]
     assert summary["counters"]["duplicate_calls"] == expected["expected_duplicate_calls"]
     assert summary["counters"]["ignored_records"] == expected["expected_ignored_records"]
-    assert summary["verdicts"] == expected["expected_input_verdicts"]
+    assert summary["input_verdicts"] == expected["expected_input_verdicts"]
     rows = details(bundle)
     assert sum(row["measurement"]["input_tokens"] is not None for row in rows) == 4
-    deviations = [row for row in rows if row["measurement"]["verdict"] == "DEVIATION"]
+    deviations = [row for row in rows if row["measurement"]["input_verdict"] == "DEVIATION"]
     assert len(deviations) == 1 and deviations[0]["measurement"]["input_delta"] == 3
     assert all(row["measurement"]["model_identity"] == "UNVERIFIED" for row in rows)
     assert sum(m["compared_calls"] for m in summary["by_model"].values()) == 3

@@ -18,7 +18,11 @@ def protocol_row(vector, protocol, model):
         parameters["tools"] = vector["tools"]
     # Output billing is deliberately absent: separate component counts do not
     # establish a provider's generation/EOS accounting rule.
-    usage = {"prompt_tokens": len(vector["input_ids"])}
+    usage = {
+        "prompt_tokens": vector["input_tokens"]
+        if "input_tokens" in vector
+        else len(vector["input_ids"])
+    }
     response = {
         "role": "assistant",
         "content": vector["output_text"],
@@ -82,11 +86,9 @@ def protocol_row(vector, protocol, model):
 def main():
     source = ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json"
     vectors = json.loads(source.read_text())["vectors"]
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     bindings = {
-        "models": [
-            {"modelnames": [entry["repo"]], "asset": asset} for asset, entry in assets.items()
-        ],
+        "models": [{"name": asset, "aliases": [entry["repo"]]} for asset, entry in assets.items()],
     }
     for protocol in ("dify", "langchain", "litellm"):
         directory = ROOT / "examples" / protocol

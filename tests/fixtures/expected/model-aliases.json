@@ -26,10 +26,10 @@
     "reported_input_tokens": 58,
     "recalculated_input_tokens": 55,
     "input_delta": 3,
-    "verdict": "DEVIATION"
+    "input_verdict": "DEVIATION"
   },
   "reference_assets": {
-    "qwen": "qwen3.8",
+    "qwen": "qwen-3.8-2.4t",
     "deepseek": "deepseek-v4.1"
   }
 }

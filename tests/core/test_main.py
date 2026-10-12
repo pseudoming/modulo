@@ -66,7 +66,7 @@ def test_core_processes_and_retains_partial_evidence_entirely_in_memory(fail):
         return {"locator": record.locator, "sha256": bytes_digest(record.data)}
 
     calculator = Recalculator(
-        Bindings(models=[Binding(modelnames=["memory-model"], asset="synthetic")]),
+        Bindings(models=[Binding(aliases=["memory-model"], name="synthetic")]),
         lambda binding: FixedReference(),
         {"assets": {"synthetic": {"family": "memory-test"}}},
     )
@@ -91,6 +91,8 @@ def test_core_processes_and_retains_partial_evidence_entirely_in_memory(fail):
     assert len(archived) == len(result.rows) == 1
     assert result.rows[0]["measurement"]["input_delta"] == 3
     assert result.summary["verdicts"] == {"DEVIATION": 1}
+    assert result.summary["input_verdicts"] == {"DEVIATION": 1}
+    assert result.summary["output_verdicts"] == {"UNVERIFIABLE": 1}
     assert result.summary["batch_read_complete"] is not fail
     assert result.summary["run_status"] == ("PARTIAL" if fail else "COMPLETE")
     assert [item["reason"] for item in result.diagnostics] == (
@@ -104,7 +106,7 @@ def test_output_backend_failure_makes_batch_partial_without_discarding_input():
             raise RuntimeError("private output must not be echoed")
 
     calculator = Recalculator(
-        Bindings(models=[Binding(modelnames=["memory-model"], asset="synthetic")]),
+        Bindings(models=[Binding(aliases=["memory-model"], name="synthetic")]),
         lambda _: BrokenOutput(),
         {"assets": {"synthetic": {"family": "memory-test"}}},
     )

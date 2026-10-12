@@ -6,21 +6,21 @@ from modulo.core.domain.bindings import Bindings
 @pytest.mark.parametrize("names", [[], [""], [" \t"], "model-a"])
 def test_aliases_require_a_nonempty_list_of_nonblank_names(names):
     with pytest.raises(ValueError):
-        Bindings.model_validate({"models": [{"modelnames": names, "asset": "test-only"}]})
+        Bindings.model_validate({"models": [{"aliases": names, "name": "test-only"}]})
 
 
 @pytest.mark.parametrize("platform", [None, "platform-a"])
 @pytest.mark.parametrize("separate_entries", [False, True])
 def test_duplicate_aliases_are_rejected_in_each_binding_scope(platform, separate_entries):
-    entries = [{"modelnames": ["model-a", "alias"], "asset": "first"}]
+    entries = [{"aliases": ["model-a", "alias"], "name": "first"}]
     if separate_entries:
-        entries.append({"modelnames": ["alias"], "asset": "second"})
+        entries.append({"aliases": ["alias"], "name": "second"})
     else:
-        entries[0]["modelnames"].append("alias")
+        entries[0]["aliases"].append("alias")
     if platform is not None:
         entries = [{**entry, "platform": platform} for entry in entries]
     config = {"models": entries}
-    with pytest.raises(ValueError, match="duplicate modelname 'alias'"):
+    with pytest.raises(ValueError, match="duplicate alias 'alias'"):
         Bindings.model_validate(config)
 
 
@@ -39,5 +39,5 @@ def test_duplicate_aliases_are_rejected_in_each_binding_scope(platform, separate
 def test_incomplete_or_meaningless_platform_conditions_are_rejected(condition):
     with pytest.raises(ValueError):
         Bindings.model_validate(
-            {"models": [{"modelnames": ["model-a"], "asset": "first", **condition}]}
+            {"models": [{"aliases": ["model-a"], "name": "first", **condition}]}
         )

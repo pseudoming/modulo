@@ -21,11 +21,16 @@ def select_variant(platform: str | None, model: str | None, config: PlatformConf
     return "unresolved" if unknown else "selected"
 
 
-def selection_summary(batch: CollectedBatch, platform_config: PlatformConfig) -> dict:
+def selection_summary(batch: CollectedBatch, platform_config: PlatformConfig, working=None) -> dict:
     calls, observed_dimensions = batch.calls, batch.dimensions
-    seen = {pair for pairs in observed_dimensions.values() for pair in pairs}
-    seen_models = {model for _, model in seen if model is not None}
-    seen_platforms = {platform for platform, _ in seen if platform is not None}
+    seen_models = working.mapping("seen_models") if working is not None else {}
+    seen_platforms = working.mapping("seen_platforms") if working is not None else {}
+    for pairs in observed_dimensions.values():
+        for platform, model in pairs:
+            if model is not None:
+                seen_models[model] = True
+            if platform is not None:
+                seen_platforms[platform] = True
     requested = set(platform_config.models) if platform_config.models is not None else None
     requested_platforms = (
         set(platform_config.platforms) if platform_config.platforms is not None else None
@@ -38,15 +43,24 @@ def selection_summary(batch: CollectedBatch, platform_config: PlatformConfig) ->
         "selected_calls": 0,
         "excluded_calls": 0,
         "unresolved_calls": 0,
-        "matched_models": sorted(seen_models if requested is None else seen_models & requested),
-        "unmatched_models": sorted(requested - seen_models) if requested is not None else [],
-        "matched_platforms": sorted(
-            seen_platforms if requested_platforms is None else seen_platforms & requested_platforms
-        ),
-        "unmatched_platforms": sorted(requested_platforms - seen_platforms)
+        "matched_models": [],
+        "unmatched_models": sorted(m for m in requested if m not in seen_models)
+        if requested is not None
+        else [],
+        "matched_platforms": [],
+        "unmatched_platforms": sorted(p for p in requested_platforms if p not in seen_platforms)
         if requested_platforms is not None
         else [],
     }
+    for label, seen, wanted in (
+        ("models", seen_models, requested),
+        ("platforms", seen_platforms, requested_platforms),
+    ):
+        matched = working.sequence("matched_" + label) if working is not None else []
+        for value in sorted(seen) if isinstance(seen, dict) else seen:
+            if wanted is None or value in wanted:
+                matched.append(value)
+        selection["matched_" + label] = matched
     return selection
 
 
@@ -54,7 +68,7 @@ def select_calls(
     batch: CollectedBatch, platform_config: PlatformConfig, selection: dict
 ) -> Iterator[dict]:
     calls, observed_dimensions, diagnostics = batch.calls, batch.dimensions, batch.diagnostics
-    for key in sorted(calls):
+    for key in sorted(calls) if isinstance(calls, dict) else calls:
         row = calls[key]
         pairs = observed_dimensions[key]
         row["observed_dimensions"] = [

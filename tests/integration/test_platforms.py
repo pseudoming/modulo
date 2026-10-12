@@ -77,7 +77,7 @@ def rule_calculator(unit_calculator):
     unit_calculator.lock["assets"]["platform-reference"] = {"family": "test-only"}
     load = unit_calculator.load_backend
     unit_calculator.load_backend = lambda binding: (
-        PlatformReference() if binding.asset == "platform-reference" else load(binding)
+        PlatformReference() if binding.name == "platform-reference" else load(binding)
     )
     return unit_calculator
 
@@ -87,10 +87,10 @@ def test_per_rule_sources_precede_global_without_changing_model_names(
     tmp_path, rule_calculator, dify_record, reverse
 ):
     rules = [
-        {"modelnames": ["test-model", "local-alias"], "asset": "test-only"},
+        {"aliases": ["test-model", "local-alias"], "name": "test-only"},
         {
-            "modelnames": ["test-model", "local-alias"],
-            "asset": "platform-reference",
+            "aliases": ["test-model", "local-alias"],
+            "name": "platform-reference",
             "platform": "volcengine",
             "platform-tag-source": "metadata:platform",
         },
@@ -135,16 +135,16 @@ def test_conflicting_matching_rules_preserve_evidence_and_never_recount(
     tmp_path, rule_calculator, dify_record, reverse, second_platform
 ):
     rules = [
-        {"modelnames": ["test-model"], "asset": "test-only"},
+        {"aliases": ["test-model"], "name": "test-only"},
         {
-            "modelnames": ["test-model"],
-            "asset": "test-only",
+            "aliases": ["test-model"],
+            "name": "test-only",
             "platform": "volcengine",
             "platform-tag-source": "field:platform",
         },
         {
-            "modelnames": ["test-model"],
-            "asset": "platform-reference",
+            "aliases": ["test-model"],
+            "name": "platform-reference",
             "platform": second_platform,
             "platform-tag-source": "metadata:platform",
         },
@@ -177,7 +177,7 @@ def test_conflicting_matching_rules_preserve_evidence_and_never_recount(
 def test_equivalent_rules_are_allowed_and_endpoint_is_configured_in_the_rule(
     tmp_path, rule_calculator, dify_record
 ):
-    base = {"modelnames": ["test-model"], "asset": "platform-reference", "platform": "volcengine"}
+    base = {"aliases": ["test-model"], "name": "platform-reference", "platform": "volcengine"}
     rule_calculator.bindings = Bindings.model_validate(
         {
             "models": [
@@ -209,10 +209,10 @@ def test_matching_platform_asset_failure_does_not_retry_global(
     rule_calculator.bindings = Bindings.model_validate(
         {
             "models": [
-                {"modelnames": ["test-model"], "asset": "test-only"},
+                {"aliases": ["test-model"], "name": "test-only"},
                 {
-                    "modelnames": ["test-model"],
-                    "asset": "platform-reference",
+                    "aliases": ["test-model"],
+                    "name": "platform-reference",
                     "platform": "volcengine",
                     "platform-tag-source": "literal:volcengine",
                 },
@@ -221,7 +221,7 @@ def test_matching_platform_asset_failure_does_not_retry_global(
     )
 
     def missing(binding):
-        assert binding.asset == "platform-reference"
+        assert binding.name == "platform-reference"
         raise AssetError("asset_files_missing")
 
     rule_calculator.load_backend = missing
@@ -233,7 +233,7 @@ def test_matching_platform_asset_failure_does_not_retry_global(
 
 
 def test_same_model_is_grouped_and_bound_separately(tmp_path, unit_calculator, dify_record):
-    binding = Binding(modelnames=["test-model"], asset="test-only")
+    binding = Binding(aliases=["test-model"], name="test-only")
     unit_calculator.bindings = Bindings(
         models=[binding, binding.model_copy(update={"platform": "volcengine"})],
     )
@@ -336,7 +336,7 @@ def test_platform_configuration_is_frozen_for_replay(tmp_path, unit_calculator, 
 def test_aliases_share_a_reference_but_preserve_logged_names_and_filters(
     tmp_path, unit_calculator, dify_record, source
 ):
-    binding = Binding(modelnames=["test-model", "local-alias"], asset="test-only")
+    binding = Binding(aliases=["test-model", "local-alias"], name="test-only")
     unit_calculator.bindings = Bindings(
         models=[binding, binding.model_copy(update={"platform": "volcengine"})]
     )
@@ -351,13 +351,13 @@ def test_aliases_share_a_reference_but_preserve_logged_names_and_filters(
     )
     rows = {row["call"]["model"]: row for row in details(bundle)}
     assert set(rows) == {"test-model", "local-alias", "LOCAL-ALIAS"}
-    for name in binding.modelnames:
+    for name in binding.aliases:
         assert rows[name]["measurement"]["input_tokens"] == 13
-        assert rows[name]["measurement"]["verdict"] == "CONSISTENT"
+        assert rows[name]["measurement"]["input_verdict"] == "CONSISTENT"
     assert rows["LOCAL-ALIAS"]["measurement"]["execution"] == "not_run"
     frozen = verify_bundle(bundle)["plan"]["bindings"]
     entries = frozen["models"]
-    assert entries[0]["modelnames"] == ["test-model", "local-alias"]
+    assert entries[0]["aliases"] == ["test-model", "local-alias"]
 
     filtered, _ = run_platform_records(
         tmp_path,
@@ -419,7 +419,7 @@ def test_unified_cli_platform_model_selection_and_yaml_equivalence(
     assert summary["selection"]["selected_calls"] == 1
     assert summary["selection"]["excluded_calls"] == 6
     assert summary["selection"]["unresolved_calls"] == 1
-    assert summary["verdicts"] == {"DEVIATION": 1}
+    assert summary["input_verdicts"] == {"DEVIATION": 1}
     row = details(Path(result["run"]))[0]
     assert row["call"]["platform"] == "volcengine"
     assert row["measurement"]["input_tokens"] == 55
@@ -521,7 +521,7 @@ def test_cli_endpoint_mode_and_explicit_yaml_overrides(tmp_path, official_assets
         == 0
     )
     overridden = json.loads(capsys.readouterr().out)
-    assert overridden["summary"]["verdicts"] == {"CONSISTENT": 1}
+    assert overridden["summary"]["input_verdicts"] == {"CONSISTENT": 1}
     assert overridden["summary"]["by_platform_model"][0]["platform"] == "huaweicloud"
 
 
@@ -556,7 +556,7 @@ def test_mixed_platform_examples_match_frozen_expectations(
     )
     summary = json.loads(capsys.readouterr().out)["summary"]
     expected = json.loads((ROOT / "tests/fixtures/expected/platforms.json").read_text())
-    assert summary["verdicts"] == expected["expected_with_field_or_metadata_source"]
+    assert summary["input_verdicts"] == expected["expected_with_field_or_metadata_source"]
     assert summary["selection"]["selected_calls"] == 8
     groups = {(row["platform"], row["model"]): row for row in summary["by_platform_model"]}
     for platform in expected["platforms"]:

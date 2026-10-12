@@ -10,7 +10,7 @@ from pathlib import Path
 from modulo.core.domain.bindings import Bindings
 from modulo.core.domain.data_models import BatchResult, RawRecord
 from modulo.shared.file_hash import file_sha256
-from modulo.shared.serialization import bytes_digest, digest, dumps, loads
+from modulo.shared.serialization import bytes_digest, digest, dumps, iter_dumps, loads
 
 AUTHORITY_FILES = frozenset(
     {
@@ -85,16 +85,18 @@ class BundleWriter:
         rows, diagnostics, summary = result.rows, result.diagnostics, result.summary
         status = summary["run_status"]
         for name, values in (("results.jsonl", rows), ("diagnostics.jsonl", diagnostics)):
-            (temporary / name).write_text(
-                "".join(dumps(row) + "\n" for row in values), encoding="utf-8"
-            )
+            with (temporary / name).open("w", encoding="utf-8") as stream:
+                for row in values:
+                    stream.write(dumps(row) + "\n")
         for name, value in (
             ("summary.json", summary),
             ("execution.json", execution),
             ("bindings.json", bindings.model_dump(by_alias=True)),
             ("assets-lock.json", asset_lock),
         ):
-            (temporary / name).write_text(dumps(value) + "\n", encoding="utf-8")
+            with (temporary / name).open("w", encoding="utf-8") as stream:
+                stream.writelines(iter_dumps(value))
+                stream.write("\n")
         files = {name: file_sha256(temporary / name) for name in sorted(AUTHORITY_FILES)}
         run_id = digest({"plan": plan, "files": files})[:24]
         manifest = {
@@ -109,7 +111,9 @@ class BundleWriter:
         target = output_root / run_id
         if target.exists():
             prior = verify_bundle(target)
-            if prior["files"] != files or prior["plan"] != plan:
+            # Decimal plan values are stored as exact strings; compare the
+            # persisted representation, not its in-memory Python types.
+            if prior["files"] != files or dumps(prior["plan"]) != dumps(plan):
                 raise ValueError("run id collision")
             return target, True
         rebuild_index(temporary)

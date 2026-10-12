@@ -3,10 +3,11 @@
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
+from modulo.adapters.protocols.shared.messages.candidates import expected_candidates
+from modulo.adapters.protocols.shared.messages.chat import message, output_fields, request_options
 from modulo.core.domain.data_models import Call, DataError, Message, Parsed, ProtocolContext
 from modulo.core.domain.interfaces import ProtocolAdapter
 
-from ..shared.chat import message, output_fields, request_options
 from ..shared.fields import identifier, json_object, mapping, text_or_none, timestamp, usage_from
 from .agent import SCHEMA, DifySession, parse_invocation, parse_thought
 
@@ -15,10 +16,12 @@ def _parse_messages(value: Any) -> tuple[list[Message] | None, list[str]]:
     if not isinstance(value, list) or not value:
         return None, ["missing_messages"]
     messages = []
-    for entry in value:
+    for index, entry in enumerate(value):
         entry = mapping(entry, "message")
         try:
-            messages.append(message(entry, content_key="text", path="process_data.prompts."))
+            messages.append(
+                message(entry, content_key="text", path=f"process_data.prompts.{index}.")
+            )
         except DataError as exc:
             return None, [str(exc)]
     return messages, []
@@ -56,11 +59,16 @@ class DifyProtocol(ProtocolAdapter):
             gaps.append("truncated_process_data")
         if data.get("model_mode") != "chat":
             gaps.append("unsupported_or_missing_model_mode")
-        options, option_sources, tools, option_gaps = request_options(
+        options = request_options(
             ("process_data", data), ("process_data.model_config", data.get("model_config"))
         )
-        gaps.extend(option_gaps)
+        gaps.extend(options.pop("gaps"))
         response = output_fields(output, content_key="text", path="outputs.")
+        response = expected_candidates(
+            response,
+            ("process_data", data),
+            ("process_data.model_config", data.get("model_config")),
+        )
         if node.get("outputs_truncated"):
             response["output_gaps"] = [*response.get("output_gaps", []), "truncated_output"]
         elapsed = node.get("elapsed_time")
@@ -89,9 +97,7 @@ class DifyProtocol(ProtocolAdapter):
                     duration_ms=duration,
                     messages=messages,
                     **response,
-                    tools_json=tools,
-                    render_options=options,
-                    render_option_sources=option_sources,
+                    **options,
                     usage=reported,
                     gaps=sorted(set(gaps)),
                 )

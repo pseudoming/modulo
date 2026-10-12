@@ -2,20 +2,20 @@
   "synthetic": true,
   "generator": "tests/tools/fixtures/generate_gateway_body_fixtures.py",
   "reference": "tests/fixtures/tokenizers/reasoning_reference_vectors.json",
-  "reference_sha256": "3d556b68d897fc045e65d67e4e96e25da55164b6e2f5dd311f28dba7a7f39a73",
-  "models": 11,
+  "reference_sha256": "dccc311fd5b856c1ea3110c0ec84c7e14f15428641f33108d7c210bf47c686bc",
+  "models": 19,
   "counts": {
     "newapi": {
-      "calls": 96,
-      "events": 912,
-      "physical_lines": 912,
-      "stream_calls": 48
+      "calls": 161,
+      "events": 1522,
+      "physical_lines": 1522,
+      "stream_calls": 80
     },
     "oneapi": {
-      "calls": 96,
-      "events": 1008,
-      "physical_lines": 1104,
-      "stream_calls": 48
+      "calls": 161,
+      "events": 1683,
+      "physical_lines": 1844,
+      "stream_calls": 80
     }
   },
   "newapi_profile": "native-debug@1d4328e97417a043a161a0dd30a5b129be3ace49",

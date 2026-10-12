@@ -13,7 +13,7 @@ from tests.tools.native_logs.native_langchain import serialized_run
 VECTORS = json.loads(
     (ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json").read_text()
 )["vectors"]
-ASSETS = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+ASSETS = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
 
 
 @pytest.mark.assets
@@ -58,6 +58,6 @@ def test_framework_runs_through_import_and_storage(
         assert call["output_reasoning"] == vector["output_reasoning"]
         assert measurement["input_tokens"] == len(vector["input_ids"])
         assert measurement["reasoning_output_tokens"] == vector["reasoning_output_tokens"]
-        assert measurement["output_execution"] == "completed"
+        assert measurement["output_execution"] == "partial"
         assert measurement["render_options"] == vector["template_options"]
-    assert result["summary"]["verdicts"] == {"CONSISTENT": len(VECTORS)}
+    assert result["summary"]["input_verdicts"] == {"CONSISTENT": len(VECTORS)}

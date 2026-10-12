@@ -27,7 +27,7 @@ flowchart LR
 
 ## 機能
 
-- **使用量の照合**：プロバイダー・モデル別に入力トークンの差分を集計し、回答本文と推論本文のローカル計数値を個別に確認できます。
+- **使用量の比較**：プロバイダー・モデルごとに入力と出力の差分を集計します。出力参照には回答、推論、ツール呼び出し、制御マーカーを含みます。
 - **社内モデル名の対応付け**：複数の別名を同じ tokenizer の参照に割り当て、必要に応じてプロバイダー別に設定できます。
 - **不足情報の明示**：一致、差分あり、検証不可を区別し、再計算できない理由を保持します。
 - **計算根拠の追跡**：元のログ位置、フィールド変換、tokenizer・テンプレートのリビジョン、計算パラメーターを保存し、結果ファイルの整合性を検証できます。
@@ -41,32 +41,44 @@ flowchart LR
 | ログの生成元と公式資料 | `adapter` | 読み込める記録 | modulo のサンプル |
 | --- | --- | --- | --- |
 | [Dify](https://docs.dify.ai/en/home) | `dify` | LLM ノードの実行記録、Agent thought のエクスポート、明示的に対応した呼び出し単位のイベント形式 | [サンプル](examples/dify/README.md) |
-| [LangChain](https://docs.langchain.com/oss/python/langchain/overview) | `langchain` | ネストされた `child_runs` を含む Run オブジェクト | [サンプル](examples/langchain/README.md) |
+| [LangChain](https://docs.langchain.com/oss/python/langchain/overview) | `langchain` | ネストされた `child_runs` と複数入力グループを含む Run オブジェクト | [サンプル](examples/langchain/README.md) |
 | [New API](https://docs.newapi.pro/en) | `newapi` | 使用量レコード、対応済みの DEBUG リクエスト・レスポンス記録、OpenAI 互換 SSE ログ | [サンプル](examples/newapi/README.md) |
 | [One API](https://github.com/songquanpeng/one-api) | `oneapi` | 使用量レコード、対応済みのリクエスト・レスポンステキスト、対応付け済みの記録 | [サンプル](examples/oneapi/README.md) |
-| [LiteLLM ログ仕様](https://docs.litellm.ai/docs/proxy/logging_spec) | `litellm` | 完了時の `StandardLoggingPayload` または単一の `LiteLLM_SpendLogs` エクスポート | [サンプル](examples/litellm/README.md) |
+| [LiteLLM ログ仕様](https://docs.litellm.ai/docs/proxy/logging_spec) | `litellm` | `StandardLoggingPayload`、`LiteLLM_SpendLogs`、保存済みのストリーム断片 | [サンプル](examples/litellm/README.md) |
 
 構造化ファイルは **JSONL（1 行に 1 レコード）**を使用します。JSON 配列は事前にレコード単位へ展開してください。New API／One API は対応済みの DEBUG テキストも読み込めます。使用量テーブルに本文がない場合は、その不足を記録します。使用量レコードには安定した元の行 ID、リクエスト・レスポンスログには明示的な関連付け ID が必要です。
 
 ログ本体が `payload` などのフィールド内にある場合は、`payload-field: payload` を設定します。ES 内のストリーミングイベントには `event.sequence` などの明示的な順序情報が必要です。ES の返却順からストリームの順序を推測しません。対応範囲は実際のフィールドと形式によって決まり、各システムの標準ログに完全なリクエスト・レスポンスが含まれることを意味しません。
 
+New API・One API・LiteLLM のログに保存された Chat Completions、[Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses)、[Anthropic Messages](https://platform.claude.com/docs/en/api/messages/create) の本文を解析できます。テキスト、思考、関数呼び出しと結果、画像入力に対応します。この 3 種類のアダプターは、ログに保存されたストリーム断片の組み立てにも対応します。[実行可能なサンプル](examples/newapi/README.md#api-正文)。
+
+Dify thought の構造化された `message` は再計算でき、空欄は不足として残します。LangChain の入力グループは個別に保存・計数し、Run 全体の usage しかない場合は `input_batches` で一度だけ比較します。LiteLLM のキャッシュヒットも本文を計数して `cache_hit` を保存しますが、キャッシュの usage を今回の新規推論の使用量として比較しません。New API／One API の本文・関連付け ID・再試行 ID・ストリーム順序が不足すると、レポートの `warnings` に影響、必要なフィールド、再インポート方法が表示されます。
+
 <a id="tokenizers"></a>
 
 ## 対応する tokenizer
 
-以下の **11 モデルを固定したテキスト再計算用の参照**として使用できます。ログに記録された推論とツールのコンテキストにも対応しています。モデル名のリンク先は公式資料です。設定と tokenizer の準備には `asset` 名を使用します。
+以下の **19 モデルを固定した再計算用の参照**として使用できます。ログに記録された推論とツールのコンテキストに加え、10 の視覚モデルでは画像入力にも対応しています。モデル名のリンク先は公式資料です。設定と tokenizer の準備には `name` 名を使用します。
 
 <details>
-<summary>モデル、公式資料、asset 名を表示</summary>
+<summary>モデル、公式資料、標準名を表示</summary>
 
-| ファミリー | 固定モデル／公式資料 | `asset` |
+| ファミリー | 固定モデル／公式資料 | `name` |
 | --- | --- | --- |
-| Qwen | [Qwen3.8-2.4T-A95B](https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B) | `qwen3.8` |
+| Qwen | [Qwen3.8-2.4T-A95B](https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B) | `qwen-3.8-2.4t` |
+| Qwen | [Qwen3.5-122B-A10B](https://huggingface.co/Qwen/Qwen3.5-122B-A10B) | `qwen3.5-122b` |
+| Qwen | [Qwen3.5-397B-A17B](https://huggingface.co/Qwen/Qwen3.5-397B-A17B) | `qwen3.5-397b` |
 | DeepSeek | [DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) | `deepseek-v4.1` |
+| DeepSeek | [DeepSeek-V4-Pro-0813](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813) | `deepseek-v4-pro-0813` |
 | Moonshot / Kimi | [Kimi-K3](https://huggingface.co/moonshotai/Kimi-K3) | `kimi-k3` |
+| Moonshot / Kimi | [Kimi-K2.6](https://huggingface.co/moonshotai/Kimi-K2.6) | `kimi-k2.6` |
+| Moonshot / Kimi | [Kimi-K2.7-Code](https://huggingface.co/moonshotai/Kimi-K2.7-Code) | `kimi-k2.7-code` |
 | MiniMax | [MiniMax-M3](https://huggingface.co/MiniMaxAI/MiniMax-M3) | `minimax-m3` |
+| MiniMax | [MiniMax-M2.7](https://huggingface.co/MiniMaxAI/MiniMax-M2.7) | `minimax-m2.7` |
 | LongCat | [LongCat-2.0](https://huggingface.co/meituan-longcat/LongCat-2.0) | `longcat-2.0` |
 | GLM | [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3) | `glm-5.3` |
+| GLM | [GLM-5.3-Flash](https://huggingface.co/zai-org/GLM-5.3-Flash) | `glm-5.3-flash` |
+| GLM | [GLM-5.2](https://huggingface.co/zai-org/GLM-5.2) | `glm-5.2` |
 | Xiaomi MiMo | [MiMo-V2.6-Pro-RL](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL) | `mimo-v2.6` |
 | StepFun | [Step-3.7-Flash](https://huggingface.co/stepfun-ai/Step-3.7-Flash) | `step-3.7` |
 | Tencent Hunyuan | [Hy4-preview](https://huggingface.co/tencent/Hy4-preview) | `hy4-preview` |
@@ -75,7 +87,9 @@ flowchart LR
 
 </details>
 
-参照ごとに語彙、テンプレート、パラメーターを固定し、リビジョンとファイルハッシュを [アセット一覧](src/modulo/application/assets-lock.json) に記録しています。社内の別名には適切な参照を割り当ててください。同じファミリーの別モデルやクラウド API の別名を、自動的に互換と見なしません。テンプレートが入力トークン数に与える影響は [Hugging Face のチャットテンプレート説明](https://huggingface.co/docs/transformers/chat_templating) を参照してください。
+参照ごとに語彙、テンプレート、パラメーターを固定し、リビジョンとファイルハッシュを [tokenizer アセット一覧](static/tokenizer-assets.json) に記録しています。社内の別名には適切な参照を割り当ててください。同じファミリーの別モデルやクラウド API の別名を、自動的に互換と見なしません。テンプレートが入力トークン数に与える影響は [Hugging Face のチャットテンプレート説明](https://huggingface.co/docs/transformers/chat_templating) を参照してください。
+
+実行用一覧にはダウンロード・検証・計算に必要な項目を保持します。[画像処理ルールの出典](static/image-processing-sources.json) と [公式ライセンス資料](licenses/README.md) は確認用の資料として別途保管します。
 
 <a id="quick-start"></a>
 
@@ -85,13 +99,15 @@ flowchart LR
 
 ```bash
 uv sync --locked
-uv run modulo prepare-assets --only qwen3.8 deepseek-v4.1
+uv run modulo prepare-assets --config config/modulo.yaml --only qwen-3.8-2.4t deepseek-v4.1
 uv run modulo import --config config/modulo.yaml
 ```
 
-アセットの準備では tokenizer の語彙やテンプレートなどをダウンロードし、モデルの重みはダウンロードしません。再計算はローカルで実行され、GPU やモデル API の呼び出しは不要です。別のモデルを使う場合は `--only` の後を上表の asset 名に置き換えます。`--only` を省略すると全アセットを準備します。
+アセットの準備では tokenizer の語彙やテンプレートなどをダウンロードし、モデルの重みはダウンロードしません。再計算はローカルで実行され、GPU やモデル API の呼び出しは不要です。別のモデルを使う場合は `--only` の後を上表の `name`に置き換えます。`--only` を省略すると全アセットを準備します。
 
-標準設定では同梱の Dify 合成サンプルを読み込み、**8 件の呼び出し：一致 2 件、差分あり 1 件、検証不可 5 件**を出力します。サンプルには差分やフィールド不足のケースを意図的に含めています。
+ダウンロード元の標準値は `global`（Hugging Face）です。[modulo.yaml](config/modulo.yaml) の設定を `asset-source: cn` に変更すると [ModelScope](https://modelscope.cn/models) を使います。`prepare-assets --asset-source cn` で一時的に上書きすることもできます。全 19 モデルの ModelScope リポジトリとリビジョンを固定し、両方の配信元で同じ SHA-256 を検証します。検証済みのローカルファイルは再利用し、`cn` で失敗しても Global へ自動的に切り替えません。
+
+標準設定では同梱の Dify 合成サンプルを読み込み、**8 件の呼び出しの入力判定：一致 2 件、差分あり 1 件、検証不可 5 件**を出力します。サンプルには差分やフィールド不足のケースを意図的に含めています。
 
 以下の `RUN_DIR` を、インポート後に表示される結果ディレクトリに置き換えてください。
 
@@ -107,13 +123,33 @@ uv run modulo verify RUN_DIR            # 結果ファイルの整合性
 
 [Dify サンプル](examples/dify/basic.jsonl) の実際の結果の一部を表にしたものです。差分は **ログの報告値 − ローカル参照値**です。
 
-| ログ内のモデル名 | 報告された入力トークン数 | ローカル入力トークン数 | 差分 | 判定 |
+| ログ内のモデル名 | 報告された入力トークン数 | ローカル入力トークン数 | 差分 | 入力判定 |
 | --- | ---: | ---: | ---: | --- |
 | Qwen/Qwen3.8-2.4T-A95B | 66 | 66 | 0 | 一致 `CONSISTENT` |
 | deepseek-ai/DeepSeek-V4.1-Flash | 58 | 55 | +3 | 差分あり `DEVIATION` |
 | Qwen/Qwen3.8-2.4T-A95B | 記録なし | 59 | — | 検証不可 `UNVERIFIABLE` |
 
-判定は、**固定した tokenizer・テンプレートによる入力参照値との比較**です。回答本文と推論本文はそれぞれ再エンコードして計数しますが、サーバー側の出力トークン使用量全体を確定するものではありません。一致しても、プロバイダーが実際に使用したモデルの識別を証明することにはなりません。差分の集計は比較可能な呼び出しのみを対象とし、欠損値をゼロで埋めません。期待値は [サンプルの記録](tests/fixtures/expected/basic.json) にあります。
+上表は**固定した tokenizer・テンプレートによる入力参照値との比較**です。出力には独立した `output_tokens`、`output_delta`、`output_verdict` があり、推論、ツール呼び出し、終了マーカーを含み、入力側の生成プレフィックスは除外します。差分は報告値からローカル参照値を引いた値です。
+
+結果には 3 種類の判定があり、集計では各判定の件数を表示します。
+
+| 集計フィールド | 明細フィールド | 意味 |
+| --- | --- | --- |
+| `verdicts` | `verdict` | 呼び出し全体 |
+| `input_verdicts` | `input_verdict` | 入力の比較 |
+| `output_verdicts` | `output_verdict` | 出力の比較 |
+
+**全体の判定：片方でも差分あり → 差分あり、両方が一致 → 一致、それ以外 → 検証不可。** 入力と出力の差分が正負で相殺されても、全体を一致とは判定しません。
+
+[出力サンプル](examples/litellm/output-audit.jsonl) の同じ回答・推論・ツール呼び出しの完全な参照値は **45 トークン**です。報告値 45 は一致、48 は +3、42 は −3 となります。残りの 3 件は usage 欠損、終了理由の欠損、打ち切りで、検証不可になります。実行例：
+
+```bash
+uv run modulo import --source log --adapter litellm \
+  --path examples/litellm/output-audit.jsonl \
+  --bindings examples/litellm/basic.bindings.yaml
+```
+
+これはローカル参照値との比較であり、サーバーの元の token ID やモデルの同一性を証明するものではありません。項目別の計数値は単純加算できません。集計には比較可能な件数を保持し、欠損をゼロで埋めません。基本入力の期待値は [サンプルの記録](tests/fixtures/expected/basic.json) にあります。
 
 インポートごとに元の記録と位置、呼び出し明細、差分、不足情報、計算根拠を保存します。JSON／JSONL が検証用の記録を保持し、DuckDB が再構築可能なローカル検索を提供します。`verify` は内容のハッシュを検証します。設定やルールを変更すると新しい結果を生成し、以前の結果は保持します。
 
@@ -126,7 +162,7 @@ uv run modulo verify RUN_DIR            # 結果ファイルの整合性
 <details open>
 <summary>メイン設定：ログ形式、モデルの別名、プロバイダー</summary>
 
-`config/modulo.yaml` の例です。ここでは 2 モデルのみを示していますが、リポジトリ内の設定には 11 モデルすべてが含まれています。
+`config/modulo.yaml` の例です。ここでは 2 モデルのみを示していますが、リポジトリ内の設定には 19 モデルすべてが含まれています。
 
 ```yaml
 source: log
@@ -138,16 +174,16 @@ adapter: dify
 # platforms: [volcengine, huaweicloud]
 
 models:
-  - modelnames: [Qwen/Qwen3.8-2.4T-A95B, qwen-2.4t]
-    asset: qwen3.8
-  - modelnames: [deepseek-ai/DeepSeek-V4.1-Flash, volc-deepseek]
-    asset: deepseek-v4.1
+  - name: qwen-3.8-2.4t
+    aliases: [Qwen/Qwen3.8-2.4T-A95B, qwen-2.4t]
+  - name: deepseek-v4.1
+    aliases: [deepseek-ai/DeepSeek-V4.1-Flash, volc-deepseek]
 
 assets: ../assets/tokenizers
 output: ../runs
 ```
 
-社内の別名は、対応する `modelnames` 配列に追加します。`models` は対応付けの設定です。特定のモデルだけを処理するには CLI の `--models` を使います。未登録モデルも読み込めますが、参照がなければ再計算できません。
+`name` で標準モデルを選択し、ログに記録された公式名や社内の別名を `aliases` 配列に記入します。名前は完全一致で照合します。`models` は対応付けの設定です。特定のモデルだけを処理するには CLI の `--models` を使います。未登録モデルも読み込めますが、参照がなければ再計算できません。
 
 `platform-tag-source` は `field:<パス>`、`metadata:<パス>`、`endpoint`、`literal:<プロバイダー名>`、`none` に対応しています。全プロバイダーを対象にする場合は `platforms` を省略します。バッチ全体が単一プロバイダーの場合は `literal:volcengine` などを指定できます。endpoint モードでは `endpoint-source` と `endpoint-map` による明示的な対応付けが必要です。[設定例](examples/dify/platforms-endpoint.yaml) を参照してください。
 
@@ -207,7 +243,17 @@ uv run modulo import --config config/modulo.yaml \
 uv run modulo import --help
 ```
 
-標準では 1 バッチにつき元のレコードを最大 10,000 件読み込みます。`--max-records` で変更できます。読み取りの打ち切り、読み取りエラー、データ不足は結果の状態に反映されます。ほかの実行可能な入力例は [プロトコル別サンプル](examples/README.md) を参照してください。
+標準では読み取り件数に上限を設けません。中間レコード、重複判定、関連付け待ちのイベントをローカルディスクに置き、1 件ずつ計算・出力します。`--memory-mib 64` は作業キャッシュの予算です。tokenizer、個別の呼び出し、JSON の解析に必要なメモリは別途使用するため、プロセス全体の上限ではありません。`--max-record-mib` の標準値は 8、`--max-records N` は 1 回に新規取得する件数の上限で、0 は無制限です。
+
+読み取りの再開や、別々のインポートで届く要求・応答の関連付けには状態ディレクトリを指定します。継続読み取りには `--follow` を追加します。
+
+```bash
+uv run modulo import --config config/modulo.yaml --state runs/import-state
+uv run modulo import --config config/modulo.yaml --state runs/import-state \
+  --follow --poll-seconds 30
+```
+
+同じ状態ディレクトリから累積スナップショットを作成し、以前の結果を保持して、変更のない計算を再利用します。Ctrl+C 後は同じコマンドで再開でき、未コミット分は再読込して重複を除きます。ファイルへの追記と名前変更によるローテーションに対応し、未完の行は改行まで待機します。既読部分の改変・切り詰めはエラーです。ES の有効なスナップショットはカーソルから再開し、期限切れや新しい走査では既読文書を含めて再取得・重複排除します。状態と過去のスナップショットはディスクを使用するため、監査期間ごとに分け、計算ルールやコードを変更した際は新しい状態ディレクトリを使います。読み取りの不完全さやデータ不足は結果に残ります。入力例は [プロトコル別サンプル](examples/README.md) を参照してください。
 
 <a id="faq"></a>
 
@@ -223,7 +269,37 @@ uv run modulo import --help
 <details>
 <summary>ツール呼び出しや推論内容も再計算できますか？</summary>
 
-上記の固定モデルについて、ログ内の推論・ツールコンテキストに対応しています。入力中のツール定義、過去の呼び出し、ツール結果も含みます。回答本文と推論本文は個別に再エンコードして計数します。ツール呼び出し出力の生成トークン列全体の検証は未実装です。画像、音声・動画、未対応パラメーター、不完全な記録は、それぞれ不足や制限として記録します。
+19 個の固定モデルすべてで、入力ツールコンテキストと完全な出力参照の再計算に対応しています。推論、並列ツール呼び出し、制御・終了マーカーを含みます。正常終了ではテンプレートの終了マーカーを含め、`length`／`max_tokens` による上限到達では生成済み本文だけを計算し、EOS を補いません。実際に一致した停止文字列や token ID が記録されていれば一度だけ計上し、根拠が不足する場合は理由を記録します。報告 usage がある場合に差分と判定を出します。ログ自体の欠損・切り詰め、音声・動画、未知のパラメーターは引き続き不足情報として扱い、`partial` は完全な検証を意味しません。
+
+`response_format`／JSON Schema、`tool_choice`（関数指定を含む）、`parallel_tool_calls`、生成プレフィックスに対応しています。制約は選択したテンプレートへ渡し、プロンプトを勝手に追加しません。Responses 内の複数 assistant メッセージは境界を保持します。交互に並ぶ本文には、バインドの `chat-template`／`template-kwargs` で明示した参照を使用できます。[パラメーターとテンプレートの設定](examples/litellm/README.md#请求参数与自定义模板)を参照してください。
+
+`thinking`／`reasoning` などの構造化された本文ブロックに対応し、元のブロックと取得元を保持します。署名は本文に数えず、要約やマスク済み内容を完全な推論の代わりにしません。LangChain、LiteLLM、New API、One API の複数候補は個別に再計算し、リクエスト全体の usage と一度だけ比較します。[実行できるサンプル](examples/litellm/README.md#结构化正文与多候选)を参照してください。
+
+</details>
+
+<details>
+<summary>画像入力も再計算できますか？</summary>
+
+Qwen3.5-122B-A10B／397B-A17B、DeepSeek-V4.1-Flash、Kimi-K3／K2.6／K2.7-Code、GLM-5.3-Flash、MiniMax-M3、MiMo-V2.6-Pro-RL、Step-3.7-Flash の固定画像参照に対応しています。視覚位置、画像の境界、切り出しマーカーをテキストと合わせ、入力全体を計数します。モデルの重みや GPU は不要です。
+
+ログには画像の順序と、埋め込み画像または信頼できる幅・高さが必要です。Qwen3.5／GLM-5.3-Flash／MiniMax-M3／MiMo では画像ごとの `image_grid_thw` も利用できます。省略された処理設定は固定参照の既定値と明記します。5 種類のログアダプターが共通で対応します。[画像サンプルと結果](examples/litellm/README.md#图片输入)を参照してください。
+
+URL だけで寸法がない画像は、メイン設定でダウンロードを有効にできます。**既定では無効**です。有効にすると、公開 HTTP(S) 画像を取得し、寸法を読み取って再計算します。
+
+```yaml
+image-download:
+  enabled: true
+  cache-dir: /tmp/modulo-images  # 省略時はシステム一時ディレクトリ内の専用フォルダー
+  max-file-bytes: 10485760      # 画像ごとに 10 MiB
+  max-cache-bytes: 268435456    # キャッシュ全体で 256 MiB
+  ttl-seconds: 86400           # 24 時間保持
+```
+
+`--download-images`／`--no-download-images` で一時的に切り替えられます。有効なインポートの開始時・終了時とキャッシュ書き込み後に、期限切れ・容量超過のファイルを削除します。常駐プロセスはなく、キャッシュは永久保管用ではありません。相対パスはメイン設定ファイルを基準に解決します。
+
+明細には取得時刻、SHA-256、バイト数と出典を残します。無効なリンク、サイズ制限、切り詰め、順序欠落、未対応のクロップ／`detail` 設定は不足情報として記録し、出力の再計算は独立して行います。ローカルファイルにはアクセスせず、システムのプロキシやログイン認証情報を引き継ぎません。
+
+プライベートアドレスは既定で拒否します。社内画像サーバーや DNS の Fake-IP マッピングでは、`image-download` に `allow-private-hosts: [images.example.com]` を追加して、信頼する完全なホスト名だけを許可できます。ワイルドカードは不可で、リダイレクト先も個別に確認します。
 
 </details>
 
@@ -249,4 +325,4 @@ uv run modulo import --source es --path http://localhost:9200 \
 
 ## ライセンス
 
-modulo は [Apache License 2.0](LICENSE) で公開されています。サードパーティーの依存ライブラリ、tokenizer、テンプレートのアセットには、それぞれのライセンスが適用されます。
+modulo は [Apache License 2.0](LICENSE) で公開されています。サードパーティーの依存ライブラリ、tokenizer、テンプレートのアセットには、それぞれのライセンスが適用されます。保管している上流のライセンス原文は [licenses/](licenses/README.md) を参照してください。

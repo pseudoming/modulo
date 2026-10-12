@@ -9,7 +9,7 @@ import httpx
 
 from modulo.core.domain.data_models import RawRecord, SourceError
 from modulo.core.domain.interfaces import MAX_RECORD_BYTES, SourceAdapter
-from modulo.shared.serialization import loads, ordered_json
+from modulo.shared.serialization import digest, loads, ordered_json
 
 
 class ElasticsearchSource(SourceAdapter):
@@ -66,6 +66,14 @@ class ElasticsearchSource(SourceAdapter):
         }
 
     def read(self) -> Iterator[RawRecord]:
+        yield from self._read()
+
+    def read_from(self, checkpoints):
+        yield from self._read(checkpoints)
+
+    def _read(self, checkpoints=None) -> Iterator[RawRecord]:
+        resume_key = "es:" + digest([self.url, self.index, self.query])
+        saved = checkpoints.get(resume_key, {}) if checkpoints is not None else {}
         headers = {"Authorization": f"ApiKey {self.api_key}"} if self.api_key else {}
         with httpx.Client(
             base_url=self.url + "/",
@@ -75,32 +83,47 @@ class ElasticsearchSource(SourceAdapter):
             transport=self.transport,
             follow_redirects=False,
         ) as client:
-            pit_id = None
-            failed = False
+            pit_id = saved.get("pit_id")
+            failed = complete = False
+            resume_allowed = bool(pit_id)
+            seen = getattr(self, "seen", {})
 
             def request(method: str, path: str, **kwargs: Any) -> dict[str, Any]:
-                response = client.request(method, path, **kwargs)
-                if not response.is_success:
-                    # Never echo an ES error body: it may contain customer documents.
-                    raise SourceError(f"ES {method} request failed: HTTP {response.status_code}")
-                data = loads(response.content)
+                with client.stream(method, path, **kwargs) as response:
+                    if response.status_code == 404 and resume_allowed and path == "_search":
+                        raise ExpiredPIT()
+                    if not response.is_success:
+                        raise SourceError(
+                            f"ES {method} request failed: HTTP {response.status_code}"
+                        )
+                    content = bytearray()
+                    for chunk in response.iter_bytes(chunk_size=64 * 1024):
+                        content.extend(chunk)
+                        if len(content) > getattr(self, "max_page_bytes", 64 * 1024 * 1024):
+                            raise SourceError("ES page exceeds memory budget; reduce page-size")
+                data = loads(bytes(content))
                 if not isinstance(data, dict):
                     raise SourceError("ES response is not an object")
                 return data
 
-            try:
+            def open_pit():
                 opened = request(
                     "POST",
                     quote(self.index, safe=",*-") + "/_pit",
                     params={"keep_alive": "2m", "allow_partial_search_results": "false"},
                 )
-                pit_id = opened.get("id")
-                if not isinstance(pit_id, str) or not pit_id:
+                value = opened.get("id")
+                if not isinstance(value, str) or not value:
                     raise SourceError("ES did not return PIT id")
-                after = None
-                observed = 0
-                total = None
-                seen: set[tuple[str, str]] = set()
+                seen.clear()
+                return value
+
+            try:
+                if not pit_id:
+                    pit_id = open_pit()
+                after = saved.get("after")
+                observed = saved.get("observed", 0)
+                total = saved.get("total")
                 while True:
                     body = {
                         "pit": {"id": pit_id, "keep_alive": "2m"},
@@ -111,15 +134,23 @@ class ElasticsearchSource(SourceAdapter):
                     }
                     if after is not None:
                         body["search_after"] = after
-                    data = request(
-                        "POST",
-                        "_search",
-                        params={"allow_partial_search_results": "false"},
-                        json=body,
-                    )
+                    try:
+                        data = request(
+                            "POST",
+                            "_search",
+                            params={"allow_partial_search_results": "false"},
+                            json=body,
+                        )
+                    except ExpiredPIT:
+                        resume_allowed = False
+                        checkpoints.pop(resume_key, None)
+                        pit_id, after, observed, total = open_pit(), None, 0, None
+                        continue
+                    resume_allowed = False
                     pit_id = data.get("pit_id", pit_id)
                     if (
                         not isinstance(pit_id, str)
+                        or not pit_id
                         or data.get("timed_out") is not False
                         or data.get("terminated_early")
                         or data.get("_shards", {}).get("failed") != 0
@@ -144,6 +175,10 @@ class ElasticsearchSource(SourceAdapter):
                     if not rows:
                         if observed != total:
                             raise SourceError("ES pages ended before the declared total")
+                        complete = True
+                        if checkpoints is not None:
+                            checkpoints.pop(resume_key, None)
+                            seen.clear()
                         break
                     for hit in rows:
                         index, record_id = hit.get("_index"), hit.get("_id")
@@ -152,7 +187,6 @@ class ElasticsearchSource(SourceAdapter):
                         key = (index, record_id)
                         if key in seen:
                             raise SourceError("ES returned a duplicate hit in the PIT")
-                        seen.add(key)
                         observed += 1
                         if observed > total:
                             raise SourceError("ES returned more hits than declared")
@@ -162,10 +196,28 @@ class ElasticsearchSource(SourceAdapter):
                         # Canonical artifact JSON would reorder tool schemas and
                         # turn decimal arguments into strings before extraction.
                         payload = ordered_json(hit["_source"]).encode()
-                        if len(payload) > MAX_RECORD_BYTES:
+                        if len(payload) > getattr(self, "max_record_bytes", MAX_RECORD_BYTES):
                             raise SourceError("ES record exceeds byte limit")
+                        sort = hit.get("sort")
+                        if checkpoints is not None and (not isinstance(sort, list) or not sort):
+                            raise SourceError("ES hit missing resumable sort values")
+                        seen[key] = True
+                        locator = f"{quote(index, safe='')}/{quote(record_id, safe='')}"
+                        if checkpoints is not None:
+                            locator = f"es:{digest(self.url)[:16]}:" + locator
                         yield RawRecord(
-                            f"{quote(index, safe='')}/{quote(record_id, safe='')}", payload
+                            locator,
+                            payload,
+                            {
+                                resume_key: {
+                                    "pit_id": pit_id,
+                                    "after": sort,
+                                    "observed": observed,
+                                    "total": total,
+                                }
+                            }
+                            if checkpoints is not None
+                            else None,
                         )
                     next_after = rows[-1].get("sort")
                     if not isinstance(next_after, list) or not next_after or next_after == after:
@@ -178,7 +230,13 @@ class ElasticsearchSource(SourceAdapter):
                 failed = True
                 raise
             finally:
-                if pit_id:
+                if checkpoints is not None and not complete and isinstance(pit_id, str) and pit_id:
+                    confirmed = checkpoints.get(resume_key)
+                    if confirmed and confirmed["pit_id"] != pit_id:
+                        # A rejected page can rotate the PIT without advancing a
+                        # single committed hit. Keep its ID, retain the old cursor.
+                        checkpoints[resume_key] = {**confirmed, "pit_id": pit_id}
+                if pit_id and (checkpoints is None or complete):
                     try:
                         closed = request("DELETE", "_pit", json={"id": pit_id})
                         if closed.get("succeeded") is not True:
@@ -186,3 +244,7 @@ class ElasticsearchSource(SourceAdapter):
                     except Exception as exc:
                         if not failed:
                             raise SourceError("ES PIT cleanup failed") from exc
+
+
+class ExpiredPIT(SourceError):
+    """A saved snapshot expired; restart the scan and let the journal deduplicate."""

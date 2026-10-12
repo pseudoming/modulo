@@ -9,8 +9,17 @@ def parser() -> argparse.ArgumentParser:
     root.add_argument("--plugin", action="append", default=[], help="显式加载受信 Python 模块")
     commands = root.add_subparsers(dest="command", required=True)
     commands.add_parser("plugins", help="列出三类已注册适配器")
-    assets = commands.add_parser("prepare-assets", help="显式联网准备固定 tokenizer 资产")
-    assets.add_argument("--assets", type=Path, default=Path("assets/tokenizers"))
+    assets = commands.add_parser(
+        "prepare-assets", help="显式联网准备固定 tokenizer 资产", argument_default=argparse.SUPPRESS
+    )
+    assets.add_argument("--config", type=Path, help="读取主配置中的 assets 与 asset-source")
+    assets.add_argument("--assets", type=Path, help="本地 tokenizer 目录，默认 assets/tokenizers")
+    assets.add_argument(
+        "--asset-source",
+        type=str.lower,
+        choices=["global", "cn"],
+        help="global 使用 Hugging Face（默认），cn 使用魔搭；覆盖主配置",
+    )
     assets.add_argument("--only", nargs="+", metavar="ASSET", help="仅准备指定资产；省略时准备全部")
     run = commands.add_parser(
         "import",
@@ -80,7 +89,19 @@ def parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--assets", type=Path, help="本地 tokenizer 目录，默认 assets/tokenizers")
     run.add_argument("--output", type=Path, help="结果父目录，默认 runs")
-    run.add_argument("--max-records", type=int, help="整批读取上限，默认 10000")
+    run.add_argument("--max-records", type=int, help="本次新增读取上限；默认 0 不限条数")
+    run.add_argument("--memory-mib", type=int, help="磁盘工作区缓存预算 MiB，默认 64")
+    run.add_argument("--max-record-mib", type=int, help="单条记录上限 MiB，默认 8")
+    run.add_argument("--state", type=Path, help="保存读取进度与已有日志；复用目录继续导入和关联")
+    run.add_argument(
+        "--follow", action=argparse.BooleanOptionalAction, help="持续轮询新增日志，需要 --state"
+    )
+    run.add_argument("--poll-seconds", type=float, help="持续导入轮询间隔，默认 5 秒")
+    run.add_argument(
+        "--download-images",
+        action=argparse.BooleanOptionalAction,
+        help="下载缺尺寸的 URL 图片，默认关闭；缓存目录与限额见主配置 image-download",
+    )
     report = commands.add_parser("report", help="校验并读取封存摘要或调用明细")
     report.add_argument("run", type=Path)
     report.add_argument("--details", action="store_true")

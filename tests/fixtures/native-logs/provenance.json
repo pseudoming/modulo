@@ -62,6 +62,13 @@
       "sha256": "7e61c4443496d12a40e9caf6f9337739bbd82d728592dd049651b6fd73b81c0e",
       "captured_file_sha256": "fb38a9a2dc3d496b3c65fb04f3acd21d8b330335cfacb8415a61c58c7a8074ca",
       "projection": "only DEBUG/GIN lines; body bytes unchanged"
+    },
+    {
+      "file": "litellm-stream-chunks.jsonl",
+      "sha256": "7fc98ecb177ec535903b741a70ab2a10b5e2c6509f775bace305e5efa250c84c",
+      "date": "2026-10-12",
+      "producer": "LiteLLM 1.103.3 completion(mock_response=\"synthetic answer\", stream=True); no external HTTP",
+      "projection": "SDK iterator ModelResponseStream.model_dump plus request kwargs projected from the actual success callback; sequence added in iterator order. Not a claim that default logs emit this envelope. Usage absent in these mock chunks."
     }
   ],
   "expected_counts_from": [

@@ -12,8 +12,7 @@ import importlib.util
 import json
 from pathlib import Path
 
-from build_family_reference import kimi_reference
-from jinja2.sandbox import ImmutableSandboxedEnvironment
+from build_family_reference import kimi_reference, official_template, reference_assets
 from tokenizers import Tokenizer
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -93,6 +92,28 @@ MODES = {
     + [({"thinking_option": "off"}, {"enable_thinking": False})],
     "ring": [({"reasoning_effort": e}, {"reasoning_effort": e}) for e in ("high", "xhigh")],
 }
+ASSET_MODES = {
+    "qwen3.5-122b": [({"enable_thinking": v}, {"enable_thinking": v}) for v in (True, False)],
+    "qwen3.5-397b": [({"enable_thinking": v}, {"enable_thinking": v}) for v in (True, False)],
+    "deepseek-v4-pro-0813": [
+        ({"reasoning_effort": v}, {"reasoning_effort": v}) for v in ("low", "high", "max")
+    ]
+    + [
+        ({"enable_thinking": False}, {"thinking_mode": "chat"}),
+        ({"drop_thinking": False}, {"drop_thinking": False}),
+    ],
+    "minimax-m2.7": [({"thinking": {"type": "enabled"}}, {"thinking_mode": "enabled"})],
+    "glm-5.2": MODES["glm"]
+    + [
+        ({"thinking": {"type": "disabled"}}, {"enable_thinking": False}),
+        ({"clear_thinking": False}, {"clear_thinking": False}),
+    ],
+    "kimi-k2.6": [
+        ({"thinking": {"type": "disabled"}}, {"thinking": False}),
+        ({"preserve_thinking": True}, {"preserve_thinking": True}),
+    ],
+    "kimi-k2.7-code": [({"preserve_thinking": True}, {"preserve_thinking": True})],
+}
 
 
 def tool_messages(parallel=False):
@@ -139,20 +160,28 @@ def main():
     parser.add_argument(
         "--deepseek-reference",
         type=Path,
-        required=True,
         help="Reviewed upstream encoding.py; exact SHA-256 is required",
     )
+    parser.add_argument("--assets", nargs="+", help="Only replace these assets' frozen vectors")
     args = parser.parse_args()
-    assert hashlib.sha256(args.deepseek_reference.read_bytes()).hexdigest() == DS_REFERENCE_SHA256
-    spec = importlib.util.spec_from_file_location(
-        "reviewed_deepseek_reference", args.deepseek_reference
-    )
-    ds_reference = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(ds_reference)
-    lock = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())
+    lock = reference_assets()
+    selected = args.assets or list(lock["assets"])
+    assert set(selected) <= lock["assets"].keys()
+    if "deepseek-v4.1" in selected:
+        assert args.deepseek_reference, "--deepseek-reference is required for deepseek-v4.1"
+        assert (
+            hashlib.sha256(args.deepseek_reference.read_bytes()).hexdigest() == DS_REFERENCE_SHA256
+        )
+        spec = importlib.util.spec_from_file_location(
+            "reviewed_deepseek_reference", args.deepseek_reference
+        )
+        ds_reference = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ds_reference)
     vectors = []
     gateway_reference = None
     for asset, entry in lock["assets"].items():
+        if asset not in selected:
+            continue
         directory = ROOT / "assets/tokenizers" / asset
         for name, expected in entry["files"].items():
             assert hashlib.sha256((directory / name).read_bytes()).hexdigest() == expected
@@ -192,13 +221,15 @@ def main():
                 {},
             ),
         ]
-        for i, (logged, expected) in enumerate(MODES[family]):
+        for i, (logged, expected) in enumerate(ASSET_MODES.get(asset, MODES[family])):
             cases.append((f"mode_{i}", HISTORY, None, logged, expected))
         if family == "moonshot":
             upstream, encoder = kimi_reference(directory)
 
-            def encode(text, encoder=encoder):
-                return encoder.encode(text, disallowed_special=())
+            def encode(text, encoder=encoder, k3=asset == "kimi-k3"):
+                return encoder.encode(
+                    text, **({"disallowed_special": ()} if k3 else {"allowed_special": "all"})
+                )
         else:
             encoder = Tokenizer.from_file(str(directory / "tokenizer.json"))
             encoder.no_padding()
@@ -208,26 +239,13 @@ def main():
                 return encoder.encode(text, add_special_tokens=False).ids
 
             config = json.loads((directory / "tokenizer_config.json").read_text())
-            template = (
-                (directory / entry["template_file"]).read_text()
-                if entry.get("template_file")
-                else config["chat_template"]
-            )
-            environment = ImmutableSandboxedEnvironment(
-                trim_blocks=True, lstrip_blocks=True, extensions=["jinja2.ext.loopcontrols"]
-            )
-            environment.globals["raise_exception"] = fail
-            environment.filters["tojson"] = lambda v, **kwargs: json.dumps(
-                v, ensure_ascii=kwargs.pop("ensure_ascii", False), **kwargs
-            )
-            environment.filters["fromjson"] = json.loads
-            render = environment.from_string(template)
+            render = official_template(directory, entry)
             special = {
                 k: v["content"] if isinstance(v, dict) else v
                 for k, v in config.items()
                 if k.endswith("_token") and isinstance(v, (str, dict))
             }
-        if family == "qwen":
+        if asset == "qwen-3.8-2.4t":
             row = json.loads((ROOT / "examples/litellm/basic.jsonl").read_text().splitlines()[7])
             prompt = render.render(
                 messages=row["messages"],
@@ -270,7 +288,7 @@ def main():
                     **special,
                     **options,
                 )
-                if family == "deepseek":
+                if asset == "deepseek-v4.1":
                     canonical_messages = copy.deepcopy(messages)
                     if tools:
                         canonical_messages[0]["tools"] = tools
@@ -302,6 +320,12 @@ def main():
                 }
             )
     target = ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json"
+    if args.assets:
+        previous = json.loads(target.read_text())
+        vectors = [v for v in previous["vectors"] if v["asset"] not in selected] + vectors
+        gateway_reference = gateway_reference or previous["gateway_tool_reference"]
+    asset_order = {asset: i for i, asset in enumerate(lock["assets"])}
+    vectors.sort(key=lambda v: asset_order[v["asset"]])
     target.write_text(
         json.dumps(
             {

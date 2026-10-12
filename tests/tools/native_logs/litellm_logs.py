@@ -47,13 +47,13 @@ async def main():
     parser.add_argument("--output", type=Path, default=OUTPUT)
     output = parser.parse_args().output
     output.mkdir(parents=True, exist_ok=True)
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     vectors = json.loads(
         (ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json").read_text()
     )["vectors"]
     collector = Collector()
     litellm.callbacks = [collector]
-    for asset in ("qwen3.8", "deepseek-v4.1"):
+    for asset in ("qwen-3.8-2.4t", "deepseek-v4.1"):
         index, vector = next((i, v) for i, v in enumerate(vectors) if v["asset"] == asset)
         for stream in (False, True):
             request = {

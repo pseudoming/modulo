@@ -19,7 +19,7 @@
     "calls": 12,
     "recalculated_calls": 6,
     "compared_calls": 5,
-    "verdicts": {
+    "input_verdicts": {
       "CONSISTENT": 3,
       "DEVIATION": 2,
       "UNVERIFIABLE": 7
@@ -33,7 +33,7 @@
     ]
   },
   "reference_assets": {
-    "qwen": "qwen3.8",
+    "qwen": "qwen-3.8-2.4t",
     "deepseek": "deepseek-v4.1"
   }
 }

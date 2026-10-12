@@ -14,7 +14,7 @@ def main():
     parser.add_argument("--output", type=Path, default=ROOT / "runs/native-logs")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     vectors = json.loads(
         (ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json").read_text()
     )["vectors"]

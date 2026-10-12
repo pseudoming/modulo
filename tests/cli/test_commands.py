@@ -1,13 +1,53 @@
+import io
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import pytest
 
 from modulo.cli import main
+from modulo.shared.serialization import bytes_digest
 from modulo.storage.query_index import details
 from modulo.storage.result_bundle import verify_bundle
 from tests.support.mock_es import MockElasticsearch
 from tests.support.paths import ROOT
+
+
+@pytest.mark.parametrize(
+    "region,override,expected",
+    [("cn", [], "modelscope.cn"), ("cn", ["--asset-source", "global"], "huggingface.co")],
+)
+def test_prepare_assets_reads_main_config_and_reports_verified_files(
+    tmp_path, monkeypatch, capsys, region, override, expected
+):
+    path = tmp_path / "modulo.yaml"
+    path.write_text(f"assets: prepared\nasset-source: {region}\n")
+    data = b"fixed tokenizer"
+    catalog = {
+        "assets": {
+            "sample": {
+                "repo": "official/model",
+                "revision": "fixed",
+                "files": {"tokenizer.json": bytes_digest(data)},
+                "modelscope": {"repo": "cn/model", "revision": "cn-fixed"},
+            }
+        }
+    }
+    requests = []
+
+    def download(request, **kwargs):
+        requests.append(urlsplit(request.full_url).netloc)
+        return io.BytesIO(data)
+
+    monkeypatch.setattr(
+        "modulo.application.tokenizer_assets.load_tokenizer_assets", lambda: catalog
+    )
+    monkeypatch.setattr("modulo.application.tokenizer_assets.urlopen", download)
+    assert main(["prepare-assets", "--config", str(path), "--only", "sample", *override]) == 0
+    assert requests == [expected]
+    assert (tmp_path / "prepared/sample/tokenizer.json").read_bytes() == data
+    assert json.loads(capsys.readouterr().out) == {"verified_assets": ["sample/tokenizer.json"]}
+
 
 MODELS = ["Qwen/Qwen3.8-2.4T-A95B", "deepseek-ai/DeepSeek-V4.1-Flash"]
 
@@ -62,7 +102,7 @@ def test_unified_cli_filters_and_recounts_both_protocols(
     assert summary["selection"]["excluded_calls"] == 1
     assert summary["selection"]["unresolved_calls"] == 0
     assert summary["selection"]["unmatched_models"] == []
-    assert summary["verdicts"] == {"CONSISTENT": 2, "DEVIATION": 1, "UNVERIFIABLE": 4}
+    assert summary["input_verdicts"] == {"CONSISTENT": 2, "DEVIATION": 1, "UNVERIFIABLE": 4}
     rows = details(bundle)
     assert {row["call"]["model"] for row in rows} == set(MODELS)
     assert sum(row["measurement"]["input_tokens"] is not None for row in rows) == 4
@@ -93,7 +133,8 @@ def test_legacy_flags_reuse_the_same_bundle_and_no_matches_are_explicit(tmp_path
     assert first["summary"]["selection"]["unmatched_models"] == ["not-present"]
     assert first["summary"]["selection"]["excluded_calls"] == 8
     assert first["summary"]["observed_calls"] == 0
-    assert first["summary"]["verdicts"] == {}
+    assert first["summary"]["input_verdicts"] == {}
+    assert first["summary"]["verdicts"] == first["summary"]["output_verdicts"] == {}
     assert details(Path(first["run"])) == []
     assert (
         main(

@@ -3,10 +3,10 @@
 from .shared.huggingface import HuggingFaceTextTokenizer
 
 
-class LingTokenizer(HuggingFaceTextTokenizer):
-    name = "ling"
+class Ling30Tokenizer(HuggingFaceTextTokenizer):
+    name = "ling-3.0"
     family = "ling"
-    allowed_repo = "inclusionAI/Ling-3.0-flash"
+    repo = "inclusionAI/Ling-3.0-flash"
     option_rules = {"enable_thinking": bool}
 
     def translate_option(self, key, value):

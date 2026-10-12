@@ -17,7 +17,7 @@ from langchain_core.tracers.run_collector import RunCollectorCallbackHandler
 
 ROOT = Path(__file__).resolve().parents[3]
 MODELS = {"qwen": "Qwen/Qwen3.8-2.4T-A95B", "deepseek": "deepseek-ai/DeepSeek-V4.1-Flash"}
-ASSETS = {"qwen": "qwen3.8", "deepseek": "deepseek-v4.1"}
+ASSETS = {"qwen": "qwen-3.8-2.4t", "deepseek": "deepseek-v4.1"}
 
 
 def main() -> None:

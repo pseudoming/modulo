@@ -1,6 +1,7 @@
 """Read through source interfaces, normalize calls and retain every observed identity variant."""
 
 from collections import Counter
+from collections.abc import MutableMapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -22,10 +23,10 @@ from ..domain.platforms import PlatformConfig
 
 @dataclass
 class CollectedBatch:
-    calls: dict[str, dict]
-    dimensions: dict[str, set[tuple[str | None, str | None]]]
+    calls: MutableMapping[str, dict]
+    dimensions: MutableMapping[str, list]
     counters: Counter
-    diagnostics: list[dict]
+    diagnostics: Sequence[dict]
     complete: bool
 
 
@@ -57,19 +58,23 @@ def collect_calls(
     max_records: int,
     platform_config: PlatformConfig,
     bindings: Bindings | None = None,
+    working=None,
+    max_record_bytes: int = 8 * 1024 * 1024,
 ) -> CollectedBatch:
     bindings = bindings or Bindings()
-    diagnostics: list[dict] = []
+    diagnostics = working.sequence("diagnostics") if working is not None else []
     counters: Counter = Counter(
         raw_records=0, ignored_records=0, invalid_records=0, duplicate_calls=0, identity_conflicts=0
     )
-    calls: dict[str, dict] = {}
-    observed_dimensions: dict[str, set[tuple[str | None, str | None]]] = {}
+    calls = working.mapping("calls") if working is not None else {}
+    observed_dimensions = working.mapping("dimensions") if working is not None else {}
     complete = False
     decoder = getattr(protocol, "decode", lambda data: record_object(loads(data)))
     session = (
         protocol.new_session() if hasattr(protocol, "new_session") else ProtocolSession(protocol)
     )
+    if working is not None:
+        session.configure_storage(working, max_record_bytes)
 
     def invalid(references, reason="invalid_record", error_type=None):
         counters["invalid_records"] += len(references)
@@ -111,7 +116,11 @@ def collect_calls(
             call = call.model_copy(update={"platform": tag.value, "platform_source": tag.source})
             key = digest([namespace, protocol.name, call.call_id])
             body = call.model_dump()
-            observed_dimensions.setdefault(key, set()).add((call.platform, call.model))
+            pairs = observed_dimensions.get(key, [])
+            pair = [call.platform, call.model]
+            if pair not in pairs:
+                pairs.append(pair)
+                observed_dimensions[key] = pairs
             tag_records = [{**item, "source_ref": primary.source_ref} for item in resolution.tags]
             for item in tag_records:
                 if not item["reason"] or item["source"] == "none":
@@ -159,6 +168,7 @@ def collect_calls(
                     )
                 if emission.assembly:
                     prior.setdefault("assemblies", []).append(emission.assembly)
+                calls[key] = prior
             else:
                 calls[key] = {
                     "call_key": key,
@@ -170,12 +180,14 @@ def collect_calls(
                     "binding_error": resolution.error,
                 }
                 if emission.assembly:
-                    calls[key]["assemblies"] = [emission.assembly]
+                    row = calls[key]
+                    row["assemblies"] = [emission.assembly]
+                    calls[key] = row
 
     records = source.read()
     try:
         for record in records:
-            if counters["raw_records"] >= max_records:
+            if max_records and counters["raw_records"] >= max_records:
                 raise SourceError("record_budget_exceeded")
             counters["raw_records"] += 1
             reference = archive(record)
@@ -230,4 +242,7 @@ def collect_calls(
             }
         )
 
+    explain = getattr(protocol, "report_warnings", None)
+    if explain:
+        diagnostics.extend(explain(calls.values(), diagnostics))
     return CollectedBatch(calls, observed_dimensions, counters, diagnostics, complete)

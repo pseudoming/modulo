@@ -7,9 +7,11 @@ from textwrap import dedent
 import pytest
 
 from modulo.application.registry import Registry, builtins
+from modulo.application.tokenizer_assets import load_tokenizer_assets
 from modulo.cli import main
 from modulo.storage.query_index import details
 from modulo.storage.result_bundle import verify_bundle
+from tests.tools.references.assets import reference_assets
 
 
 def package(tmp_path, monkeypatch, name, files):
@@ -42,24 +44,23 @@ def test_three_plugin_namespaces_and_no_silent_replacement():
     assert registry.describe() == {
         "sources": ["es", "file"],
         "protocols": ["dify", "langchain", "litellm", "newapi", "oneapi"],
-        "tokenizers": [
-            "deepseek",
-            "glm",
-            "hunyuan",
-            "ling",
-            "longcat",
-            "mimo",
-            "minimax",
-            "moonshot",
-            "qwen",
-            "ring",
-            "stepfun",
-        ],
+        "tokenizers": sorted(load_tokenizer_assets()["assets"]),
     }
     with pytest.raises(ValueError, match="already registered"):
         registry.register("protocols", "dify", object())
     with pytest.raises(ValueError, match="unknown plugin"):
         registry.get("tokenizers", "arbitrary-model-name")
+
+
+def test_each_model_declares_the_matching_family_and_repository():
+    registry = builtins()
+    references = reference_assets()["assets"]
+    for name, entry in load_tokenizer_assets()["assets"].items():
+        implementation = registry.get("tokenizers", name)
+        assert implementation.name == name
+        assert implementation.family == references[name]["family"]
+        assert implementation.loader == references[name]["loader"]
+        assert implementation.repo == entry["repo"]
 
 
 def test_explicit_extension_module(tmp_path, monkeypatch):
@@ -337,8 +338,8 @@ def test_declared_extension_adapters_work_through_unified_cli(tmp_path, monkeypa
             {
                 "models": [
                     {
-                        "modelnames": ["synthetic-model"],
-                        "asset": "synthetic",
+                        "aliases": ["synthetic-model"],
+                        "name": "synthetic",
                     },
                 ]
             }
@@ -346,7 +347,7 @@ def test_declared_extension_adapters_work_through_unified_cli(tmp_path, monkeypa
     )
     # The extension's asset declaration is independent of user model aliases.
     monkeypatch.setattr(
-        "modulo.cli.commands.asset_lock",
+        "modulo.cli.commands.load_tokenizer_assets",
         lambda: {"assets": {"synthetic": {"family": "synthetic"}}},
     )
     assert (
@@ -370,7 +371,7 @@ def test_declared_extension_adapters_work_through_unified_cli(tmp_path, monkeypa
         == 0
     )
     imported = json.loads(capsys.readouterr().out)
-    assert imported["summary"]["verdicts"] == {"CONSISTENT": 1}
+    assert imported["summary"]["input_verdicts"] == {"CONSISTENT": 1}
     bundle = Path(imported["run"])
     assert details(bundle)[0]["measurement"]["input_delta"] == 0
     verify_bundle(bundle)

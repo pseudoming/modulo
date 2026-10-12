@@ -1,0 +1,128 @@
+{
+  "assets": {
+    "qwen-3.8-2.4t": {
+      "family": "qwen",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "deepseek-v4.1": {
+      "family": "deepseek",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "kimi-k3": {
+      "family": "moonshot",
+      "loader": "tiktoken_kimi_k3",
+      "template_file": "encoding_k3.py",
+      "files": {
+        "encoding_k3.py": "49ff03305fdc4be26867972788d36150b67f8a9e852e62bb7959d87482223676",
+        "tokenization_kimi.py": "f28ea66e2d862a2a5814970b2ce40c2f7d8296ff09aed90a7e7def689b906944"
+      }
+    },
+    "minimax-m3": {
+      "family": "minimax",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "longcat-2.0": {
+      "family": "longcat",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "glm-5.3": {
+      "family": "glm",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "mimo-v2.6": {
+      "family": "mimo",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "step-3.7": {
+      "family": "stepfun",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "hy4-preview": {
+      "family": "hunyuan",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "ling-3.0": {
+      "family": "ling",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "ring-2.6": {
+      "family": "ring",
+      "loader": "fast_json",
+      "files": {}
+    },
+    "qwen3.5-122b": {
+      "family": "qwen",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "303aba891d66ab63908a7b3cc9163bcb835fdf8b9f6301c73216f3f1eb3992dd",
+        "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+      }
+    },
+    "qwen3.5-397b": {
+      "family": "qwen",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "303aba891d66ab63908a7b3cc9163bcb835fdf8b9f6301c73216f3f1eb3992dd",
+        "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+      }
+    },
+    "deepseek-v4-pro-0813": {
+      "family": "deepseek",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "5fccff80f55a4d455bbe516bdd552edf3e9623df95e99fbf2a3c3389fdf91af0"
+      }
+    },
+    "glm-5.3-flash": {
+      "family": "glm",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "230c30609ecbbb9e6583bedde8e7bdda0c6eb8fe5fad0eaeb3d1b293d751cb4f",
+        "processor_config.json": "aae38374c94b08cc9b0547c6e64f05b951bd9735cea571c6988f5ed552bed3ed"
+      }
+    },
+    "glm-5.2": {
+      "family": "glm",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "ac76b43d8683d3b930126870fc8be73d8679308fe752fa1f381096d8354f6a55"
+      }
+    },
+    "minimax-m2.7": {
+      "family": "minimax",
+      "loader": "fast_json",
+      "files": {
+        "generation_config.json": "2c24fe5507e260bb081727e2a14693d9a982942e721b28720c184d201bffb9dd"
+      }
+    },
+    "kimi-k2.6": {
+      "family": "moonshot",
+      "loader": "tiktoken_kimi_k2",
+      "files": {
+        "generation_config.json": "5431db52f431099f309ece737670e977de148f8cfd5340e920ff1f44d7cff596",
+        "preprocessor_config.json": "0c43520fbcc076dacbffcf0273f0dfa0ee318ff9aa55537cf7f2788d906de7b2",
+        "tokenization_kimi.py": "2ab1ffb6f5c4380758bd8d9752ff1041c09024182676a4311528fbdf92fb9599",
+        "tool_declaration_ts.py": "97e09ed262f1cd38f87584eaa46c5d4d5b3c9725dd299b21642f389040794ebc"
+      }
+    },
+    "kimi-k2.7-code": {
+      "family": "moonshot",
+      "loader": "tiktoken_kimi_k2",
+      "files": {
+        "generation_config.json": "b784cc6a9ecb551196b81cb6b1d2dcb18467b92adaab6992ae4cc455ad44d2ce",
+        "preprocessor_config.json": "bd9a1f5d7b1580b38093c35ca49162580a118485164fac48e1cdb224ee41fcff",
+        "tokenization_kimi.py": "88394687bd081f55928849b2d140e190c70297660d3fb8b7c54c0e5633b177e3",
+        "tool_declaration_ts.py": "97e09ed262f1cd38f87584eaa46c5d4d5b3c9725dd299b21642f389040794ebc"
+      }
+    }
+  }
+}

@@ -62,5 +62,5 @@ def test_real_agent_rounds_through_cli(tmp_path, capsys, official_assets, mock_e
     if label == "agent-llm":
         check_rows(actual, json.loads((FIXTURES / "reference.json").read_text()))
     else:
-        assert all(r["measurement"]["verdict"] == "UNVERIFIABLE" for r in actual)
+        assert all(r["measurement"]["input_verdict"] == "UNVERIFIABLE" for r in actual)
         assert all(r["call"]["usage"]["input_tokens"] == 123 for r in actual)

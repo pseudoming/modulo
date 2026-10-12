@@ -66,11 +66,9 @@ def native(gateway, request_id, label, body):
 def main():
     source = ROOT / "tests/fixtures/tokenizers/reasoning_reference_vectors.json"
     vectors = json.loads(source.read_text())["vectors"]
-    assets = json.loads((ROOT / "src/modulo/application/assets-lock.json").read_text())["assets"]
+    assets = json.loads((ROOT / "static/tokenizer-assets.json").read_text())["assets"]
     bindings = {
-        "models": [
-            {"modelnames": [entry["repo"]], "asset": asset} for asset, entry in assets.items()
-        ],
+        "models": [{"name": asset, "aliases": [entry["repo"]]} for asset, entry in assets.items()],
     }
     counts = {}
     for gateway in ("newapi", "oneapi"):

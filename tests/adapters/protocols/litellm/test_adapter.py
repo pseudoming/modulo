@@ -174,15 +174,21 @@ def test_litellm_missing_or_display_messages_do_not_get_reconstructed(litellm_re
 @pytest.mark.parametrize(
     "message",
     [
-        {"role": "user", "content": [{"type": "text", "text": "Hi"}]},
         {"role": "tool", "content": "Hi"},
         {"role": "assistant", "content": "", "tool_calls": [{"id": "call-1"}]},
     ],
 )
-def test_litellm_tool_and_multimodal_messages_have_capability_gaps(litellm_record, message):
+def test_litellm_invalid_tool_messages_have_capability_gaps(litellm_record, message):
     litellm_record["messages"] = [message]
     call = LiteLLMProtocol().parse(litellm_record).calls[0]
     assert call.messages is None and call.gaps
+
+
+def test_litellm_text_blocks_are_valid_messages(litellm_record):
+    litellm_record["messages"] = [{"role": "user", "content": [{"type": "text", "text": "Hi"}]}]
+    call = LiteLLMProtocol().parse(litellm_record).calls[0]
+    assert not call.gaps and not call.messages[0].gaps
+    assert call.messages[0].content == "Hi"
 
 
 @pytest.mark.parametrize("field", ["model_parameters", "proxy_server_request"])
@@ -199,25 +205,22 @@ def test_litellm_request_tool_definitions_are_retained(litellm_record, field):
     [
         ({"call_type": "embedding"}, "unsupported_call_type"),
         ({"status": "failure"}, "failed_call"),
-        ({"cache_hit": True}, "cache_hit"),
-        ({"cache_hit": "True"}, "cache_hit"),
     ],
 )
-def test_litellm_nontext_failed_and_cached_calls_are_retained_with_gaps(
-    litellm_record, fields, reason
-):
+def test_litellm_nontext_and_failed_calls_are_retained_with_gaps(litellm_record, fields, reason):
     litellm_record.update(fields)
     call = LiteLLMProtocol().parse(litellm_record).calls[0]
     assert reason in call.gaps and call.usage.input_tokens == 30
 
 
-def test_litellm_does_not_derive_missing_usage_or_replace_top_level_counts(litellm_record):
+def test_litellm_reads_explicit_body_usage_and_rejects_conflicting_reports(litellm_record):
     litellm_record["response"]["usage"] = {"prompt_tokens": 999, "completion_tokens": 888}
     litellm_record.pop("total_tokens")
     litellm_record.pop("prompt_tokens")
     call = LiteLLMProtocol().parse(litellm_record).calls[0]
-    assert call.usage.input_tokens is None and call.usage.total_tokens is None
-    assert call.usage.output_tokens == 2
+    assert call.usage.input_tokens == 999 and call.usage.total_tokens is None
+    assert call.usage.output_tokens is None
+    assert "conflicting_litellm_output_tokens" in call.output_gaps
     litellm_record["completion_tokens"] = True
     with pytest.raises(DataError):
         LiteLLMProtocol().parse(litellm_record)
@@ -282,3 +285,13 @@ def test_nested_json_duplicate_keys_are_rejected(litellm_record):
         LiteLLMProtocol().parse(litellm_record)
     with pytest.raises(ValueError):
         loads('{"prompt_tokens":0,"prompt_tokens":30}')
+
+
+@pytest.mark.parametrize("hit", [True, "True", "true"])
+def test_cached_response_usage_does_not_block_complete_request(litellm_record, hit):
+    litellm_record.update(cache_hit=hit, prompt_tokens=0, completion_tokens=0)
+    litellm_record["response"]["usage"] = {"prompt_tokens": 30, "completion_tokens": 2}
+    call = LiteLLMProtocol().parse(litellm_record).calls[0]
+    assert call.cache_hit is True and not call.gaps and not call.output_gaps
+    assert call.usage.input_tokens == call.usage.output_tokens == 0
+    assert call.messages is not None
