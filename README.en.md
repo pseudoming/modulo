@@ -1,7 +1,8 @@
 <p align="right"><a href="README.md">中文</a> | <strong>English</strong> | <a href="README.ja.md">日本語</a></p>
 
 <h1 align="center">modulo</h1>
-<p align="center"><strong>Recount AI gateway tokens. Trace every discrepancy to its source.</strong></p>
+<p align="center"><strong>AI API buyers deserve their own “electricity meter”.</strong></p>
+<p align="center">Recount tokens from existing logs and check the provider's reported usage.</p>
 <p align="center">Python 3.12 · Local computation · Traceable source records · <a href="LICENSE">Apache-2.0</a></p>
 
 <p align="center">
@@ -15,7 +16,7 @@
   <a href="#faq">FAQ</a>
 </p>
 
-modulo is an **AI token usage verification tool for existing logs**, built for teams managing aggregated AI gateways, MaaS operators, and auditors. Import logs, select providers and models, and compare reported usage with local reference counts while retaining a path back to each original record.
+modulo is an **AI token usage verification tool for existing logs**, built for teams managing aggregated AI gateways, MaaS operators, and auditors. Import logs, select providers and models, and recount input and output tokens locally. Compare those counts with the provider-reported usage in the logs, with a path back to each original record.
 
 ```mermaid
 flowchart LR

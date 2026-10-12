@@ -1,7 +1,8 @@
 <p align="right"><strong>中文</strong> | <a href="README.en.md">English</a> | <a href="README.ja.md">日本語</a></p>
 
 <h1 align="center">modulo</h1>
-<p align="center"><strong>复算 AI 网关的 token 用量，让差异有据可查。</strong></p>
+<p align="center"><strong>买 AI API，也该有自己的「电表」。</strong></p>
+<p align="center">从已有日志复算 token，核对供应商报告的用量。</p>
 <p align="center">Python 3.12 · 本地计算 · 原文可追溯 · <a href="LICENSE">Apache-2.0</a></p>
 
 <p align="center">
@@ -15,7 +16,7 @@
   <a href="#faq">常见问题</a>
 </p>
 
-modulo 是一个基于已有日志的 **AI token 用量复核工具**，面向聚合 AI 网关的管理与运维团队、MaaS 服务运营人员和审计人员。导入日志，选择供应商和模型，即可查看来源用量、本地复算结果及差额，并追溯到每条原始记录。
+modulo 是一个基于已有日志的 **AI token 用量复核工具**，面向聚合 AI 网关的管理与运维团队、MaaS 服务运营人员和审计人员。导入日志，选择供应商和模型，即可在本地复算输入、输出 token，与日志中供应商报告的用量对照，并追溯到每条原始记录。
 
 ```mermaid
 flowchart LR

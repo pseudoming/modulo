@@ -1,7 +1,8 @@
 <p align="right"><a href="README.md">中文</a> | <a href="README.en.md">English</a> | <strong>日本語</strong></p>
 
 <h1 align="center">modulo</h1>
-<p align="center"><strong>AI ゲートウェイのトークン使用量を再計算し、差分を元のログまで追跡。</strong></p>
+<p align="center"><strong>AI API を買うなら、自分の「電力メーター」も。</strong></p>
+<p align="center">既存のログからトークンを再計算し、プロバイダーが報告した使用量と照合します。</p>
 <p align="center">Python 3.12 · ローカル計算 · 元の記録を保持 · <a href="LICENSE">Apache-2.0</a></p>
 
 <p align="center">
@@ -15,7 +16,7 @@
   <a href="#faq">よくある質問</a>
 </p>
 
-modulo は、**既存のログから AI のトークン使用量を検証するツール**です。複数の AI サービスを集約するゲートウェイの管理・運用担当者、MaaS 事業者、監査担当者を対象としています。ログを読み込み、プロバイダーとモデルを選ぶと、報告された使用量、ローカルでの再計算値、差分を確認できます。各結果から元の記録を追跡できます。
+modulo は、**既存のログから AI のトークン使用量を検証するツール**です。複数の AI サービスを集約するゲートウェイの管理・運用担当者、MaaS 事業者、監査担当者を対象としています。ログを読み込み、プロバイダーとモデルを選ぶと、入力・出力トークンをローカルで再計算し、ログに記録されたプロバイダーの報告値と比較できます。各結果から元の記録を追跡できます。
 
 ```mermaid
 flowchart LR
